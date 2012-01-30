@@ -10,7 +10,8 @@
     },
     "autoload": {
         "psr-0": {
-            "net\\stubbles\\console": "src/main/php"
+            "net\\stubbles\\console": "src/main/php",
+            "org\\stubbles\\test\\console": "src/main/php"
         }
     }
 }
