@@ -1,0 +1,11 @@
+#!/usr/bin/php
+<?php
+/**
+ * Script to execute an implementation of net\stubbles\console\ConsoleApp.
+ *
+ * @package  net\stubbles\console
+ */
+namespace net\stubbles\console;
+require __DIR__ . '/../../bootstrap.php';
+exit(ConsoleApp::main(\net\stubbles\Bootstrap::getRootPath(), $argv, ConsoleOutputStream::forError()));
+?>
