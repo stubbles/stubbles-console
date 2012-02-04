@@ -8,12 +8,11 @@
  * @package  net\stubbles\console
  */
 namespace org\stubbles\test\console;
-use net\stubbles\console\ConsoleCommand;
-use net\stubbles\lang\BaseObject;
+use net\stubbles\console\ConsoleApp;
 /**
  * Helper class for the test.
  */
-class TestConsoleCommandRunner extends BaseObject implements ConsoleCommand
+class TestConsoleApp extends ConsoleApp
 {
     /**
      * exception to be thrown
