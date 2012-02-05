@@ -9,7 +9,6 @@
  */
 namespace net\stubbles\console;
 use net\stubbles\lang\exception\Exception;
-use org\stubbles\test\console\ConsoleAppWithArgument;
 use org\stubbles\test\console\TestConsoleApp;
 /**
  * Test for net\stubbles\console\ConsoleApp.
@@ -95,21 +94,5 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                                  )
         );
     }
-
-    /**
-     * @test
-     */
-    public function createInstanceWithArguments()
-    {
-        ConsoleApp::main('projectPath',
-                         array('stubcli',
-                               'org\\stubbles\\test\\console\\ConsoleAppWithArgument',
-                               'foo'
-                         ),
-                         $this->mockOutputStream
-        );
-        $this->assertEquals('foo', ConsoleAppWithArgument::getArgument());
-    }
-
 }
 ?>

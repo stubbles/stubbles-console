@@ -14,16 +14,11 @@ use net\stubbles\ioc\App;
 use net\stubbles\streams\OutputStream;
 /**
  * Base class for console applications.
+ *
+ * @since  2.0.0
  */
 abstract class ConsoleApp extends App
 {
-    /**
-     * list of arguments
-     *
-     * @type  string[]
-     */
-    private static $_argv;
-
     /**
      * main method
      *
@@ -39,9 +34,7 @@ abstract class ConsoleApp extends App
             return 1;
         }
 
-        array_shift($argv); // stubcli
-        $commandClass = array_shift($argv);
-        self::$_argv  = array_values($argv);
+        $commandClass = $argv[1];
         try {
             return (int) $commandClass::create($projectPath)
                                       ->run();
@@ -55,18 +48,16 @@ abstract class ConsoleApp extends App
      * creates argument binding module
      *
      * @return  ArgumentsBindingModule
-     * @since   2.0.0
      */
     protected static function createArgumentsBindingModule()
     {
-        return new ArgumentsBindingModule(self::$_argv);
+        return new ArgumentsBindingModule();
     }
 
     /**
      * creates console binding module
      *
      * @return  ConsoleBindingModule
-     * @since   2.0.0
      */
     protected static function createConsoleBindingModule()
     {
