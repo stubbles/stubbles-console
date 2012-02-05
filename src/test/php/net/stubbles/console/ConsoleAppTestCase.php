@@ -9,6 +9,7 @@
  */
 namespace net\stubbles\console;
 use net\stubbles\lang\exception\Exception;
+use org\stubbles\test\console\ConsoleAppUsingBindingModule;
 use org\stubbles\test\console\TestConsoleApp;
 /**
  * Test for net\stubbles\console\ConsoleApp.
@@ -92,6 +93,28 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                                                   ),
                                                   $this->mockOutputStream
                                  )
+        );
+    }
+
+    /**
+     * @since  2.0.0
+     * @test
+     */
+    public function canCreateArgumentsBindingModule()
+    {
+        $this->assertInstanceOf('net\stubbles\console\ioc\ArgumentsBindingModule',
+                                ConsoleAppUsingBindingModule::getArgumentsBindingModule()
+        );
+    }
+
+    /**
+     * @since  2.0.0
+     * @test
+     */
+    public function canCreateConsoleBindingModule()
+    {
+        $this->assertInstanceOf('net\stubbles\console\ioc\ConsoleBindingModule',
+                                ConsoleAppUsingBindingModule::getConsoleBindingModule()
         );
     }
 }
