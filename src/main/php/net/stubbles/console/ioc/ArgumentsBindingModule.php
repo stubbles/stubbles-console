@@ -61,7 +61,11 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      */
     public function configure(Binder $binder)
     {
-        foreach ($this->getArgs() as $position => $value) {
+        $args = $this->getArgs();
+        $binder->bindConstant()
+               ->named('argv')
+               ->to($args);
+        foreach ($args as $position => $value) {
             $binder->bindConstant()
                    ->named('argv.' . $position)
                    ->to($value);

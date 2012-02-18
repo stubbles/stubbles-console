@@ -68,11 +68,23 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function argumentsAreBoundAsRecievedWhenNoOptionsDefined()
     {
         $_SERVER['argv'] = array('foo', 'bar', 'baz');
-        $injector  = $this->bindArguments();
+        $injector        = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('argv.0'));
         $this->assertTrue($injector->hasConstant('argv.1'));
         $this->assertEquals('bar', $injector->getConstant('argv.0'));
         $this->assertEquals('baz', $injector->getConstant('argv.1'));
+    }
+
+    /**
+     * @test
+     * @group  issue_1
+     */
+    public function argumentsAreBoundAsListWhenNoOptionsDefined()
+    {
+        $_SERVER['argv'] = array('foo', 'bar', 'baz');
+        $injector        = $this->bindArguments();
+        $this->assertTrue($injector->hasConstant('argv'));
+        $this->assertEquals(array('bar', 'baz'), $injector->getConstant('argv'));
     }
 
     /**
@@ -91,6 +103,25 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($injector->hasConstant('argv.verbose'));
         $this->assertEquals('example', $injector->getConstant('argv.n'));
         $this->assertFalse($injector->getConstant('argv.verbose'));
+    }
+
+    /**
+     * @test
+     * @group  issue_1
+     */
+    public function argumentsAreBoundAsListAfterParsingWhenOptionsDefined()
+    {
+        $this->argumentsBindingModule->expects($this->once())
+                                     ->method('getopt')
+                                     ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
+                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+        $this->argumentsBindingModule->withOptions('n:f::')
+                                     ->withLongOptions(array('verbose'));
+        $injector = $this->bindArguments();
+        $this->assertTrue($injector->hasConstant('argv'));
+        $this->assertEquals(array('n' => 'example', 'verbose' => false),
+                            $injector->getConstant('argv')
+        );
     }
 
     /**
