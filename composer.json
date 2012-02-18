@@ -14,5 +14,9 @@
             "org\\stubbles\\test\\console": "src/main/php"
         }
     },
-    "bin": ["bin/stubcli"]
+    "bin": ["bin/stubcli"],
+    "scripts": {
+        "post-install-cmd": "org\\stubbles\\scripts\\ComposerScripts::postInstall",
+        "post-update-cmd": "org\\stubbles\\scripts\\ComposerScripts::postUpdate"
+    }
 }
