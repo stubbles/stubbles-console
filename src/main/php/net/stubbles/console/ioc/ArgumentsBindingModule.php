@@ -18,17 +18,33 @@ use net\stubbles\lang\exception\ConfigurationException;
 class ArgumentsBindingModule extends BaseObject implements BindingModule
 {
     /**
+     * switch whether stubcli was used to run the command
+     *
+     * @type  bool
+     */
+    private $stubcliUsed;
+    /**
      * options to be used for parsing the arguments
      *
      * @type  string
      */
-    protected $options  = null;
+    protected $options   = null;
     /**
      * long options to be used for parsing the arguments
      *
      * @type  string[]
      */
-    protected $longopts = array();
+    protected $longopts  = array();
+
+    /**
+     * constructor
+     *
+     * @param  bool  $stubcliUsed  switch whether stubcli was used to run the command
+     */
+    public function __construct($stubcliUsed = false)
+    {
+        $this->stubcliUsed = $stubcliUsed;
+    }
 
     /**
      * sets the options to be used for parsing the arguments
@@ -38,6 +54,10 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      */
     public function withOptions($options)
     {
+        if ($this->stubcliUsed && !strstr($options, 'c')) {
+            $options .= 'c:';
+        }
+
         $this->options = $options;
         return $this;
     }
@@ -50,6 +70,10 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      */
     public function withLongOptions($options)
     {
+        if ($this->stubcliUsed && null === $this->options) {
+            $this->options = 'c:';
+        }
+
         $this->longopts = $options;
         return $this;
     }

@@ -137,5 +137,58 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
         $this->argumentsBindingModule->withOptions('//');
         $this->bindArguments();
     }
+
+    /**
+     * @test
+     */
+    public function optionsContainCIfStubCliEnabled()
+    {
+        $this->argumentsBindingModule = $this->getMock('net\\stubbles\\console\\ioc\\ArgumentsBindingModule',
+                                                       array('getopt'),
+                                                       array(true)
+                                        );
+        $this->argumentsBindingModule->expects($this->once())
+                                     ->method('getopt')
+                                     ->with($this->equalTo('n:f::c:'), $this->equalTo(array('verbose')))
+                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+        $this->argumentsBindingModule->withOptions('n:f::')
+                                     ->withLongOptions(array('verbose'));
+        $this->bindArguments();
+    }
+
+    /**
+     * @test
+     */
+    public function optionsContainCIfStubCliEnabledAndOnlyLongOptionsSet()
+    {
+        $this->argumentsBindingModule = $this->getMock('net\\stubbles\\console\\ioc\\ArgumentsBindingModule',
+                                                       array('getopt'),
+                                                       array(true)
+                                        );
+        $this->argumentsBindingModule->expects($this->once())
+                                     ->method('getopt')
+                                     ->with($this->equalTo('c:'), $this->equalTo(array('verbose')))
+                                     ->will($this->returnValue(array('verbose' => false)));
+        $this->argumentsBindingModule->withLongOptions(array('verbose'));
+        $this->bindArguments();
+    }
+
+    /**
+     * @test
+     */
+    public function optionsContainCIfStubCliEnabledAndLongOptionsSetFirst()
+    {
+        $this->argumentsBindingModule = $this->getMock('net\\stubbles\\console\\ioc\\ArgumentsBindingModule',
+                                                       array('getopt'),
+                                                       array(true)
+                                        );
+        $this->argumentsBindingModule->expects($this->once())
+                                     ->method('getopt')
+                                     ->with($this->equalTo('n:f::c:'), $this->equalTo(array('verbose')))
+                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+        $this->argumentsBindingModule->withLongOptions(array('verbose'))
+                                     ->withOptions('n:f::');
+        $this->bindArguments();
+    }
 }
 ?>

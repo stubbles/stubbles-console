@@ -37,11 +37,40 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function missingClassnameGivesErrorMessageAndReturns()
+    public function missingClassnameOptionGivesErrorMessageAndReturns()
     {
         $this->mockOutputStream->expects($this->once())
                                ->method('writeLine');
-        $this->assertEquals(1, TestConsoleApp::stubcli('projectPath', array(), $this->mockOutputStream));
+        $this->assertEquals(1, TestConsoleApp::stubcli('projectPath',
+                                                       array(),
+                                                       $this->mockOutputStream)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function missingClassnameInOptionGivesErrorMessageAndReturns()
+    {
+        $this->mockOutputStream->expects($this->once())
+                               ->method('writeLine');
+        $this->assertEquals(2, TestConsoleApp::stubcli('projectPath',
+                                                       array('-c'),
+                                                       $this->mockOutputStream)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function invalidClassnameGivesErrorMessageAndReturns()
+    {
+        $this->mockOutputStream->expects($this->once())
+                               ->method('writeLine');
+        $this->assertEquals(3, TestConsoleApp::stubcli('projectPath',
+                                                       array('-c', 'doesNotExist'),
+                                                       $this->mockOutputStream)
+        );
     }
 
     /**
@@ -55,6 +84,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                                ->with($this->equalTo('*** Exception: failure'));
         $this->assertEquals(70, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
+                                                          '-c',
                                                           'org\\stubbles\\test\\console\\TestConsoleApp'
                                                     ),
                                                     $this->mockOutputStream
@@ -73,6 +103,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                                ->with($this->equalTo('*** net\stubbles\lang\exception\Exception: failure'));
         $this->assertEquals(70, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
+                                                          '-c',
                                                           'org\\stubbles\\test\\console\\TestConsoleApp'
                                                     ),
                                                      $this->mockOutputStream
@@ -89,6 +120,27 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                                ->method('writeLine');
         $this->assertEquals(313, ConsoleApp::stubcli('projectPath',
                                                      array('stubcli',
+                                                           '-c',
+                                                           'org\\stubbles\\test\\console\\TestConsoleApp'
+                                                     ),
+                                                     $this->mockOutputStream
+                                 )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function detectsClassNameIfOnOtherPosition()
+    {
+        $this->mockOutputStream->expects($this->never())
+                               ->method('writeLine');
+        $this->assertEquals(313, ConsoleApp::stubcli('projectPath',
+                                                     array('stubcli',
+                                                           '-v',
+                                                           '-other',
+                                                           'value',
+                                                           '-c',
                                                            'org\\stubbles\\test\\console\\TestConsoleApp'
                                                      ),
                                                      $this->mockOutputStream

@@ -20,6 +20,13 @@ use net\stubbles\streams\OutputStream;
 abstract class ConsoleApp extends App
 {
     /**
+     * switch whether stubcli was used
+     *
+     * @type  bool
+     */
+    private static $stubcli = false;
+
+    /**
      * main method for stubcli
      *
      * @param   string        $projectPath
@@ -29,12 +36,17 @@ abstract class ConsoleApp extends App
      */
     public static function stubcli($projectPath, array $argv, OutputStream $err)
     {
-        if (!isset($argv[1])) {
-            $err->writeLine('*** Missing classname of command app to execute');
-            return 1;
+        $commandClass  = self::parseCommandClass($argv, $err);
+        if (is_int($commandClass)) {
+            return $commandClass;
         }
 
-        $commandClass = $argv[1];
+        if (!class_exists($commandClass)) {
+            $err->writeLine('*** Can not find ' . $commandClass);
+            return 3;
+        }
+
+        self::$stubcli = true;
         try {
             return (int) $commandClass::create($projectPath)
                                       ->run();
@@ -42,6 +54,29 @@ abstract class ConsoleApp extends App
             $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
             return 70;
         }
+    }
+
+    /**
+     * tries to parse command class from input
+     *
+     * @param   array         $argv
+     * @param   OutputStream  $err
+     * @return  int|string
+     */
+    private static function parseCommandClass(array $argv, OutputStream $err)
+    {
+        $c = array_search('-c', $argv);
+        if (false === $c) {
+            $err->writeLine('*** Missing classname option -c');
+            return 1;
+        }
+
+        if (!isset($argv[$c + 1])) {
+            $err->writeLine('*** No classname specified in -c');
+            return 2;
+        }
+
+        return $argv[$c + 1];
     }
 
     /**
@@ -69,7 +104,7 @@ abstract class ConsoleApp extends App
      */
     protected static function createArgumentsBindingModule()
     {
-        return new ArgumentsBindingModule();
+        return new ArgumentsBindingModule(self::$stubcli);
     }
 
     /**
