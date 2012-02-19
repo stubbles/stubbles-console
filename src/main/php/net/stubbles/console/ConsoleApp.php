@@ -20,14 +20,14 @@ use net\stubbles\streams\OutputStream;
 abstract class ConsoleApp extends App
 {
     /**
-     * main method
+     * main method for stubcli
      *
      * @param   string        $projectPath
      * @param   array         $argv
      * @param   OutputStream  $err
      * @return  int  exit code
      */
-    public static function main($projectPath, array $argv, OutputStream $err)
+    public static function stubcli($projectPath, array $argv, OutputStream $err)
     {
         if (!isset($argv[1])) {
             $err->writeLine('*** Missing classname of command app to execute');
@@ -38,6 +38,24 @@ abstract class ConsoleApp extends App
         try {
             return (int) $commandClass::create($projectPath)
                                       ->run();
+        } catch (\Exception $e) {
+            $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
+            return 70;
+        }
+    }
+
+    /**
+     * main method
+     *
+     * @param   string        $projectPath
+     * @param   OutputStream  $err
+     * @return  int  exit code
+     */
+    public static function main($projectPath, OutputStream $err)
+    {
+        try {
+            return (int) self::create($projectPath)
+                             ->run();
         } catch (\Exception $e) {
             $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
             return 70;

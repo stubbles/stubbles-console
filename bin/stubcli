@@ -7,5 +7,5 @@
  */
 namespace net\stubbles\console;
 require __DIR__ . '/../../../../bootstrap.php';
-exit(ConsoleApp::main(\net\stubbles\Bootstrap::getRootPath(), $argv, ConsoleOutputStream::forError()));
+exit(ConsoleApp::stubcli(\net\stubbles\Bootstrap::getRootPath(), $argv, ConsoleOutputStream::forError()));
 ?>
