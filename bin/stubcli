@@ -6,6 +6,11 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-require __DIR__ . '/../../../../bootstrap.php';
+if (file_exists(__DIR__ . '/../bootstrap.php')) {
+    require __DIR__ . '/../bootstrap.php';
+} else {
+    require __DIR__ . '/../../../../bootstrap.php';
+}
+
 exit(ConsoleApp::stubcli(\net\stubbles\Bootstrap::getRootPath(), $argv, ConsoleOutputStream::forError()));
 ?>
