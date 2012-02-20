@@ -1,0 +1,11 @@
+#!/usr/bin/php
+<?php
+/**
+ * Script to execute org\stubbles\console\scripts\creator\ConsoleAppCreator.
+ *
+ * @package  net\stubbles\console
+ */
+namespace org\stubbles\console\scripts\creator;
+require __DIR__ . '/../bootstrap.php';
+exit(ConsoleAppCreator::main(\net\stubbles\Bootstrap::getRootPath(), \net\stubbles\console\ConsoleOutputStream::forError()));
+?>
