@@ -9,8 +9,8 @@
  */
 namespace net\stubbles\console;
 use net\stubbles\lang\exception\Exception;
-use org\stubbles\test\console\ConsoleAppUsingBindingModule;
-use org\stubbles\test\console\TestConsoleApp;
+use org\stubbles\console\test\ConsoleAppUsingBindingModule;
+use org\stubbles\console\test\TestConsoleApp;
 /**
  * Test for net\stubbles\console\ConsoleApp.
  *
@@ -85,7 +85,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(70, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
                                                           '-c',
-                                                          'org\\stubbles\\test\\console\\TestConsoleApp'
+                                                          'org\\stubbles\\console\\test\\TestConsoleApp'
                                                     ),
                                                     $this->mockOutputStream
                                 )
@@ -104,7 +104,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(70, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
                                                           '-c',
-                                                          'org\\stubbles\\test\\console\\TestConsoleApp'
+                                                          'org\\stubbles\\console\\test\\TestConsoleApp'
                                                     ),
                                                      $this->mockOutputStream
                                 )
@@ -121,7 +121,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(313, ConsoleApp::stubcli('projectPath',
                                                      array('stubcli',
                                                            '-c',
-                                                           'org\\stubbles\\test\\console\\TestConsoleApp'
+                                                           'org\\stubbles\\console\\test\\TestConsoleApp'
                                                      ),
                                                      $this->mockOutputStream
                                  )
@@ -141,7 +141,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                                                            '-other',
                                                            'value',
                                                            '-c',
-                                                           'org\\stubbles\\test\\console\\TestConsoleApp'
+                                                           'org\\stubbles\\console\\test\\TestConsoleApp'
                                                      ),
                                                      $this->mockOutputStream
                                  )

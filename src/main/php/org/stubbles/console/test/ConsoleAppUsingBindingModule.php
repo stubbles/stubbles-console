@@ -7,7 +7,7 @@
  *
  * @package  net\stubbles
  */
-namespace org\stubbles\test\console;
+namespace org\stubbles\console\test;
 use net\stubbles\console\ConsoleApp;
 /**
  * Helper class to test binding module creations.
