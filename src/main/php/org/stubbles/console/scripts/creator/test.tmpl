@@ -1,0 +1,57 @@
+<?php
+/**
+ * Your license or something other here.
+ *
+ * @package  {NAMESPACE}
+ */
+namespace {NAMESPACE};
+/**
+ * Test for {NAMESPACE}\{CLASS}.
+ */
+class {CLASS}TestCase extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * instance to test
+     *
+     * @type  {CLASS}
+     */
+    private $instance;
+
+    /**
+     * set up test environment
+     */
+    public function setUp()
+    {
+        $this->instance = new {CLASS}();
+    }
+
+    /**
+     * @test
+     */
+    public function annotationsPresentOnConstructor()
+    {
+        $this->assertTrue($this->instance->getClass()
+                                         ->getConstructor()
+                                         ->hasAnnotation('Inject')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function returnsExitCode0()
+    {
+        $this->assertEquals(0, $this->instance->run());
+    }
+
+    /**
+     * @test
+     */
+    public function canCreateInstance()
+    {
+        $this->assertInstanceOf('{NAMESPACE_ESCAPED}\\{CLASS}',
+                                {CLASS}::create(\net\stubbles\Bootstrap::getRootPath())
+        );
+    }
+}
+?>
