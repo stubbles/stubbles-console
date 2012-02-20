@@ -11,8 +11,7 @@
     "autoload": {
         "psr-0": {
             "net\\stubbles\\console": "src/main/php",
-            "org\\stubbles\\console": "src/main/php",
-            "org\\stubbles\\test\\console": "src/main/php"
+            "org\\stubbles\\console": "src/main/php"
         }
     },
     "bin": ["bin/stubcli", "bin/createConsoleApp"],

@@ -7,7 +7,7 @@
  *
  * @package  net\stubbles\console
  */
-namespace org\stubbles\test\console;
+namespace org\stubbles\console\test;
 use net\stubbles\console\ConsoleApp;
 /**
  * Helper class for the test.
