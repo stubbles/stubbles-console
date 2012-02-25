@@ -29,11 +29,11 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     private $mockClassFile;
     /**
-     * mocked stub file creator
+     * mocked script file creator
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockStubFile;
+    private $mockScriptFile;
     /**
      * mocked test file creator
      *
@@ -52,7 +52,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
         $this->mockClassFile     = $this->getMockBuilder('org\\stubbles\\console\\scripts\\creator\\ClassFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->mockStubFile      = $this->getMockBuilder('org\\stubbles\\console\\scripts\\creator\\StubFileCreator')
+        $this->mockScriptFile    = $this->getMockBuilder('org\\stubbles\\console\\scripts\\creator\\ScriptFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $this->mockTestFile      = $this->getMockBuilder('org\\stubbles\\console\\scripts\\creator\\TestFileCreator')
@@ -60,7 +60,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
                                         ->getMock();
         $this->consoleAppCreator = new ConsoleAppCreator($this->mockConsole,
                                                          $this->mockClassFile,
-                                                         $this->mockStubFile,
+                                                         $this->mockScriptFile,
                                                          $this->mockTestFile
                                    );
         $this->mockConsole->expects(($this->any()))
@@ -89,7 +89,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
                           ->will($this->returnValue('500'));
         $this->mockClassFile->expects($this->never())
                             ->method('create');
-        $this->mockStubFile->expects($this->never())
+        $this->mockScriptFile->expects($this->never())
                            ->method('create');
         $this->mockTestFile->expects($this->never())
                            ->method('create');
@@ -106,7 +106,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
                           ->will($this->returnValue('foo\\500'));
         $this->mockClassFile->expects($this->never())
                             ->method('create');
-        $this->mockStubFile->expects($this->never())
+        $this->mockScriptFile->expects($this->never())
                            ->method('create');
         $this->mockTestFile->expects($this->never())
                            ->method('create');
@@ -124,7 +124,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
         $this->mockClassFile->expects($this->once())
                             ->method('create')
                             ->with($this->equalTo('foo\\bar\\Example'));
-        $this->mockStubFile->expects($this->once())
+        $this->mockScriptFile->expects($this->once())
                            ->method('create')
                            ->with($this->equalTo('foo\\bar\\Example'));
         $this->mockTestFile->expects($this->once())
@@ -144,7 +144,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
         $this->mockClassFile->expects($this->once())
                             ->method('create')
                             ->with($this->equalTo('foo\\bar\\Example'));
-        $this->mockStubFile->expects($this->once())
+        $this->mockScriptFile->expects($this->once())
                            ->method('create')
                            ->with($this->equalTo('foo\\bar\\Example'));
         $this->mockTestFile->expects($this->once())
@@ -164,7 +164,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
         $this->mockClassFile->expects($this->once())
                             ->method('create')
                             ->with($this->equalTo('foo\\bar\\Example'));
-        $this->mockStubFile->expects($this->once())
+        $this->mockScriptFile->expects($this->once())
                            ->method('create')
                            ->with($this->equalTo('foo\\bar\\Example'));
         $this->mockTestFile->expects($this->once())

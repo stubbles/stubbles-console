@@ -68,7 +68,7 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      * @param   string[]  $options
      * @return  ArgumentsBindingModule
      */
-    public function withLongOptions($options)
+    public function withLongOptions(array $options)
     {
         if ($this->stubcliUsed && null === $this->options) {
             $this->options = 'c:';

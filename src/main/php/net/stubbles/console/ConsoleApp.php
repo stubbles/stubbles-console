@@ -52,7 +52,7 @@ abstract class ConsoleApp extends App
                                       ->run();
         } catch (\Exception $e) {
             $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
-            return 70;
+            return 20;
         }
     }
 
@@ -93,7 +93,7 @@ abstract class ConsoleApp extends App
                              ->run();
         } catch (\Exception $e) {
             $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
-            return 70;
+            return 20;
         }
     }
 
