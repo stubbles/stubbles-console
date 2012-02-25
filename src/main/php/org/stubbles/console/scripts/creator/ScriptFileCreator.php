@@ -9,9 +9,9 @@
  */
 namespace org\stubbles\console\scripts\creator;
 /**
- * Creates a stub file for given console class name.
+ * Creates a script file for given console class name.
  */
-class StubFileCreator extends FileCreator
+class ScriptFileCreator extends FileCreator
 {
     /**
      * creates file
@@ -20,13 +20,13 @@ class StubFileCreator extends FileCreator
      */
     public function create($className)
     {
-        $this->console->writeLine('Please enter the stub name for the console app: ');
+        $this->console->writeLine('Please enter the script name for the console app: ');
         $stubFileName = $this->projectPath . '/bin/'  . $this->console->readLine();
         if (!file_exists($stubFileName)) {
-            $this->createFile($stubFileName, $className, 'stub.tmpl');
-            $this->console->writeLine('Stub for ' . $className . ' created at ' . $stubFileName);
+            $this->createFile($stubFileName, $className, 'script.tmpl');
+            $this->console->writeLine('Script for ' . $className . ' created at ' . $stubFileName);
         } else {
-            $this->console->writeLine('Stub for ' . $className . ' already exists, skipped creating the stub');
+            $this->console->writeLine('Script for ' . $className . ' already exists, skipped creating the script');
         }
     }
 }

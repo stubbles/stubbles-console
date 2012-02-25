@@ -32,7 +32,7 @@ class TestConsoleApp extends ConsoleApp
             throw self::$exception;
         }
 
-        return 313;
+        return 0;
     }
 }
 ?>

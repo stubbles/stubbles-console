@@ -27,9 +27,9 @@ class ConsoleAppCreator extends ConsoleApp
     /**
      * stub file creator
      *
-     * @type  StubFileCreator
+     * @type  ScriptFileCreator
      */
-    private $stubFile;
+    private $scriptFile;
     /**
      * test file creator
      *
@@ -53,21 +53,21 @@ class ConsoleAppCreator extends ConsoleApp
     /**
      * constructor
      *
-     * @param  Console           $console
-     * @param  ClassFileCreator  $classFile
-     * @param  StubFileCreator   $stubFile
-     * @param  TestFileCreator   $testFile
+     * @param  Console            $console
+     * @param  ClassFileCreator   $classFile
+     * @param  ScriptFileCreator  $scriptFile
+     * @param  TestFileCreator    $testFile
      * @Inject
      */
     public function __construct(Console $console,
                                 ClassFileCreator $classFile,
-                                StubFileCreator $stubFile,
+                                ScriptFileCreator $scriptFile,
                                 TestFileCreator $testFile)
     {
-        $this->console   = $console;
-        $this->classFile = $classFile;
-        $this->stubFile  = $stubFile;
-        $this->testFile  = $testFile;
+        $this->console    = $console;
+        $this->classFile  = $classFile;
+        $this->scriptFile = $scriptFile;
+        $this->testFile   = $testFile;
     }
 
     /**
@@ -88,7 +88,7 @@ class ConsoleAppCreator extends ConsoleApp
         }
 
         $this->classFile->create($className);
-        $this->stubFile->create($className);
+        $this->scriptFile->create($className);
         $this->testFile->create($className);
         return 0;
     }
@@ -106,8 +106,19 @@ class ConsoleAppCreator extends ConsoleApp
         }
 
         return (bool) preg_match('/^([a-zA-Z_]{1}[a-zA-Z0-9_]*)$/',
-                                 substr($className, strrpos($className, '\\') + 1)
+                                 $this->getNonQualifiedClassName($className)
                       );
+    }
+
+    /**
+     * returns non qualified part of class name
+     *
+     * @param   string  $className
+     * @return  string
+     */
+    private function getNonQualifiedClassName($className)
+    {
+        return substr($className, strrpos($className, '\\') + 1);
     }
 }
 ?>
