@@ -82,7 +82,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->mockOutputStream->expects($this->once())
                                ->method('writeLine')
                                ->with($this->equalTo('*** Exception: failure'));
-        $this->assertEquals(70, ConsoleApp::stubcli('projectPath',
+        $this->assertEquals(20, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
                                                           '-c',
                                                           'org\\stubbles\\console\\test\\TestConsoleApp'
@@ -101,7 +101,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->mockOutputStream->expects($this->once())
                                ->method('writeLine')
                                ->with($this->equalTo('*** net\stubbles\lang\exception\Exception: failure'));
-        $this->assertEquals(70, ConsoleApp::stubcli('projectPath',
+        $this->assertEquals(20, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
                                                           '-c',
                                                           'org\\stubbles\\console\\test\\TestConsoleApp'
@@ -118,13 +118,13 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockOutputStream->expects($this->never())
                                ->method('writeLine');
-        $this->assertEquals(313, ConsoleApp::stubcli('projectPath',
-                                                     array('stubcli',
-                                                           '-c',
-                                                           'org\\stubbles\\console\\test\\TestConsoleApp'
-                                                     ),
-                                                     $this->mockOutputStream
-                                 )
+        $this->assertEquals(0, ConsoleApp::stubcli('projectPath',
+                                                   array('stubcli',
+                                                         '-c',
+                                                         'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                   ),
+                                                   $this->mockOutputStream
+                               )
         );
     }
 
@@ -135,16 +135,16 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockOutputStream->expects($this->never())
                                ->method('writeLine');
-        $this->assertEquals(313, ConsoleApp::stubcli('projectPath',
-                                                     array('stubcli',
-                                                           '-v',
-                                                           '-other',
-                                                           'value',
-                                                           '-c',
-                                                           'org\\stubbles\\console\\test\\TestConsoleApp'
-                                                     ),
-                                                     $this->mockOutputStream
-                                 )
+        $this->assertEquals(0, ConsoleApp::stubcli('projectPath',
+                                                   array('stubcli',
+                                                         '-v',
+                                                         '-other',
+                                                         'value',
+                                                         '-c',
+                                                         'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                   ),
+                                                   $this->mockOutputStream
+                               )
         );
     }
 
@@ -157,7 +157,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->mockOutputStream->expects($this->once())
                                ->method('writeLine')
                                ->with($this->equalTo('*** Exception: failure'));
-        $this->assertEquals(70, TestConsoleApp::main('projectPath',
+        $this->assertEquals(20, TestConsoleApp::main('projectPath',
                                                      $this->mockOutputStream
                                 )
         );
@@ -172,7 +172,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->mockOutputStream->expects($this->once())
                                ->method('writeLine')
                                ->with($this->equalTo('*** net\stubbles\lang\exception\Exception: failure'));
-        $this->assertEquals(70, TestConsoleApp::main('projectPath',
+        $this->assertEquals(20, TestConsoleApp::main('projectPath',
                                                      $this->mockOutputStream
                                 )
         );
@@ -185,9 +185,9 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockOutputStream->expects($this->never())
                                ->method('writeLine');
-        $this->assertEquals(313, TestConsoleApp::main('projectPath',
-                                                      $this->mockOutputStream
-                                 )
+        $this->assertEquals(0, TestConsoleApp::main('projectPath',
+                                                    $this->mockOutputStream
+                               )
         );
     }
 
