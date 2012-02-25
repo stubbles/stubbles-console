@@ -106,8 +106,19 @@ class ConsoleAppCreator extends ConsoleApp
         }
 
         return (bool) preg_match('/^([a-zA-Z_]{1}[a-zA-Z0-9_]*)$/',
-                                 substr($className, strrpos($className, '\\') + 1)
+                                 $this->getNonQualifiedClassName($className)
                       );
+    }
+
+    /**
+     * returns non qualified part of class name
+     *
+     * @param   string  $className
+     * @return  string
+     */
+    private function getNonQualifiedClassName($className)
+    {
+        return substr($className, strrpos($className, '\\') + 1);
     }
 }
 ?>
