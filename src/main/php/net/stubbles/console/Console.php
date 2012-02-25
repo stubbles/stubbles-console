@@ -23,25 +23,34 @@ class Console extends BaseObject
      */
     private $in;
     /**
-     * stream to write data to
+     * stream to write default data to
      *
      * @type  OutputStream
      */
     private $out;
+    /**
+     * stream to write error data to
+     *
+     * @type  OutputStream
+     */
+    private $err;
 
     /**
      * constructor
      *
      * @param  InputStream   $in   stresm to read data from
-     * @param  OutputStream  $out  stream to write data to
+     * @param  OutputStream  $out  stream to write default data to
+     * @param  OutputStream  $err  stream to write error data to
      * @Inject
      * @Named{in}('stdin')
      * @Named{out}('stdout')
+     * @Named{err}('stderr')
      */
-    public function __construct(InputStream $in, OutputStream $out)
+    public function __construct(InputStream $in, OutputStream $out, OutputStream $err)
     {
         $this->in  = $in;
         $this->out = $out;
+        $this->err = $err;
     }
 
     /**
@@ -87,6 +96,30 @@ class Console extends BaseObject
     public function writeLine($bytes)
     {
         $this->out->writeLine($bytes);
+        return $this;
+    }
+
+    /**
+     * writes given bytes
+     *
+     * @param   string  $bytes
+     * @return  Console
+     */
+    public function writeError($bytes)
+    {
+        $this->err->write($bytes);
+        return $this;
+    }
+
+    /**
+     * writes given bytes and appends a line break
+     *
+     * @param   string  $bytes
+     * @return  Console
+     */
+    public function writeErrorLine($bytes)
+    {
+        $this->err->writeLine($bytes);
         return $this;
     }
 }
