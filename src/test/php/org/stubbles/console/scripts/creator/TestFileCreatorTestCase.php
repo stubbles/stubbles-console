@@ -50,7 +50,7 @@ class TestFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function createsClassIfDoesNotExist()
+    public function createsTestIfDoesNotExist()
     {
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
