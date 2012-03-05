@@ -12,6 +12,8 @@ use net\stubbles\lang\Object;
 use net\stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
+ *
+ * @api
  */
 interface Executor extends Object
 {
