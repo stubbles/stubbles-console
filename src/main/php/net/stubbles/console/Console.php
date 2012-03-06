@@ -56,6 +56,7 @@ class Console extends BaseObject
     /**
      * reads given amount of bytes
      *
+     * @api
      * @param   int  $length  max amount of bytes to read
      * @return  string
      */
@@ -67,6 +68,7 @@ class Console extends BaseObject
     /**
      * reads given amount of bytes or until next line break
      *
+     * @api
      * @param   int  $length  max amount of bytes to read
      * @return  string
      */
@@ -78,6 +80,7 @@ class Console extends BaseObject
     /**
      * writes given bytes
      *
+     * @api
      * @param   string  $bytes
      * @return  Console
      */
@@ -90,6 +93,7 @@ class Console extends BaseObject
     /**
      * writes given bytes and appends a line break
      *
+     * @api
      * @param   string  $bytes
      * @return  Console
      */
@@ -102,6 +106,7 @@ class Console extends BaseObject
     /**
      * writes given bytes
      *
+     * @api
      * @param   string  $bytes
      * @return  Console
      */
@@ -114,6 +119,7 @@ class Console extends BaseObject
     /**
      * writes given bytes and appends a line break
      *
+     * @api
      * @param   string  $bytes
      * @return  Console
      */

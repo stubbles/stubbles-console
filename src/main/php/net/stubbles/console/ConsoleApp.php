@@ -82,6 +82,7 @@ abstract class ConsoleApp extends App
     /**
      * main method
      *
+     * @api
      * @param   string        $projectPath
      * @param   OutputStream  $err
      * @return  int  exit code
@@ -100,6 +101,7 @@ abstract class ConsoleApp extends App
     /**
      * creates argument binding module
      *
+     * @api
      * @return  ArgumentsBindingModule
      */
     protected static function createArgumentsBindingModule()
@@ -110,6 +112,7 @@ abstract class ConsoleApp extends App
     /**
      * creates console binding module
      *
+     * @api
      * @return  ConsoleBindingModule
      */
     protected static function createConsoleBindingModule()

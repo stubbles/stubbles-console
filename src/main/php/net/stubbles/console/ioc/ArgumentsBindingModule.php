@@ -49,6 +49,7 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
     /**
      * sets the options to be used for parsing the arguments
      *
+     * @api
      * @param   string  $options
      * @return  ArgumentsBindingModule
      */
@@ -65,6 +66,7 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
     /**
      * sets the long options to be used for parsing the arguments
      *
+     * @api
      * @param   string[]  $options
      * @return  ArgumentsBindingModule
      */
