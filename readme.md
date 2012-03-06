@@ -9,7 +9,7 @@ with Composer, see [Composer - Package Management for PHP](https://github.com/co
 Stubbles Console requires PHP 5.3.
 
 
-For more information please check the project's wiki here on github.
+For more information please check the [project's wiki](https://github.com/stubbles/stubbles-console/wiki) here on github.
 
 
 Build status
