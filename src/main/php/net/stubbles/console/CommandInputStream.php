@@ -15,6 +15,8 @@ use net\stubbles\lang\exception\RuntimeException;
 use net\stubbles\streams\ResourceInputStream;
 /**
  * Input stream to read output of an executed command.
+ *
+ * @internal
  */
 class CommandInputStream extends ResourceInputStream
 {
