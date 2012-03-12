@@ -6,11 +6,12 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-if (file_exists(__DIR__ . '/../bootstrap.php')) {
-    require __DIR__ . '/../bootstrap.php';
+if (file_exists(__DIR__ . '/../vendor/.composer/autoload.php')) {
+    $rootDir = __DIR__ . '/../';
 } else {
-    require __DIR__ . '/../../../../bootstrap.php';
+    $rootDir = __DIR__ . '/../../../../';
 }
 
-exit(ConsoleApp::stubcli(\net\stubbles\Bootstrap::getRootPath(), $argv, ConsoleOutputStream::forError()));
+require $rootDir . '/vendor/.composer/autoload.php';
+exit(ConsoleApp::stubcli($rootDir, $argv, ConsoleOutputStream::forError()));
 ?>
