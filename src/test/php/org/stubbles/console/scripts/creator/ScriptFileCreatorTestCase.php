@@ -68,8 +68,8 @@ class ScriptFileCreatorTestCase extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
-require __DIR__ . \'/../bootstrap.php\';
-exit(ExampleConsoleApp::main(\net\stubbles\Bootstrap::getRootPath(), \net\stubbles\console\ConsoleOutputStream::forError()));
+require __DIR__ . \'/../vendor/.composer/autoload.php\';
+exit(ExampleConsoleApp::main(__DIR__ . \'/../\', \net\stubbles\console\ConsoleOutputStream::forError()));
 ?>',
                             $this->root->getChild('bin/example')
                                        ->getContent()

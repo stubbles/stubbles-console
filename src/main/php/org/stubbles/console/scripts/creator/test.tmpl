@@ -50,7 +50,7 @@ class {CLASS}TestCase extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         $this->assertInstanceOf('{NAMESPACE_ESCAPED}\\{CLASS}',
-                                {CLASS}::create(\net\stubbles\Bootstrap::getRootPath())
+                                {CLASS}::create(\net\stubbles\lang\ResourceLoader::getRootPath())
         );
     }
 }
