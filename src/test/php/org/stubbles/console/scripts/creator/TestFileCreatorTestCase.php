@@ -109,7 +109,7 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         $this->assertInstanceOf(\'example\\\\console\\\\ExampleConsoleApp\',
-                                ExampleConsoleApp::create(\net\stubbles\Bootstrap::getRootPath())
+                                ExampleConsoleApp::create(\net\stubbles\lang\ResourceLoader::getRootPath())
         );
     }
 }

@@ -40,9 +40,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function configure()
     {
-        $injector = new Injector();
-        $this->consoleBindingModule->configure(new Binder($injector));
-        return $injector;
+        $binder = new Binder();
+        $this->consoleBindingModule->configure($binder);
+        return $binder->getInjector();
     }
 
     /**

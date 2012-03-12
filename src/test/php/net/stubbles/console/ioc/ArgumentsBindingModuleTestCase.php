@@ -57,9 +57,9 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function bindArguments()
     {
-        $injector = new Injector();
-        $this->argumentsBindingModule->configure(new Binder($injector));
-        return $injector;
+        $binder = new Binder();
+        $this->argumentsBindingModule->configure($binder);
+        return $binder->getInjector();
     }
 
     /**
