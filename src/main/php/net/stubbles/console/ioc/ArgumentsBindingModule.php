@@ -94,6 +94,12 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
             $binder->bindConstant('argv.' . $position)
                    ->to($value);
         }
+
+        if (interface_exists('net\\stubbles\\input\\Request')) {
+            $binder->bind('net\\stubbles\\input\\Request')
+                   ->to('net\\stubbles\\input\\console\\ConsoleRequest')
+                   ->asSingleton();
+        }
     }
 
     /**

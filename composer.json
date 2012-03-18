@@ -10,6 +10,9 @@
         "mikey179/vfsStream": "1.0.*",
         "stubbles/core": "2.0.*"
     },
+    "recommend": {
+        "stubbles/input": "dev-master"
+    },
     "autoload": {
         "psr-0": {
             "net\\stubbles\\console": "src/main/php",

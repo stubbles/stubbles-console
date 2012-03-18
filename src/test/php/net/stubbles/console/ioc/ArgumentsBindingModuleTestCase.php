@@ -190,5 +190,59 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
                                      ->withOptions('n:f::');
         $this->bindArguments();
     }
+
+    /**
+     * @test
+     */
+    public function bindsRequestIfAvailable()
+    {
+        if (!interface_exists('net\\stubbles\\input\\Request')) {
+            $this->markTestSkipped('Can only be run if net\\stubbles\\input\\Request is available');
+        }
+
+        $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\Request'));
+    }
+
+    /**
+     * @test
+     */
+    public function bindsRequestToConsoleRequestIfAvailable()
+    {
+        if (!interface_exists('net\\stubbles\\input\\Request')) {
+            $this->markTestSkipped('Can only be run if net\\stubbles\\input\\Request is available');
+        }
+
+        $this->assertInstanceOf('net\\stubbles\\input\\console\\ConsoleRequest',
+                                $this->bindArguments()->getInstance('net\\stubbles\\input\\Request')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function bindsConsoleRequestAsSingletonIfAvailable()
+    {
+        if (!interface_exists('net\\stubbles\\input\\Request')) {
+            $this->markTestSkipped('Can only be run if net\\stubbles\\input\\Request is available');
+        }
+
+        $injector = $this->bindArguments();
+        $this->assertSame($injector->getInstance('net\\stubbles\\input\\Request'),
+                          $injector->getInstance('net\\stubbles\\input\\Request')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function doesNotBindRequestIfNotAvailable()
+    {
+        if (interface_exists('net\\stubbles\\input\\Request')) {
+            $this->markTestSkipped('Can only be run if net\\stubbles\\input\\Request is not available');
+        }
+
+        $injector = $this->bindArguments();
+        $this->assertFalse($injector->hasBinding('net\\stubbles\\input\\Request'));
+    }
 }
 ?>
