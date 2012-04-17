@@ -190,5 +190,34 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
                                      ->withOptions('n:f::');
         $this->bindArguments();
     }
+
+    /**
+     * @test
+     */
+    public function bindsRequestIfAvailable()
+    {
+        $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\Request'));
+    }
+
+    /**
+     * @test
+     */
+    public function bindsRequestToConsoleRequestIfAvailable()
+    {
+        $this->assertInstanceOf('net\\stubbles\\input\\console\\ConsoleRequest',
+                                $this->bindArguments()->getInstance('net\\stubbles\\input\\Request')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function bindsConsoleRequestAsSingleton()
+    {
+        $injector = $this->bindArguments();
+        $this->assertSame($injector->getInstance('net\\stubbles\\input\\Request'),
+                          $injector->getInstance('net\\stubbles\\input\\Request')
+        );
+    }
 }
 ?>
