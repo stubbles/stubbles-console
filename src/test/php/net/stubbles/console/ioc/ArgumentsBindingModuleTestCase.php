@@ -196,10 +196,6 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestIfAvailable()
     {
-        if (!interface_exists('net\\stubbles\\input\\Request')) {
-            $this->markTestSkipped('Can only be run if net\\stubbles\\input\\Request is available');
-        }
-
         $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\Request'));
     }
 
@@ -208,10 +204,6 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestToConsoleRequestIfAvailable()
     {
-        if (!interface_exists('net\\stubbles\\input\\Request')) {
-            $this->markTestSkipped('Can only be run if net\\stubbles\\input\\Request is available');
-        }
-
         $this->assertInstanceOf('net\\stubbles\\input\\console\\ConsoleRequest',
                                 $this->bindArguments()->getInstance('net\\stubbles\\input\\Request')
         );
