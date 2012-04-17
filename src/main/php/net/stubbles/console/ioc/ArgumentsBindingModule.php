@@ -94,6 +94,10 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
             $binder->bindConstant('argv.' . $position)
                    ->to($value);
         }
+
+        $binder->bind('net\\stubbles\\input\\Request')
+               ->to('net\\stubbles\\input\\console\\ConsoleRequest')
+               ->asSingleton();
     }
 
     /**
