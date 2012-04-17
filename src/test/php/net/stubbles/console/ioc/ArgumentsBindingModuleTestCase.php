@@ -220,29 +220,12 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function bindsConsoleRequestAsSingletonIfAvailable()
+    public function bindsConsoleRequestAsSingleton()
     {
-        if (!interface_exists('net\\stubbles\\input\\Request')) {
-            $this->markTestSkipped('Can only be run if net\\stubbles\\input\\Request is available');
-        }
-
         $injector = $this->bindArguments();
         $this->assertSame($injector->getInstance('net\\stubbles\\input\\Request'),
                           $injector->getInstance('net\\stubbles\\input\\Request')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function doesNotBindRequestIfNotAvailable()
-    {
-        if (interface_exists('net\\stubbles\\input\\Request')) {
-            $this->markTestSkipped('Can only be run if net\\stubbles\\input\\Request is not available');
-        }
-
-        $injector = $this->bindArguments();
-        $this->assertFalse($injector->hasBinding('net\\stubbles\\input\\Request'));
     }
 }
 ?>
