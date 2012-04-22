@@ -59,12 +59,15 @@ class RequestParser extends BaseObject
     /**
      * parses request data into given class and returns an instance of it
      *
+     * Prints help for given class when -h or --help param is set.
+     *
      * @param   string  $class
+     * @param   string  $group   restrict parsing to given group
      * @return  object
      */
-    public function parseTo($class)
+    public function parseTo($class, $group = null)
     {
-        return $this->parseInto(new $class());
+        return $this->parseInto(new $class(), $group);
     }
 
     /**
@@ -73,19 +76,20 @@ class RequestParser extends BaseObject
      * Prints help for given object when -h or --help param is set.
      *
      * @param   object  $object
+     * @param   string  $group   restrict parsing to given group
      * @return  object
      * @throws  ConsoleAppException
      */
-    public function parseInto($object)
+    public function parseInto($object, $group = null)
     {
         if ($this->request->hasParam('h') || $this->request->hasParam('help')) {
-            throw new ConsoleAppException($this->createHelp($object), 0);
+            throw new ConsoleAppException($this->createHelp($object, $group), 0);
         }
 
-        $this->requestBroker->procure($object, function($paramName, $message)
-                                               {
-                                                   throw new ConsoleAppException($paramName . ': ' . $message, 10);
-                                               }
+        $this->requestBroker->procure($object, $group, function($paramName, $error)
+                                                       {
+                                                           throw new ConsoleAppException($paramName . ': ' . $error, 10);
+                                                       }
         );
 
         return $object;
@@ -95,26 +99,26 @@ class RequestParser extends BaseObject
      * prints help to console
      *
      * @param   object  $object
+     * @param   string  $group   restrict parsing to given group
      * @return  Closure
      */
-    private function createHelp($object)
+    private function createHelp($object, $group)
     {
-        $out           = $this->out;
-        $requestBroker = $this->requestBroker;
-        return function() use ($out, $requestBroker, $object)
+        $annotations = array();
+        foreach ($this->requestBroker->getAnnotations($object, $group) as $requestAnnotation) {
+            $name = $requestAnnotation->getName();
+            if (strlen($name) === 1) {
+                $name = '-' . $name;
+            } else {
+                $name = '--' . $name;
+            }
+
+            $annotations[$name] = $requestAnnotation->getDescription();
+        }
+
+        $out = $this->out;
+        return function() use ($out, $annotations)
                {
-                   $annotations = array();
-                   foreach ($requestBroker->getAnnotations($object) as $requestAnnotation) {
-                       $name = $requestAnnotation->getName();
-                       if (strlen($name) === 1) {
-                           $name = '-' . $name;
-                       } else {
-                           $name = '--' . $name;
-                       }
-
-                       $annotations[$name] = $requestAnnotation->getDescription();
-                   }
-
                    $longestName = max(array_map('strlen', array_keys($annotations)));
                    $out->writeLine('Usage: ');
                    foreach ($annotations as $name => $description) {

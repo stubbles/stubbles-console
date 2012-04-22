@@ -88,6 +88,9 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                           ->will($this->returnValue(true));
         $this->mockRequestBroker->expects($this->never())
                                 ->method('procure');
+        $this->mockRequestBroker->expects($this->once())
+                                    ->method('getAnnotations')
+                                    ->will($this->returnValue(array()));
         $this->requestParser->parseTo('org\\stubbles\\console\\test\\BrokeredUserInput');
     }
 
@@ -103,6 +106,9 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                           ->will($this->onConsecutiveCalls(false, true));
         $this->mockRequestBroker->expects($this->never())
                                 ->method('procure');
+        $this->mockRequestBroker->expects($this->once())
+                                    ->method('getAnnotations')
+                                    ->will($this->returnValue(array()));
         $this->requestParser->parseTo('org\\stubbles\\console\\test\\BrokeredUserInput');
     }
 
@@ -114,17 +120,17 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
         $this->mockRequest->expects($this->once())
                           ->method('hasParam')
                           ->will($this->returnValue(true));
+        $this->mockRequestBroker->expects($this->once())
+                                ->method('getAnnotations')
+                                ->will($this->returnValue(array($this->createRequestAnnotation('bar', 'Set the bar option.', 'main'),
+                                                                $this->createRequestAnnotation('o', 'Set another option.', 'other')
+                                                          )
+                                       )
+                                  );
         try {
             $this->requestParser->parseTo('org\\stubbles\\console\\test\\BrokeredUserInput');
             $this->fail('Excpected net\\stubbles\\console\\ConsoleAppException');
         } catch (ConsoleAppException $cae) {
-            $this->mockRequestBroker->expects($this->once())
-                                    ->method('getAnnotations')
-                                    ->will($this->returnValue(array($this->createRequestAnnotation('bar', 'Set the bar option.'),
-                                                                    $this->createRequestAnnotation('o', 'Set another option.')
-                                                              )
-                                           )
-                                      );
             $this->mockOutputStream->expects($this->at(0))
                                    ->method('writeLine')
                                    ->with($this->equalTo('Usage: '));
@@ -142,15 +148,17 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
     /**
      * creates request annotation
      *
-     * @param   string $name
+     * @param   string  $name
      * @param   string  $description
+     * @param   string  $group
      * @return  Annotation
      */
-    private function createRequestAnnotation($name, $description)
+    private function createRequestAnnotation($name, $description, $group)
     {
         $annotation = new Annotation('Test');
-        $annotation->name = $name;
+        $annotation->name        = $name;
         $annotation->description = $description;
+        $annotation->group       = $group;
         return $annotation;
     }
 
@@ -182,7 +190,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                           ->will($this->returnValue(false));
         $this->mockRequestBroker->expects($this->once())
                                 ->method('procure')
-                                ->will($this->returnCallback(function(BrokeredUserInput $userInput, \Closure $onError)
+                                ->will($this->returnCallback(function(BrokeredUserInput $userInput, $group, \Closure $onError)
                                                              {
                                                                  $onError('bar', 'Error, dude!');
                                                              }
