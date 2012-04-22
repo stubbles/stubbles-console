@@ -51,8 +51,7 @@ abstract class ConsoleApp extends App
             return (int) $commandClass::create($projectPath)
                                       ->run();
         } catch (\Exception $e) {
-            $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
-            return 20;
+            return self::handleException($e, $err);
         }
     }
 
@@ -93,9 +92,27 @@ abstract class ConsoleApp extends App
             return (int) self::create($projectPath)
                              ->run();
         } catch (\Exception $e) {
-            $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
-            return 20;
+            return self::handleException($e, $err);
         }
+    }
+
+    /**
+     * handle exception
+     *
+     * @param   \Exception    $e
+     * @param   OutputStream  $err
+     * @return  int
+     */
+    private static function handleException(\Exception $e, OutputStream $err)
+    {
+        if ($e instanceof ConsoleAppException) {
+            $messenger = $e->getMessenger();
+            $messenger($err);
+            return $e->getCode();
+        }
+
+        $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
+        return 20;
     }
 
     /**
