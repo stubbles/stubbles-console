@@ -76,6 +76,52 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function thrownConsoleAppExceptionWithMessageIsCatchedInStubcli()
+    {
+        TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
+        $this->mockOutputStream->expects($this->once())
+                               ->method('writeLine')
+                               ->with($this->equalTo('*** Exception: failure'));
+        $this->assertEquals(10, ConsoleApp::stubcli('projectPath',
+                                                    array('stubcli',
+                                                          '-c',
+                                                          'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                    ),
+                                                    $this->mockOutputStream
+                                )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function thrownConsoleAppExceptionWithClosureIsCatchedInStubcli()
+    {
+        $this->mockOutputStream->expects($this->never())
+                               ->method('writeLine');
+        $out = $this->getMock('net\\stubbles\\streams\\OutputStream');
+        $out->expects($this->once())
+            ->method('writeLine')
+            ->with($this->equalTo('something happened'));
+        TestConsoleApp::$exception = new ConsoleAppException(function() use($out)
+                                                             {
+                                                                 $out->writeLine('something happened');
+                                                             },
+                                                             10
+                                     );
+        $this->assertEquals(10, ConsoleApp::stubcli('projectPath',
+                                                    array('stubcli',
+                                                          '-c',
+                                                          'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                    ),
+                                                    $this->mockOutputStream
+                                )
+        );
+    }
+
+    /**
+     * @test
+     */
     public function thrownApplicationExceptionIsCatchedInStubcli()
     {
         TestConsoleApp::$exception = new \Exception('failure');
@@ -145,6 +191,44 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                                                    ),
                                                    $this->mockOutputStream
                                )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function thrownConsoleAppExceptionWithMessageIsCatched()
+    {
+        TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
+        $this->mockOutputStream->expects($this->once())
+                               ->method('writeLine')
+                               ->with($this->equalTo('*** Exception: failure'));
+        $this->assertEquals(10, TestConsoleApp::main('projectPath',
+                                                     $this->mockOutputStream
+                                )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function thrownConsoleAppExceptionWithClosureIsCatched()
+    {
+        $this->mockOutputStream->expects($this->never())
+                               ->method('writeLine');
+        $out = $this->getMock('net\\stubbles\\streams\\OutputStream');
+        $out->expects($this->once())
+            ->method('writeLine')
+            ->with($this->equalTo('something happened'));
+        TestConsoleApp::$exception = new ConsoleAppException(function() use($out)
+                                                             {
+                                                                 $out->writeLine('something happened');
+                                                             },
+                                                             10
+                                     );
+        $this->assertEquals(10, TestConsoleApp::main('projectPath',
+                                                     $this->mockOutputStream
+                                )
         );
     }
 

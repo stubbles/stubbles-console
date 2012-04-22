@@ -6,12 +6,12 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-if (file_exists(__DIR__ . '/../vendor/.composer/autoload.php')) {
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     $rootDir = __DIR__ . '/../';
 } else {
     $rootDir = __DIR__ . '/../../../../';
 }
 
-require $rootDir . '/vendor/.composer/autoload.php';
+require $rootDir . '/vendor/autoload.php';
 exit(ConsoleApp::stubcli($rootDir, $argv, ConsoleOutputStream::forError()));
 ?>
