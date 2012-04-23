@@ -88,9 +88,13 @@ class RequestParser extends BaseObject
 
         $this->requestBroker->procure($object, $group, function($paramName, $error)
                                                        {
-                                                           throw new ConsoleAppException($paramName . ': ' . $error, 10);
+                                                           throw new ConsoleAppException($error, 10);
                                                        }
         );
+
+        if (method_exists($object, 'finalizeInput')) {
+            $object->finalizeInput();
+        }
 
         return $object;
     }
@@ -106,24 +110,31 @@ class RequestParser extends BaseObject
     {
         $annotations = array();
         foreach ($this->requestBroker->getAnnotations($object, $group) as $requestAnnotation) {
-            $name = $requestAnnotation->getName();
-            if (strlen($name) === 1) {
-                $name = '-' . $name;
+            if ($requestAnnotation->hasOption()) {
+                $name = $requestAnnotation->getOption();
             } else {
-                $name = '--' . $name;
+                $name = $requestAnnotation->getName();
+                if (strlen($name) === 1) {
+                    $name = '-' . $name;
+                } else {
+                    $name = '--' . $name;
+                }
             }
 
             $annotations[$name] = $requestAnnotation->getDescription();
         }
 
-        $out = $this->out;
+        $annotations['-h'] = 'Prints this help.';
+        $out               = $this->out;
         return function() use ($out, $annotations)
                {
                    $longestName = max(array_map('strlen', array_keys($annotations)));
-                   $out->writeLine('Usage: ');
-                   foreach ($annotations as $name => $description) {
-                       $out->writeLine('   ' . str_pad($name, $longestName) . '   ' . $description);
+                   $out->writeLine('Options:');
+                   foreach ($annotations as $name => $requestAnnotation) {
+                       $out->writeLine('   ' . str_pad($name, $longestName) . '   ' . $requestAnnotation);
                    }
+                   
+                   $out->writeLine('');
                };
     }
 }

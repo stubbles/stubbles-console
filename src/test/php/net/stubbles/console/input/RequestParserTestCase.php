@@ -122,8 +122,9 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                           ->will($this->returnValue(true));
         $this->mockRequestBroker->expects($this->once())
                                 ->method('getAnnotations')
-                                ->will($this->returnValue(array($this->createRequestAnnotation('bar', 'Set the bar option.', 'main'),
-                                                                $this->createRequestAnnotation('o', 'Set another option.', 'other')
+                                ->will($this->returnValue(array($this->createRequestAnnotation('foo', 'Set the foo option.', '-f FOO'),
+                                                                $this->createRequestAnnotation('bar', 'Set the bar option.'),
+                                                                $this->createRequestAnnotation('o', 'Set another option.')
                                                           )
                                        )
                                   );
@@ -133,13 +134,19 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
         } catch (ConsoleAppException $cae) {
             $this->mockOutputStream->expects($this->at(0))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('Usage: '));
+                                   ->with($this->equalTo('Options:'));
             $this->mockOutputStream->expects($this->at(1))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('   --bar   Set the bar option.'));
+                                   ->with($this->equalTo('   -f FOO   Set the foo option.'));
             $this->mockOutputStream->expects($this->at(2))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('   -o      Set another option.'));
+                                   ->with($this->equalTo('   --bar    Set the bar option.'));
+            $this->mockOutputStream->expects($this->at(3))
+                                   ->method('writeLine')
+                                   ->with($this->equalTo('   -o       Set another option.'));
+            $this->mockOutputStream->expects($this->at(4))
+                                   ->method('writeLine')
+                                   ->with($this->equalTo('   -h       Prints this help.'));
             $messenger = $cae->getMessenger();
             $messenger();
         }
@@ -150,15 +157,18 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      *
      * @param   string  $name
      * @param   string  $description
-     * @param   string  $group
+     * @param   string  $option
      * @return  Annotation
      */
-    private function createRequestAnnotation($name, $description, $group)
+    private function createRequestAnnotation($name, $description, $option = null)
     {
         $annotation = new Annotation('Test');
         $annotation->name        = $name;
         $annotation->description = $description;
-        $annotation->group       = $group;
+        if (null !== $option) {
+            $annotation->option = $option;
+        }
+
         return $annotation;
     }
 
@@ -181,7 +191,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException         net\stubbles\console\ConsoleAppException
      * @expectedExceptionCode     10
-     * @expectedExceptionMessage  bar: Error, dude!
+     * @expectedExceptionMessage  Error, dude!
      */
     public function failureWhileParsingThrowsConsoleAppException()
     {
