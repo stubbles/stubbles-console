@@ -191,7 +191,6 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException         net\stubbles\console\ConsoleAppException
      * @expectedExceptionCode     10
-     * @expectedExceptionMessage  Error, dude!
      */
     public function failureWhileParsingThrowsConsoleAppException()
     {
