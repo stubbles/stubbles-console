@@ -88,7 +88,12 @@ class RequestParser extends BaseObject
 
         $this->requestBroker->procure($object, $group, function($paramName, $error)
                                                        {
-                                                           throw new ConsoleAppException($error, 10);
+                                                           throw new ConsoleAppException(function(OutputStream $err) use($error)
+                                                                                         {
+                                                                                             $err->writeLine($error);
+                                                                                         },
+                                                                                         10
+                                                           );
                                                        }
         );
 
@@ -133,7 +138,7 @@ class RequestParser extends BaseObject
                    foreach ($annotations as $name => $requestAnnotation) {
                        $out->writeLine('   ' . str_pad($name, $longestName) . '   ' . $requestAnnotation);
                    }
-                   
+
                    $out->writeLine('');
                };
     }
