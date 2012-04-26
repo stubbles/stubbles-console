@@ -4,12 +4,12 @@
         {
             "package": "stubbles/core",
             "version": "dev-master",
-            "source-reference": "0ebd7e42471e1c8c961b15e8a96c5a9dcea79d74"
+            "source-reference": "61b539074ec7e00418480de35929e6eaf1f7a388"
         },
         {
             "package": "stubbles/input",
             "version": "dev-master",
-            "source-reference": "a29baca00b2cc129b6bf9a789f78aaed456b519a"
+            "source-reference": "0b019c56b268ad06519bc678af28770c08feeb89"
         },
         {
             "package": "stubbles/scripts",
