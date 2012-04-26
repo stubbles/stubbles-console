@@ -235,5 +235,29 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
                           $injector->getInstance('net\\stubbles\\input\\Request')
         );
     }
+
+    /**
+     * @test
+     */
+    public function bindsNoUserInputByDefault()
+    {
+        $injector = $this->bindArguments();
+        $this->assertFalse($injector->hasConstant('net.stubbles.console.input.class'));
+    }
+
+    /**
+     * @test
+     */
+    public function bindsNoUserInputIfSet()
+    {
+        $this->argumentsBindingModule->withUserInput('org\\stubbles\\console\\test\\BrokeredUserInput');
+        $this->argumentsBindingModule->expects($this->once())
+                                     ->method('getopt')
+                                     ->with($this->equalTo('o::'), $this->equalTo(array('bar::')))
+                                     ->will($this->returnValue(array()));
+        $injector = $this->bindArguments();
+        $this->assertTrue($injector->hasConstant('net.stubbles.console.input.class'));
+        $this->assertTrue($injector->hasBinding('org\\stubbles\\console\\test\\BrokeredUserInput'));
+    }
 }
 ?>

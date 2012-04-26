@@ -35,6 +35,12 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      * @type  string[]
      */
     protected $longopts  = array();
+    /**
+     * name of user input class
+     *
+     * @type  string
+     */
+    private $userInput   = null;
 
     /**
      * constructor
@@ -81,6 +87,18 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
     }
 
     /**
+     * sets class to store user input into
+     *
+     * @param   string  $className
+     * @return  ArgumentsBindingModule
+     */
+    public function withUserInput($className)
+    {
+        $this->userInput = $className;
+        return $this;
+    }
+
+    /**
      * configure the binder
      *
      * @param  Binder  $binder
@@ -98,6 +116,12 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
         $binder->bind('net\\stubbles\\input\\Request')
                ->to('net\\stubbles\\input\\console\\ConsoleRequest')
                ->asSingleton();
+        if (null !== $this->userInput) {
+            $binder->bind($this->userInput)
+                   ->toProviderClass('net\\stubbles\\console\\input\\UserInputProvider');
+            $binder->bindConstant('net.stubbles.console.input.class')
+                   ->to($this->userInput);
+        }
     }
 
     /**
@@ -110,16 +134,37 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
     {
         $vars = $_SERVER['argv'];
         array_shift($vars); // script name
-        if (null === $this->options && count($this->longopts) === 0) {
+        if (null === $this->options && count($this->longopts) === 0 && null === $this->userInput) {
             return $vars;
         }
 
+        $this->parseOptions();
         $parsedVars = $this->getopt($this->options, $this->longopts);
         if (false === $parsedVars) {
             throw new ConfigurationException('Error parsing "' . join(' ', $_SERVER['argv']) . '" with ' . $this->options . ' and ' . join(' ', $this->longopts));
         }
 
         return array_merge($vars, $parsedVars);
+    }
+
+    /**
+     * parses options from user input class
+     */
+    private function parseOptions()
+    {
+        if (null === $this->userInput) {
+            return;
+        }
+
+        $requestMethods = new \net\stubbles\input\broker\RequestBrokerMethods();
+        foreach ($requestMethods->getAnnotations($this->userInput) as $annotation) {
+            $name = $annotation->getName();
+            if (strlen($name) === 1) {
+                $this->options .= $name . '::';
+            } else {
+                $this->longopts[] = $name . '::';
+            }
+        }
     }
 
     /**
