@@ -108,17 +108,18 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      */
     protected function getArgs()
     {
-        if (null === $this->options) {
-            $vars = $_SERVER['argv'];
-            array_shift($vars); // script name
-        } else {
-            $vars = $this->getopt($this->options, $this->longopts);
-            if (false === $vars) {
-                throw new ConfigurationException('Error parsing "' . join(' ', $_SERVER['argv']) . '" with ' . $this->options . ' and ' . join(' ', $this->longopts));
-            }
+        $vars = $_SERVER['argv'];
+        array_shift($vars); // script name
+        if (null === $this->options && count($this->longopts) === 0) {
+            return $vars;
         }
 
-        return $vars;
+        $parsedVars = $this->getopt($this->options, $this->longopts);
+        if (false === $parsedVars) {
+            throw new ConfigurationException('Error parsing "' . join(' ', $_SERVER['argv']) . '" with ' . $this->options . ' and ' . join(' ', $this->longopts));
+        }
+
+        return array_merge($vars, $parsedVars);
     }
 
     /**

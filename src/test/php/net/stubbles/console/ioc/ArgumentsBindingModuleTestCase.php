@@ -92,6 +92,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function argumentsAreBoundAfterParsingWhenOptionsDefined()
     {
+        $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'bar');
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
                                      ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
@@ -99,8 +100,16 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
         $this->argumentsBindingModule->withOptions('n:f::')
                                      ->withLongOptions(array('verbose'));
         $injector = $this->bindArguments();
+        $this->assertTrue($injector->hasConstant('argv.0'));
+        $this->assertTrue($injector->hasConstant('argv.1'));
+        $this->assertTrue($injector->hasConstant('argv.2'));
+        $this->assertTrue($injector->hasConstant('argv.3'));
         $this->assertTrue($injector->hasConstant('argv.n'));
         $this->assertTrue($injector->hasConstant('argv.verbose'));
+        $this->assertEquals('-n', $injector->getConstant('argv.0'));
+        $this->assertEquals('example', $injector->getConstant('argv.1'));
+        $this->assertEquals('--verbose', $injector->getConstant('argv.2'));
+        $this->assertEquals('bar', $injector->getConstant('argv.3'));
         $this->assertEquals('example', $injector->getConstant('argv.n'));
         $this->assertFalse($injector->getConstant('argv.verbose'));
     }
@@ -111,6 +120,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function argumentsAreBoundAsListAfterParsingWhenOptionsDefined()
     {
+        $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'bar');
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
                                      ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
@@ -119,7 +129,13 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
                                      ->withLongOptions(array('verbose'));
         $injector = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('argv'));
-        $this->assertEquals(array('n' => 'example', 'verbose' => false),
+        $this->assertEquals(array(0         => '-n',
+                                  1         => 'example',
+                                  2         => '--verbose',
+                                  3         => 'bar',
+                                  'n'       => 'example',
+                                  'verbose' => false
+                            ),
                             $injector->getConstant('argv')
         );
     }
