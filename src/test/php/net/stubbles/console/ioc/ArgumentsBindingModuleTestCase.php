@@ -51,6 +51,74 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function bindsRequestIfAvailable()
+    {
+        $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\Request'));
+    }
+
+    /**
+     * @test
+     */
+    public function bindsConsoleRequestIfAvailable()
+    {
+        $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\console\\ConsoleRequest'));
+    }
+
+    /**
+     * @test
+     */
+    public function bindsRequestToConsoleRequest()
+    {
+        $this->assertInstanceOf('net\\stubbles\\input\\console\\ConsoleRequest',
+                                $this->bindArguments()->getInstance('net\\stubbles\\input\\Request')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function bindsRequestToBaseConsoleRequest()
+    {
+        $this->assertInstanceOf('net\\stubbles\\input\\console\\BaseConsoleRequest',
+                                $this->bindArguments()->getInstance('net\\stubbles\\input\\Request')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function bindsConsoleRequestToBaseConsoleRequest()
+    {
+        $this->assertInstanceOf('net\\stubbles\\input\\console\\BaseConsoleRequest',
+                                $this->bindArguments()->getInstance('net\\stubbles\\input\\console\\ConsoleRequest')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function bindsRequestAsSingleton()
+    {
+        $injector = $this->bindArguments();
+        $this->assertSame($injector->getInstance('net\\stubbles\\input\\Request'),
+                          $injector->getInstance('net\\stubbles\\input\\Request')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function bindsConsoleRequestAsSingleton()
+    {
+        $injector = $this->bindArguments();
+        $this->assertSame($injector->getInstance('net\\stubbles\\input\\Request'),
+                          $injector->getInstance('net\\stubbles\\input\\console\\ConsoleRequest')
+        );
+    }
+
+    /**
      * binds arguments
      *
      * @return  Injector
@@ -63,28 +131,26 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * binds request
+     *
+     * @return  net\stubbles\input\Request
+     */
+    private function bindRequest()
+    {
+        return $this->bindArguments()->getInstance('net\\stubbles\\input\\Request');
+    }
+
+    /**
      * @test
      */
     public function argumentsAreBoundAsRecievedWhenNoOptionsDefined()
     {
         $_SERVER['argv'] = array('foo', 'bar', 'baz');
-        $injector        = $this->bindArguments();
-        $this->assertTrue($injector->hasConstant('argv.0'));
-        $this->assertTrue($injector->hasConstant('argv.1'));
-        $this->assertEquals('bar', $injector->getConstant('argv.0'));
-        $this->assertEquals('baz', $injector->getConstant('argv.1'));
-    }
-
-    /**
-     * @test
-     * @group  issue_1
-     */
-    public function argumentsAreBoundAsListWhenNoOptionsDefined()
-    {
-        $_SERVER['argv'] = array('foo', 'bar', 'baz');
-        $injector        = $this->bindArguments();
-        $this->assertTrue($injector->hasConstant('argv'));
-        $this->assertEquals(array('bar', 'baz'), $injector->getConstant('argv'));
+        $request        = $this->bindRequest();
+        $this->assertTrue($request->hasParam('argv.0'));
+        $this->assertTrue($request->hasParam('argv.1'));
+        $this->assertEquals('bar', $request->readParam('argv.0')->unsecure());
+        $this->assertEquals('baz', $request->readParam('argv.1')->unsecure());
     }
 
     /**
@@ -99,45 +165,13 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
                                      ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
         $this->argumentsBindingModule->withOptions('n:f::')
                                      ->withLongOptions(array('verbose'));
-        $injector = $this->bindArguments();
-        $this->assertTrue($injector->hasConstant('argv.0'));
-        $this->assertTrue($injector->hasConstant('argv.1'));
-        $this->assertTrue($injector->hasConstant('argv.2'));
-        $this->assertTrue($injector->hasConstant('argv.3'));
-        $this->assertTrue($injector->hasConstant('argv.n'));
-        $this->assertTrue($injector->hasConstant('argv.verbose'));
-        $this->assertEquals('-n', $injector->getConstant('argv.0'));
-        $this->assertEquals('example', $injector->getConstant('argv.1'));
-        $this->assertEquals('--verbose', $injector->getConstant('argv.2'));
-        $this->assertEquals('bar', $injector->getConstant('argv.3'));
-        $this->assertEquals('example', $injector->getConstant('argv.n'));
-        $this->assertFalse($injector->getConstant('argv.verbose'));
-    }
-
-    /**
-     * @test
-     * @group  issue_1
-     */
-    public function argumentsAreBoundAsListAfterParsingWhenOptionsDefined()
-    {
-        $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'bar');
-        $this->argumentsBindingModule->expects($this->once())
-                                     ->method('getopt')
-                                     ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
-                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
-        $this->argumentsBindingModule->withOptions('n:f::')
-                                     ->withLongOptions(array('verbose'));
-        $injector = $this->bindArguments();
-        $this->assertTrue($injector->hasConstant('argv'));
-        $this->assertEquals(array(0         => '-n',
-                                  1         => 'example',
-                                  2         => '--verbose',
-                                  3         => 'bar',
-                                  'n'       => 'example',
-                                  'verbose' => false
-                            ),
-                            $injector->getConstant('argv')
-        );
+        $request        = $this->bindRequest();
+        $this->assertTrue($request->hasParam('n'));
+        $this->assertTrue($request->hasParam('verbose'));
+        $this->assertTrue($request->hasParam('argv.0'));
+        $this->assertEquals('example', $request->readParam('n')->unsecure());
+        $this->assertFalse($request->readParam('verbose')->unsecure());
+        $this->assertEquals('bar', $request->readParam('argv.0')->unsecure());
     }
 
     /**
@@ -210,35 +244,6 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function bindsRequestIfAvailable()
-    {
-        $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\Request'));
-    }
-
-    /**
-     * @test
-     */
-    public function bindsRequestToConsoleRequestIfAvailable()
-    {
-        $this->assertInstanceOf('net\\stubbles\\input\\console\\ConsoleRequest',
-                                $this->bindArguments()->getInstance('net\\stubbles\\input\\Request')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function bindsConsoleRequestAsSingleton()
-    {
-        $injector = $this->bindArguments();
-        $this->assertSame($injector->getInstance('net\\stubbles\\input\\Request'),
-                          $injector->getInstance('net\\stubbles\\input\\Request')
-        );
-    }
-
-    /**
-     * @test
-     */
     public function bindsNoUserInputByDefault()
     {
         $injector = $this->bindArguments();
@@ -248,12 +253,12 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function bindsNoUserInputIfSet()
+    public function bindsUserInputIfSet()
     {
         $this->argumentsBindingModule->withUserInput('org\\stubbles\\console\\test\\BrokeredUserInput');
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('o::'), $this->equalTo(array('bar::')))
+                                     ->with($this->equalTo('o:uh'), $this->equalTo(array('bar1', 'bar2:', 'help')))
                                      ->will($this->returnValue(array()));
         $injector = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('net.stubbles.console.input.class'));

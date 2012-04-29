@@ -33,11 +33,11 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     private $mockOutputStream;
     /**
-     * request instance
+     * console request instance
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockRequest;
+    private $mockConsoleRequest;
     /**
      * request broker
      *
@@ -50,15 +50,15 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockOutputStream  = $this->getMock('net\\stubbles\\streams\\OutputStream');
-        $this->mockRequest       = $this->getMock('net\\stubbles\\input\\Request');
-        $this->mockRequestBroker = $this->getMockBuilder('net\\stubbles\\input\\broker\\RequestBrokerFacade')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $this->requestParser     = new RequestParser($this->mockOutputStream,
-                                                     $this->mockRequest,
-                                                     $this->mockRequestBroker
-                                   );
+        $this->mockOutputStream   = $this->getMock('net\\stubbles\\streams\\OutputStream');
+        $this->mockConsoleRequest = $this->getMock('net\\stubbles\\input\\console\ConsoleRequest');
+        $this->mockRequestBroker  = $this->getMockBuilder('net\\stubbles\\input\\broker\\RequestBrokerFacade')
+                                         ->disableOriginalConstructor()
+                                         ->getMock();
+        $this->requestParser      = new RequestParser($this->mockOutputStream,
+                                                      $this->mockConsoleRequest,
+                                                      $this->mockRequestBroker
+                                    );
     }
 
     /**
@@ -83,9 +83,12 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function throwsConsoleAppExceptionWhenHelpIsRequestedWithDashH()
     {
-        $this->mockRequest->expects($this->once())
-                          ->method('hasParam')
-                          ->will($this->returnValue(true));
+        $this->mockConsoleRequest->expects($this->once())
+                                 ->method('hasParam')
+                                 ->will($this->returnValue(true));
+        $this->mockConsoleRequest->expects($this->once())
+                                 ->method('readEnv')
+                                 ->will($this->returnValue(\net\stubbles\input\ValueReader::forValue('bin/http')));
         $this->mockRequestBroker->expects($this->never())
                                 ->method('procure');
         $this->mockRequestBroker->expects($this->once())
@@ -101,9 +104,12 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function throwsConsoleAppExceptionWhenHelpIsRequestedWithDashDashHelp()
     {
-        $this->mockRequest->expects($this->exactly(2))
-                          ->method('hasParam')
-                          ->will($this->onConsecutiveCalls(false, true));
+        $this->mockConsoleRequest->expects($this->exactly(2))
+                                 ->method('hasParam')
+                                 ->will($this->onConsecutiveCalls(false, true));
+        $this->mockConsoleRequest->expects($this->once())
+                                 ->method('readEnv')
+                                 ->will($this->returnValue(\net\stubbles\input\ValueReader::forValue('bin/http')));
         $this->mockRequestBroker->expects($this->never())
                                 ->method('procure');
         $this->mockRequestBroker->expects($this->once())
@@ -117,14 +123,18 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function helpClosureRendersHelpToOutputStream()
     {
-        $this->mockRequest->expects($this->once())
-                          ->method('hasParam')
-                          ->will($this->returnValue(true));
+        $this->mockConsoleRequest->expects($this->once())
+                                 ->method('hasParam')
+                                 ->will($this->returnValue(true));
+        $this->mockConsoleRequest->expects($this->once())
+                                 ->method('readEnv')
+                                 ->will($this->returnValue(\net\stubbles\input\ValueReader::forValue('bin/http')));
         $this->mockRequestBroker->expects($this->once())
                                 ->method('getAnnotations')
                                 ->will($this->returnValue(array($this->createRequestAnnotation('foo', 'Set the foo option.', '-f FOO'),
                                                                 $this->createRequestAnnotation('bar', 'Set the bar option.'),
-                                                                $this->createRequestAnnotation('o', 'Set another option.')
+                                                                $this->createRequestAnnotation('o', 'Set another option.'),
+                                                                $this->createRequestAnnotation('argv.1', 'Set another option.', null, 'HttpUri')
                                                           )
                                        )
                                   );
@@ -133,20 +143,29 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
             $this->fail('Excpected net\\stubbles\\console\\ConsoleAppException');
         } catch (ConsoleAppException $cae) {
             $this->mockOutputStream->expects($this->at(0))
-                                   ->method('writeLine')
-                                   ->with($this->equalTo('Options:'));
+                                   ->method('write')
+                                   ->with($this->equalTo('Usage: bin/http [options]'));
             $this->mockOutputStream->expects($this->at(1))
-                                   ->method('writeLine')
-                                   ->with($this->equalTo('   -f FOO   Set the foo option.'));
+                                   ->method('write')
+                                   ->with($this->equalTo(' <HttpUri>'));
             $this->mockOutputStream->expects($this->at(2))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('   --bar    Set the bar option.'));
+                                   ->with($this->equalTo(''));
             $this->mockOutputStream->expects($this->at(3))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('   -o       Set another option.'));
+                                   ->with($this->equalTo('Options:'));
             $this->mockOutputStream->expects($this->at(4))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('   -h       Prints this help.'));
+                                   ->with($this->equalTo('   -f FOO         Set the foo option.'));
+            $this->mockOutputStream->expects($this->at(5))
+                                   ->method('writeLine')
+                                   ->with($this->equalTo('   --bar          Set the bar option.'));
+            $this->mockOutputStream->expects($this->at(6))
+                                   ->method('writeLine')
+                                   ->with($this->equalTo('   -o             Set another option.'));
+            $this->mockOutputStream->expects($this->at(7))
+                                   ->method('writeLine')
+                                   ->with($this->equalTo('   -h or --help   Prints this help.'));
             $messenger = $cae->getMessenger();
             $messenger();
         }
@@ -160,9 +179,9 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      * @param   string  $option
      * @return  Annotation
      */
-    private function createRequestAnnotation($name, $description, $option = null)
+    private function createRequestAnnotation($name, $description, $option = null, $type = 'Test')
     {
-        $annotation = new Annotation('Test');
+        $annotation = new Annotation($type);
         $annotation->name        = $name;
         $annotation->description = $description;
         if (null !== $option) {
@@ -177,9 +196,9 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function successfulParseReturnsInstance()
     {
-        $this->mockRequest->expects($this->any())
-                          ->method('hasParam')
-                          ->will($this->returnValue(false));
+        $this->mockConsoleRequest->expects($this->any())
+                                 ->method('hasParam')
+                                 ->will($this->returnValue(false));
         $this->mockRequestBroker->expects($this->once())
                                 ->method('procure');
         $this->assertInstanceOf('org\\stubbles\\console\\test\\BrokeredUserInput',
@@ -194,9 +213,9 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function failureWhileParsingThrowsConsoleAppException()
     {
-        $this->mockRequest->expects($this->any())
-                          ->method('hasParam')
-                          ->will($this->returnValue(false));
+        $this->mockConsoleRequest->expects($this->any())
+                                 ->method('hasParam')
+                                 ->will($this->returnValue(false));
         $this->mockRequestBroker->expects($this->once())
                                 ->method('procure')
                                 ->will($this->returnCallback(function(BrokeredUserInput $userInput, $group, \Closure $onError)
