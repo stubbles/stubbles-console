@@ -124,7 +124,7 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      * @return  array
      * @throws  ConfigurationException
      */
-    protected function parseArgs()
+    private function parseArgs()
     {
         if (null === $this->options && count($this->longopts) === 0 && null === $this->userInput) {
             return $this->fixArgs($_SERVER['argv']);
@@ -180,16 +180,9 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
             }
 
             if (strlen($name) === 1) {
-                $this->options .= $name;
-                if ($annotation->isRequired()) {
-                    $this->options .= ':';
-                }
+                $this->options .= $this->getOptionName($annotation);
             } else {
-                if ($annotation->isRequired()) {
-                    $name .= ':';
-                }
-
-                $this->longopts[] = $name;
+                $this->longopts[] = $this->getOptionName($annotation);
             }
         }
 
@@ -200,6 +193,24 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
         if (!in_array('help', $this->longopts)) {
             $this->longopts[] = 'help';
         }
+    }
+
+    /**
+     * returns option name
+     *
+     * @param   \net\stubbles\lang\reflect\annotation\Annotation  $annotation
+     * @return  string
+     */
+    private function getOptionName(\net\stubbles\lang\reflect\annotation\Annotation $annotation)
+    {
+        $name = $annotation->getName();
+        if ($annotation->requiresValue()) {
+            return $name . '::';
+        } elseif ($annotation->isRequired()) {
+            return $name . ':';
+        }
+
+        return $name;
     }
 
     /**
