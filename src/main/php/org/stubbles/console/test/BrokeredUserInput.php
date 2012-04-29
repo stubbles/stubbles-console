@@ -30,7 +30,7 @@ class BrokeredUserInput extends BaseObject
     /**
      * test method
      *
-     * @Request[String](name='bar', group='main', description='Set the bar option.')
+     * @Request[String](name='bar', required=true, group='main', description='Set the bar option.')
      * @param  string  $bar
      */
     public function setBar($bar)
