@@ -26,6 +26,42 @@ class BrokeredUserInput extends BaseObject
      * @type  string
      */
     private $baz = null;
+    /**
+     * verbosity switch
+     *
+     * @type  bool
+     */
+    private $verbose = false;
+
+    /**
+     * test method without parameter
+     *
+     * @Request[Bool](name='verbose', group='noparam')
+     */
+    public function enableVerbose()
+    {
+        $this->verbose = true;
+    }
+
+    /**
+     * test method without parameter
+     *
+     * @Request[Bool](name='v', required=true, group='noparam')
+     */
+    public function enableVerboseDifferently()
+    {
+        $this->verbose = true;
+    }
+
+    /**
+     * test method
+     *
+     * @return  bool
+     */
+    public function isVerbose()
+    {
+        return $this->verbose;
+    }
 
     /**
      * test method
