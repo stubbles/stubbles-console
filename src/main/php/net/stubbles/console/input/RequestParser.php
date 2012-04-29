@@ -9,9 +9,10 @@
  */
 namespace net\stubbles\console\input;
 use net\stubbles\console\ConsoleAppException;
-use net\stubbles\input\Request;
+use net\stubbles\input\console\ConsoleRequest;
 use net\stubbles\input\broker\RequestBrokerFacade;
 use net\stubbles\lang\BaseObject;
+use net\stubbles\lang\reflect\annotation\Annotation;
 use net\stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
@@ -29,7 +30,7 @@ class RequestParser extends BaseObject
     /**
      * request instance
      *
-     * @type  Request
+     * @type  ConsoleRequest
      */
     private $request;
     /**
@@ -43,12 +44,12 @@ class RequestParser extends BaseObject
      * constructor
      *
      * @param  OutputStream         $out
-     * @param  Request              $request
+     * @param  ConsoleRequest       $request
      * @param  RequestBrokerFacade  $requestBroker
      * @Inject
      * @Named{out}('stdout')
      */
-    public function __construct(OutputStream $out, Request $request, RequestBrokerFacade $requestBroker)
+    public function __construct(OutputStream $out, ConsoleRequest $request, RequestBrokerFacade $requestBroker)
     {
         $this->out           = $out;
         $this->request       = $request;
@@ -112,30 +113,67 @@ class RequestParser extends BaseObject
      */
     private function createHelp($object, $group)
     {
-        $annotations = array();
+        $options    = array();
+        $parameters = array();
         foreach ($this->requestBroker->getAnnotations($object, $group) as $requestAnnotation) {
-            if ($requestAnnotation->hasOption()) {
-                $name = $requestAnnotation->getOption();
+            if (substr($requestAnnotation->getName(), 0, 5) !== 'argv.') {
+                $options[$this->getOptionName($requestAnnotation)] = $requestAnnotation->getDescription();
             } else {
-                $name = $requestAnnotation->getName();
-                if (strlen($name) === 1) {
-                    $name = '-' . $name;
-                } else {
-                    $name = '--' . $name;
-                }
+                $parameters[] = $requestAnnotation->getAnnotationName();
             }
-
-            $annotations[$name] = $requestAnnotation->getDescription();
         }
 
-        $annotations['-h'] = 'Prints this help.';
-        $out               = $this->out;
-        return function() use ($out, $annotations)
+        $options['-h or --help'] = 'Prints this help.';
+        return $this->creatHelpWriter($this->out,
+                                      $this->request->readEnv('SCRIPT_NAME')->unsecure(),
+                                      $options,
+                                      $parameters
+        );
+    }
+
+    /**
+     * retrieves name of option
+     *
+     * @param   Annotation  $requestAnnotation
+     * @return  string
+     */
+    private function getOptionName(Annotation $requestAnnotation)
+    {
+        if ($requestAnnotation->hasOption()) {
+            return $requestAnnotation->getOption();
+        }
+
+        $name = $requestAnnotation->getName();
+        if (strlen($name) === 1) {
+            return '-' . $name;
+        }
+
+        return '--' . $name;
+    }
+
+    /**
+     * creates help writing closure
+     *
+     * @param   OutputStream  $out
+     * @param   string        $scriptName
+     * @param   array         $options
+     * @param   array         $parameters
+     * @return  Closure
+     */
+    private function creatHelpWriter(OutputStream $out, $scriptName, array $options, array $parameters)
+    {
+        return function() use ($out, $scriptName, $options, $parameters)
                {
-                   $longestName = max(array_map('strlen', array_keys($annotations)));
+                   $out->write('Usage: ' . $scriptName . ' [options]');
+                   foreach ($parameters as $type) {
+                       $out->write(' <' . $type . '>');
+                   }
+
+                   $out->writeLine('');
+                   $longestName = max(array_map('strlen', array_keys($options)));
                    $out->writeLine('Options:');
-                   foreach ($annotations as $name => $requestAnnotation) {
-                       $out->writeLine('   ' . str_pad($name, $longestName) . '   ' . $requestAnnotation);
+                   foreach ($options as $name => $description) {
+                       $out->writeLine('   ' . str_pad($name, $longestName) . '   ' . $description);
                    }
 
                    $out->writeLine('');
