@@ -30,7 +30,29 @@ class BrokeredUserInput extends BaseObject
     /**
      * test method
      *
-     * @Request[String](name='bar', required=true, group='main', description='Set the bar option.')
+     * @Request[String](name='argv.0', group='arg')
+     * @param  string  $bar
+     */
+    public function setArgument($arg)
+    {
+        $this->bar = $arg;
+    }
+
+    /**
+     * test method
+     *
+     * @Request[String](name='bar1', group='other', description='Set the bar option.')
+     * @param  string  $bar
+     */
+    public function setOtherBar($bar)
+    {
+        $this->bar = $bar;
+    }
+
+    /**
+     * test method
+     *
+     * @Request[String](name='bar2', required=true, group='main', description='Set the bar option.')
      * @param  string  $bar
      */
     public function setBar($bar)
@@ -51,7 +73,18 @@ class BrokeredUserInput extends BaseObject
     /**
      * test method
      *
-     * @Request[Mock](name='o', group='other', description='Set another option.')
+     * @Request[Mock](name='o', required=true, group='main', description='Set another option.')
+     * @param  string  $baz
+     */
+    public function setMainBaz($baz)
+    {
+        $this->baz = $baz;
+    }
+
+    /**
+     * test method
+     *
+     * @Request[Mock](name='u', group='other', description='Set another option.')
      * @param  string  $baz
      */
     public function setBaz($baz)

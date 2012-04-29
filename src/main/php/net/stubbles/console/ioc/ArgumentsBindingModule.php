@@ -105,17 +105,11 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      */
     public function configure(Binder $binder)
     {
-        $args = $this->getArgs();
-        $binder->bindConstant('argv')
-               ->to($args);
-        foreach ($args as $position => $value) {
-            $binder->bindConstant('argv.' . $position)
-                   ->to($value);
-        }
-
+        $request = new \net\stubbles\input\console\BaseConsoleRequest($this->parseArgs(), $_SERVER);
         $binder->bind('net\\stubbles\\input\\Request')
-               ->to('net\\stubbles\\input\\console\\ConsoleRequest')
-               ->asSingleton();
+               ->toInstance($request);
+        $binder->bind('net\\stubbles\\input\\console\\ConsoleRequest')
+               ->toInstance($request);
         if (null !== $this->userInput) {
             $binder->bind($this->userInput)
                    ->toProviderClass('net\\stubbles\\console\\input\\UserInputProvider');
@@ -130,18 +124,40 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      * @return  array
      * @throws  ConfigurationException
      */
-    protected function getArgs()
+    protected function parseArgs()
     {
-        $vars = $_SERVER['argv'];
-        array_shift($vars); // script name
         if (null === $this->options && count($this->longopts) === 0 && null === $this->userInput) {
-            return $vars;
+            return $this->fixArgs($_SERVER['argv']);
         }
 
         $this->parseOptions();
         $parsedVars = $this->getopt($this->options, $this->longopts);
         if (false === $parsedVars) {
             throw new ConfigurationException('Error parsing "' . join(' ', $_SERVER['argv']) . '" with ' . $this->options . ' and ' . join(' ', $this->longopts));
+        }
+
+        return $this->fixArgs($_SERVER['argv'], $parsedVars);
+    }
+
+    /**
+     * retrieves list of arguments
+     *
+     * @param   array  $args
+     * @param   array  $parsedVars
+     * @return  array
+     */
+    private function fixArgs(array $args, array $parsedVars = array())
+    {
+        array_shift($args); // script name
+        $vars     = array();
+        $position = 0;
+        foreach ($args as $arg) {
+            if (isset($parsedVars[substr($arg, 1)]) || isset($parsedVars[substr($arg, 2)]) || in_array($arg, $parsedVars)) {
+                continue;
+            }
+
+            $vars['argv.' . $position] = $arg;
+            $position++;
         }
 
         return array_merge($vars, $parsedVars);
@@ -159,16 +175,35 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
         $requestMethods = new \net\stubbles\input\broker\RequestBrokerMethods();
         foreach ($requestMethods->getAnnotations($this->userInput) as $annotation) {
             $name = $annotation->getName();
-            if (strlen($name) === 1) {
-                $this->options .= $name . '::';
-            } else {
-                $this->longopts[] = $name . '::';
+            if (substr($name, 0, 5) === 'argv.') {
+                continue;
             }
+
+            if (strlen($name) === 1) {
+                $this->options .= $name;
+                if ($annotation->isRequired()) {
+                    $this->options .= ':';
+                }
+            } else {
+                if ($annotation->isRequired()) {
+                    $name .= ':';
+                }
+
+                $this->longopts[] = $name;
+            }
+        }
+
+        if (!strpos($this->options, 'h')) {
+            $this->options .= 'h';
+        }
+
+        if (!in_array('help', $this->longopts)) {
+            $this->longopts[] = 'help';
         }
     }
 
     /**
-     * helper method to enable proper testing
+     * helper method to enable proper testing, as PHP's getopt() is not mockable
      *
      * @param   string    $options   options to be used for parsing the arguments
      * @param   string[]  $longopts  long options to be used for parsing the arguments
