@@ -105,7 +105,19 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
      */
     public function configure(Binder $binder)
     {
-        $request = new \net\stubbles\input\console\BaseConsoleRequest($this->parseArgs(), $_SERVER);
+        $args = $this->parseArgs();
+        $binder->bindConstant('argv')
+               ->to($args);
+        foreach ($args as $name => $value) {
+            if (substr($name, 0, 5) !== 'argv.') {
+                $name = 'argv.' . $name;
+            }
+
+            $binder->bindConstant($name)
+                   ->to($value);
+        }
+
+        $request = new \net\stubbles\input\console\BaseConsoleRequest($args, $_SERVER);
         $binder->bind('net\\stubbles\\input\\Request')
                ->toInstance($request);
         $binder->bind('net\\stubbles\\input\\console\\ConsoleRequest')

@@ -2,6 +2,11 @@
     "hash": "3d41247d650b1e2aa694a73394068b26",
     "packages": [
         {
+            "package": "mikey179/vfsStream",
+            "version": "dev-master",
+            "source-reference": "226538a487f7862b151b8727caac53b9a417c9ab"
+        },
+        {
             "package": "stubbles/core",
             "version": "dev-master",
             "source-reference": "61b539074ec7e00418480de35929e6eaf1f7a388"
