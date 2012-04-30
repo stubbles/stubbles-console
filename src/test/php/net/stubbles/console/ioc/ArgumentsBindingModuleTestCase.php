@@ -53,6 +53,74 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function argumentsAreBoundAsRecievedWhenNoOptionsDefined()
+    {
+        $_SERVER['argv'] = array('foo.php', 'bar', 'baz');
+        $injector        = $this->bindArguments();
+        $this->assertTrue($injector->hasConstant('argv.0'));
+        $this->assertTrue($injector->hasConstant('argv.1'));
+        $this->assertEquals('bar', $injector->getConstant('argv.0'));
+        $this->assertEquals('baz', $injector->getConstant('argv.1'));
+    }
+
+    /**
+     * @test
+     * @group  issue_1
+     */
+    public function argumentsAreBoundAsListWhenNoOptionsDefined()
+    {
+        $_SERVER['argv'] = array('foo.php', 'bar', 'baz');
+        $injector        = $this->bindArguments();
+        $this->assertTrue($injector->hasConstant('argv'));
+        $this->assertEquals(array('argv.0' => 'bar', 'argv.1' => 'baz'),
+                            $injector->getConstant('argv')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function argumentsAreBoundAfterParsingWhenOptionsDefined()
+    {
+        $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'install');
+        $this->argumentsBindingModule->expects($this->once())
+                                     ->method('getopt')
+                                     ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
+                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+        $this->argumentsBindingModule->withOptions('n:f::')
+                                     ->withLongOptions(array('verbose'));
+        $injector = $this->bindArguments();
+        $this->assertTrue($injector->hasConstant('argv.n'));
+        $this->assertTrue($injector->hasConstant('argv.verbose'));
+        $this->assertTrue($injector->hasConstant('argv.0'));
+        $this->assertEquals('example', $injector->getConstant('argv.n'));
+        $this->assertFalse($injector->getConstant('argv.verbose'));
+        $this->assertEquals('install', $injector->getConstant('argv.0'));
+    }
+
+    /**
+     * @test
+     * @group  issue_1
+     */
+    public function argumentsAreBoundAsListAfterParsingWhenOptionsDefined()
+    {
+        $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'install');
+        $this->argumentsBindingModule->expects($this->once())
+                                     ->method('getopt')
+                                     ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
+                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+        $this->argumentsBindingModule->withOptions('n:f::')
+                                     ->withLongOptions(array('verbose'));
+        $injector = $this->bindArguments();
+        $this->assertTrue($injector->hasConstant('argv'));
+        $this->assertEquals(array('n' => 'example', 'verbose' => false, 'argv.0' => 'install'),
+                            $injector->getConstant('argv')
+        );
+    }
+
+    /**
+     * @test
+     */
     public function bindsRequestIfAvailable()
     {
         $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\Request'));
@@ -143,7 +211,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function argumentsAreBoundAsRecievedWhenNoOptionsDefined()
+    public function argumentsAvailableViaRequestWhenNoOptionsDefined()
     {
         $_SERVER['argv'] = array('foo', 'bar', 'baz');
         $request        = $this->bindRequest();
@@ -156,7 +224,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function argumentsAreBoundAfterParsingWhenOptionsDefined()
+    public function argumentsAvailableViaRequestAfterParsingWhenOptionsDefined()
     {
         $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'bar');
         $this->argumentsBindingModule->expects($this->once())
