@@ -2,7 +2,6 @@
     "name": "stubbles/console",
     "type": "library",
     "homepage": "http://stubbles.net/",
-    "version": "2.0.0-beta3",
     "license": "BSD-3",
     "description": "Stubbles package to build command line apps.",
     "require": {
