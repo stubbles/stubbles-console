@@ -1,5 +1,5 @@
 {
-    "hash": "3d41247d650b1e2aa694a73394068b26",
+    "hash": "54e0364075c4ddd18725f8233aa7157c",
     "packages": [
         {
             "package": "stubbles/core",
@@ -17,6 +17,13 @@
             "source-reference": "432da2be37a0e71e929a98a14b4b0926be578898"
         }
     ],
-    "packages-dev": null,
-    "aliases": []
+    "packages-dev": [
+        {
+            "package": "mikey179/vfsStream",
+            "version": "1.0.0-beta4"
+        }
+    ],
+    "aliases": [
+
+    ]
 }
