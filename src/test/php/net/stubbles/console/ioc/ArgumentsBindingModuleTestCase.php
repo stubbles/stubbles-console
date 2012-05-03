@@ -326,7 +326,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
         $this->argumentsBindingModule->withUserInput('org\\stubbles\\console\\test\\BrokeredUserInput');
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('v:o::u::h'), $this->equalTo(array('verbose', 'bar1::', 'bar2::', 'help')))
+                                     ->with($this->equalTo('vo:u:h'), $this->equalTo(array('verbose', 'bar1:', 'bar2:', 'help')))
                                      ->will($this->returnValue(array()));
         $injector = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('net.stubbles.console.input.class'));
