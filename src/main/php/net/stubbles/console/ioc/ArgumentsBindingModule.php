@@ -216,13 +216,11 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
     private function getOptionName(\net\stubbles\lang\reflect\annotation\Annotation $annotation)
     {
         $name = $annotation->getName();
-        if ($annotation->requiresValue()) {
-            return $name . '::';
-        } elseif ($annotation->isRequired()) {
-            return $name . ':';
+        if (!$annotation->requiresValue()) {
+            return $name;
         }
 
-        return $name;
+        return $name . ':';
     }
 
     /**
