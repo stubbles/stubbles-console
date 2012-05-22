@@ -3,20 +3,24 @@
     "packages": [
         {
             "package": "stubbles/core",
-            "version": "v2.0.0-beta8"
+            "version": "v2.0.0"
         },
         {
             "package": "stubbles/input",
-            "version": "v2.0.0-beta1"
+            "version": "v2.0.0"
         }
     ],
     "packages-dev": [
         {
             "package": "mikey179/vfsStream",
-            "version": "v1.0.0-beta5"
+            "version": "v1.0.0"
         }
     ],
     "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
 
     ]
 }
