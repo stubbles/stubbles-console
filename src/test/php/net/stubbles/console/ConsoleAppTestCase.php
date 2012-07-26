@@ -10,6 +10,7 @@
 namespace net\stubbles\console;
 use net\stubbles\lang\exception\Exception;
 use org\stubbles\console\test\ConsoleAppUsingBindingModule;
+use org\stubbles\console\test\SelfBoundConsoleApp;
 use org\stubbles\console\test\TestConsoleApp;
 /**
  * Test for net\stubbles\console\ConsoleApp.
@@ -295,6 +296,25 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('net\stubbles\console\ioc\ConsoleBindingModule',
                                 ConsoleAppUsingBindingModule::getConsoleBindingModule()
         );
+    }
+
+    /**
+     * @since  2.1.0
+     * @test
+     */
+    public function canCreateInstanceWithSelfBoundApp()
+    {
+        $_SERVER['argv'][1] = 'value';
+        $this->assertEquals(0, ConsoleApp::stubcli('projectPath',
+                                                   array('stubcli',
+                                                         'value',
+                                                         '-c',
+                                                         'org\stubbles\console\test\SelfBoundConsoleApp'
+                                                   ),
+                                                   $this->mockOutputStream
+                               )
+         );
+        $this->assertEquals('value', SelfBoundConsoleApp::$bar);
     }
 }
 ?>

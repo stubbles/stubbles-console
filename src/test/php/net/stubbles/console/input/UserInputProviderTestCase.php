@@ -24,10 +24,13 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
      */
     private $userInputProvider;
     /**
-     *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
     private $mockRequestParser;
+    /**
+     * @type  \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockInjector;
 
     /**
      * set up test environment
@@ -37,7 +40,11 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
         $this->mockRequestParser = $this->getMockBuilder('net\stubbles\console\input\RequestParser')
                                         ->disableOriginalConstructor()
                                         ->getMock();
+        $this->mockInjector      = $this->getMockBuilder('net\stubbles\ioc\Injector')
+                                        ->disableOriginalConstructor()
+                                        ->getMock();
         $this->userInputProvider = new UserInputProvider($this->mockRequestParser,
+                                                         $this->mockInjector,
                                                          'org\stubbles\console\test\BrokeredUserInput'
                                    );
     }
@@ -51,9 +58,9 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($constructor->hasAnnotation('Inject'));
 
         $parameters = $constructor->getParameters();
-        $this->assertTrue($parameters[1]->hasAnnotation('Named'));
+        $this->assertTrue($parameters[2]->hasAnnotation('Named'));
         $this->assertEquals('net.stubbles.console.input.class',
-                            $parameters[1]->getAnnotation('Named')->getName()
+                            $parameters[2]->getAnnotation('Named')->getName()
         );
     }
 
@@ -63,9 +70,15 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
     public function createsUserInputInstance()
     {
         $brokeredUserInput = new BrokeredUserInput();
+        $this->mockInjector->expects($this->once())
+                           ->method('getInstance')
+                           ->with($this->equalTo('org\stubbles\console\test\BrokeredUserInput'),
+                                  $this->equalTo('net.stubbles.console.input.instance')
+                             )
+                           ->will($this->returnValue($brokeredUserInput));
         $this->mockRequestParser->expects($this->once())
-                                ->method('parseTo')
-                                ->with($this->equalTo('org\stubbles\console\test\BrokeredUserInput'),
+                                ->method('parseInto')
+                                ->with($this->equalTo($brokeredUserInput),
                                        $this->equalTo('main')
                                   )
                                 ->will($this->returnValue($brokeredUserInput));

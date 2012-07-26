@@ -332,5 +332,35 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($injector->hasConstant('net.stubbles.console.input.class'));
         $this->assertTrue($injector->hasBinding('org\stubbles\console\test\BrokeredUserInput'));
     }
+
+    /**
+     * @since  2.1.0
+     * @test
+     */
+    public function bindsUserInputAsSingleton()
+    {
+        $this->argumentsBindingModule->withUserInput('org\stubbles\console\test\BrokeredUserInput');
+        $this->argumentsBindingModule->expects($this->once())
+                                     ->method('getopt')
+                                     ->with($this->equalTo('vo:u:h'), $this->equalTo(array('verbose', 'bar1:', 'bar2:', 'help')))
+                                     ->will($this->returnValue(array('bar2' => 'foo', 'o' => 'baz')));
+        $binder = new Binder();
+        $this->argumentsBindingModule->configure($binder);
+        $binder->bind('net\stubbles\streams\OutputStream')
+               ->named('stdout')
+               ->toInstance($this->getMock('net\stubbles\streams\OutputStream'));
+        $binder->bind('net\stubbles\streams\OutputStream')
+               ->named('stderr')
+               ->toInstance($this->getMock('net\stubbles\streams\OutputStream'));
+        $binder->bind('net\stubbles\streams\InputStream')
+               ->named('stdin')
+               ->toInstance($this->getMock('net\stubbles\streams\InputStream'));
+        $binder->bindMap('net\stubbles\input\broker\param\ParamBroker')
+               ->withEntry('Mock', $this->getMock('net\stubbles\input\broker\param\ParamBroker'));
+        $injector = $binder->getInjector();
+        $this->assertSame($injector->getInstance('org\stubbles\console\test\BrokeredUserInput'),
+                          $injector->getInstance('org\stubbles\console\test\BrokeredUserInput')
+        );
+    }
 }
 ?>
