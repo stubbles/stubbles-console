@@ -9,12 +9,7 @@
  */
 namespace net\stubbles\console\input;
 use net\stubbles\ioc\InjectionProvider;
-use net\stubbles\console\Console;
-use net\stubbles\console\ConsoleAppException;
-use net\stubbles\input\Request;
-use net\stubbles\input\broker\RequestBrokerFacade;
 use net\stubbles\lang\BaseObject;
-use net\stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
  *
