@@ -68,8 +68,14 @@ class ScriptFileCreatorTestCase extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
-require __DIR__ . \'/../vendor/autoload.php\';
-exit(ExampleConsoleApp::main(__DIR__ . \'/../\', \net\stubbles\console\ConsoleOutputStream::forError()));
+if (file_exists(__DIR__ . \'/../vendor/autoload.php\')) {
+    $rootDir = __DIR__ . \'/../\';
+} else {
+    $rootDir = __DIR__ . \'/../../../../\';
+}
+
+require $rootDir . \'/vendor/autoload.php\';
+exit(ExampleConsoleApp::main($rootDir, \net\stubbles\console\ConsoleOutputStream::forError()));
 ?>',
                             $this->root->getChild('bin/example')
                                        ->getContent()
