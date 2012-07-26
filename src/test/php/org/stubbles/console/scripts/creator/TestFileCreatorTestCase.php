@@ -41,7 +41,7 @@ class TestFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root            = vfsStream::setup();
-        $this->mockConsole     = $this->getMockBuilder('net\\stubbles\\console\\Console')
+        $this->mockConsole     = $this->getMockBuilder('net\stubbles\console\Console')
                                       ->disableOriginalConstructor()
                                       ->getMock();
         $this->testFileCreator = new TestFileCreator($this->mockConsole, vfsStream::url('root'));
@@ -54,8 +54,8 @@ class TestFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
-                          ->with($this->equalTo('Test for example\\console\\ExampleConsoleApp created at ' . vfsStream::url('root/src/test/php/example/console/ExampleConsoleAppTestCase.php')));
-        $this->testFileCreator->create('example\\console\\ExampleConsoleApp');
+                          ->with($this->equalTo('Test for example\console\ExampleConsoleApp created at ' . vfsStream::url('root/src/test/php/example/console/ExampleConsoleAppTestCase.php')));
+        $this->testFileCreator->create('example\console\ExampleConsoleApp');
         $this->assertTrue($this->root->hasChild('src/test/php/example/console/ExampleConsoleAppTestCase.php'));
         $this->assertEquals('<?php
 /**
@@ -108,7 +108,7 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstance()
     {
-        $this->assertInstanceOf(\'example\\\\console\\\\ExampleConsoleApp\',
+        $this->assertInstanceOf(\'example\console\ExampleConsoleApp\',
                                 ExampleConsoleApp::create(\net\stubbles\lang\ResourceLoader::getRootPath())
         );
     }
@@ -131,8 +131,8 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                              ->at($this->root->getChild('src/test/php/org/stubbles/console/scripts/creator'));
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
-                          ->with($this->equalTo('Test for org\\stubbles\\console\\scripts\\creator\\TestFileCreator already exists, skipped creating the test'));
-        $this->testFileCreator->create('org\\stubbles\\console\\scripts\\creator\\TestFileCreator');
+                          ->with($this->equalTo('Test for org\stubbles\console\scripts\creator\TestFileCreator already exists, skipped creating the test'));
+        $this->testFileCreator->create('org\stubbles\console\scripts\creator\TestFileCreator');
         $this->assertEquals('foo', $testFile->getContent());
     }
 }

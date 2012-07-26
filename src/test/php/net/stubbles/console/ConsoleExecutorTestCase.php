@@ -52,7 +52,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function executeWithOutputStreamWritesResponseDataToOutputStream()
     {
-        $mockOutputStream = $this->getMock('net\\stubbles\\streams\\OutputStream');
+        $mockOutputStream = $this->getMock('net\stubbles\streams\OutputStream');
         $mockOutputStream->expects($this->once())
                          ->method('writeLine')
                          ->with($this->equalTo('foo'));
@@ -76,7 +76,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
     public function executeAsyncReturnsStreamToReadResultFrom()
     {
         $commandInputStream = $this->executor->executeAsync('echo foo');
-        $this->assertInstanceOf('net\\stubbles\\console\\CommandInputStream', $commandInputStream);
+        $this->assertInstanceOf('net\stubbles\console\CommandInputStream', $commandInputStream);
         $this->assertEquals('foo', chop($commandInputStream->read()));
     }
 
@@ -87,7 +87,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
     public function executeAsyncFailsThrowsRuntimeException()
     {
         $commandInputStream = $this->executor->executeAsync('php -r "throw new Exception();"');
-        $this->assertInstanceOf('net\\stubbles\\console\\CommandInputStream', $commandInputStream);
+        $this->assertInstanceOf('net\stubbles\console\CommandInputStream', $commandInputStream);
         while (!$commandInputStream->eof()) {
             $commandInputStream->readLine();
         }
@@ -111,7 +111,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
     public function readAfterCloseThrowsIllegalStateException()
     {
         $commandInputStream = $this->executor->executeAsync('echo foo');
-        $this->assertInstanceOf('net\\stubbles\\console\\CommandInputStream', $commandInputStream);
+        $this->assertInstanceOf('net\stubbles\console\CommandInputStream', $commandInputStream);
         $this->assertEquals('foo', chop($commandInputStream->read()));
         $commandInputStream->close();
         $commandInputStream->read();

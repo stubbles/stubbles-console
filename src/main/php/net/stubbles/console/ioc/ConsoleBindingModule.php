@@ -25,17 +25,17 @@ class ConsoleBindingModule extends BaseObject implements BindingModule
      */
     public function configure(Binder $binder)
     {
-        $binder->bind('net\\stubbles\\streams\\InputStream')
+        $binder->bind('net\stubbles\streams\InputStream')
                ->named('stdin')
                ->toInstance(ConsoleInputStream::forIn());
-        $binder->bind('net\\stubbles\\streams\\OutputStream')
+        $binder->bind('net\stubbles\streams\OutputStream')
                ->named('stdout')
                ->toInstance(ConsoleOutputStream::forOut());
-        $binder->bind('net\\stubbles\\streams\\OutputStream')
+        $binder->bind('net\stubbles\streams\OutputStream')
                ->named('stderr')
                ->toInstance(ConsoleOutputStream::forError());
-        $binder->bind('net\\stubbles\\console\\Executor')
-               ->to('net\\stubbles\\console\\ConsoleExecutor');
+        $binder->bind('net\stubbles\console\Executor')
+               ->to('net\stubbles\console\ConsoleExecutor');
     }
 }
 ?>
