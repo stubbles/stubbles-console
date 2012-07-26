@@ -41,7 +41,7 @@ class ClassFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root             = vfsStream::setup();
-        $this->mockConsole      = $this->getMockBuilder('net\\stubbles\\console\\Console')
+        $this->mockConsole      = $this->getMockBuilder('net\stubbles\console\Console')
                                        ->disableOriginalConstructor()
                                        ->getMock();
         $this->classFileCreator = new ClassFileCreator($this->mockConsole, vfsStream::url('root'));
@@ -54,8 +54,8 @@ class ClassFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
-                          ->with($this->equalTo('Class example\\console\\ExampleConsoleApp created at ' . vfsStream::url('root/src/main/php/example/console/ExampleConsoleApp.php')));
-        $this->classFileCreator->create('example\\console\\ExampleConsoleApp');
+                          ->with($this->equalTo('Class example\console\ExampleConsoleApp created at ' . vfsStream::url('root/src/main/php/example/console/ExampleConsoleApp.php')));
+        $this->classFileCreator->create('example\console\ExampleConsoleApp');
         $this->assertTrue($this->root->hasChild('src/main/php/example/console/ExampleConsoleApp.php'));
         $this->assertEquals('<?php
 /**
@@ -118,8 +118,8 @@ class ExampleConsoleApp extends ConsoleApp
     {
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
-                          ->with($this->equalTo('Class org\\stubbles\\console\\scripts\\creator\\ClassFileCreator already exists, skipped creating the class'));
-        $this->classFileCreator->create('org\\stubbles\\console\\scripts\\creator\\ClassFileCreator');
+                          ->with($this->equalTo('Class org\stubbles\console\scripts\creator\ClassFileCreator already exists, skipped creating the class'));
+        $this->classFileCreator->create('org\stubbles\console\scripts\creator\ClassFileCreator');
         $this->assertFalse($this->root->hasChild('src/main/php/org/stubbles/console/scripts/creator/ClassFileCreator.php'));
     }
 }

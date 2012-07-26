@@ -46,16 +46,16 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockConsole       = $this->getMockBuilder('net\\stubbles\\console\\Console')
+        $this->mockConsole       = $this->getMockBuilder('net\stubbles\console\Console')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->mockClassFile     = $this->getMockBuilder('org\\stubbles\\console\\scripts\\creator\\ClassFileCreator')
+        $this->mockClassFile     = $this->getMockBuilder('org\stubbles\console\scripts\creator\ClassFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->mockScriptFile    = $this->getMockBuilder('org\\stubbles\\console\\scripts\\creator\\ScriptFileCreator')
+        $this->mockScriptFile    = $this->getMockBuilder('org\stubbles\console\scripts\creator\ScriptFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->mockTestFile      = $this->getMockBuilder('org\\stubbles\\console\\scripts\\creator\\TestFileCreator')
+        $this->mockTestFile      = $this->getMockBuilder('org\stubbles\console\scripts\creator\TestFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $this->consoleAppCreator = new ConsoleAppCreator($this->mockConsole,
@@ -103,7 +103,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockConsole->expects(($this->any()))
                           ->method('readLine')
-                          ->will($this->returnValue('foo\\500'));
+                          ->will($this->returnValue('foo\500'));
         $this->mockClassFile->expects($this->never())
                             ->method('create');
         $this->mockScriptFile->expects($this->never())
@@ -120,16 +120,16 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockConsole->expects(($this->any()))
                           ->method('readLine')
-                          ->will($this->returnValue('foo\\bar\\Example'));
+                          ->will($this->returnValue('foo\bar\Example'));
         $this->mockClassFile->expects($this->once())
                             ->method('create')
-                            ->with($this->equalTo('foo\\bar\\Example'));
+                            ->with($this->equalTo('foo\bar\Example'));
         $this->mockScriptFile->expects($this->once())
                            ->method('create')
-                           ->with($this->equalTo('foo\\bar\\Example'));
+                           ->with($this->equalTo('foo\bar\Example'));
         $this->mockTestFile->expects($this->once())
                            ->method('create')
-                           ->with($this->equalTo('foo\\bar\\Example'));
+                           ->with($this->equalTo('foo\bar\Example'));
         $this->assertEquals(0, $this->consoleAppCreator->run());
     }
 
@@ -140,16 +140,16 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockConsole->expects(($this->any()))
                           ->method('readLine')
-                          ->will($this->returnValue(' foo\\bar\\Example   '));
+                          ->will($this->returnValue(' foo\bar\Example   '));
         $this->mockClassFile->expects($this->once())
                             ->method('create')
-                            ->with($this->equalTo('foo\\bar\\Example'));
+                            ->with($this->equalTo('foo\bar\Example'));
         $this->mockScriptFile->expects($this->once())
                            ->method('create')
-                           ->with($this->equalTo('foo\\bar\\Example'));
+                           ->with($this->equalTo('foo\bar\Example'));
         $this->mockTestFile->expects($this->once())
                            ->method('create')
-                           ->with($this->equalTo('foo\\bar\\Example'));
+                           ->with($this->equalTo('foo\bar\Example'));
         $this->assertEquals(0, $this->consoleAppCreator->run());
     }
 
@@ -178,7 +178,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstance()
     {
-        $this->assertInstanceOf('org\\stubbles\\console\\scripts\\creator\\ConsoleAppCreator',
+        $this->assertInstanceOf('org\stubbles\console\scripts\creator\ConsoleAppCreator',
                                 ConsoleAppCreator::create(\net\stubbles\lang\ResourceLoader::getRootPath())
         );
     }

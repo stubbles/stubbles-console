@@ -10,6 +10,7 @@
 namespace net\stubbles\console;
 use net\stubbles\lang\exception\Exception;
 use org\stubbles\console\test\ConsoleAppUsingBindingModule;
+use org\stubbles\console\test\SelfBoundConsoleApp;
 use org\stubbles\console\test\TestConsoleApp;
 /**
  * Test for net\stubbles\console\ConsoleApp.
@@ -30,7 +31,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockOutputStream    = $this->getMock('net\\stubbles\\streams\\OutputStream');
+        $this->mockOutputStream    = $this->getMock('net\stubbles\streams\OutputStream');
         TestConsoleApp::$exception = null;
     }
 
@@ -85,7 +86,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
                                                           '-c',
-                                                          'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                          'org\stubbles\console\test\TestConsoleApp'
                                                     ),
                                                     $this->mockOutputStream
                                 )
@@ -99,7 +100,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->mockOutputStream->expects($this->never())
                                ->method('writeLine');
-        $out = $this->getMock('net\\stubbles\\streams\\OutputStream');
+        $out = $this->getMock('net\stubbles\streams\OutputStream');
         $out->expects($this->once())
             ->method('writeLine')
             ->with($this->equalTo('something happened'));
@@ -112,7 +113,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
                                                           '-c',
-                                                          'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                          'org\stubbles\console\test\TestConsoleApp'
                                                     ),
                                                     $this->mockOutputStream
                                 )
@@ -131,7 +132,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(20, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
                                                           '-c',
-                                                          'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                          'org\stubbles\console\test\TestConsoleApp'
                                                     ),
                                                     $this->mockOutputStream
                                 )
@@ -150,7 +151,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(20, ConsoleApp::stubcli('projectPath',
                                                     array('stubcli',
                                                           '-c',
-                                                          'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                          'org\stubbles\console\test\TestConsoleApp'
                                                     ),
                                                      $this->mockOutputStream
                                 )
@@ -167,7 +168,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, ConsoleApp::stubcli('projectPath',
                                                    array('stubcli',
                                                          '-c',
-                                                         'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                         'org\stubbles\console\test\TestConsoleApp'
                                                    ),
                                                    $this->mockOutputStream
                                )
@@ -187,7 +188,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
                                                          '-other',
                                                          'value',
                                                          '-c',
-                                                         'org\\stubbles\\console\\test\\TestConsoleApp'
+                                                         'org\stubbles\console\test\TestConsoleApp'
                                                    ),
                                                    $this->mockOutputStream
                                )
@@ -295,6 +296,25 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('net\stubbles\console\ioc\ConsoleBindingModule',
                                 ConsoleAppUsingBindingModule::getConsoleBindingModule()
         );
+    }
+
+    /**
+     * @since  2.1.0
+     * @test
+     */
+    public function canCreateInstanceWithSelfBoundApp()
+    {
+        $_SERVER['argv'][1] = 'value';
+        $this->assertEquals(0, ConsoleApp::stubcli('projectPath',
+                                                   array('stubcli',
+                                                         'value',
+                                                         '-c',
+                                                         'org\stubbles\console\test\SelfBoundConsoleApp'
+                                                   ),
+                                                   $this->mockOutputStream
+                               )
+         );
+        $this->assertEquals('value', SelfBoundConsoleApp::$bar);
     }
 }
 ?>

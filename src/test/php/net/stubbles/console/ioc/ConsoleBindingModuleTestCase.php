@@ -51,9 +51,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindingsConfiguredForInputStream()
     {
         $injector = $this->configure();
-        $this->assertTrue($injector->hasBinding('net\\stubbles\\streams\\InputStream', 'stdin'));
-        $this->assertInstanceOf('net\\stubbles\\streams\\InputStream',
-                                $injector->getInstance('net\\stubbles\\streams\\InputStream', 'stdin')
+        $this->assertTrue($injector->hasBinding('net\stubbles\streams\InputStream', 'stdin'));
+        $this->assertInstanceOf('net\stubbles\streams\InputStream',
+                                $injector->getInstance('net\stubbles\streams\InputStream', 'stdin')
         );
     }
 
@@ -63,9 +63,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindingsConfiguredForOutputStream()
     {
         $injector = $this->configure();
-        $this->assertTrue($injector->hasBinding('net\\stubbles\\streams\\OutputStream', 'stdout'));
-        $this->assertInstanceOf('net\\stubbles\\streams\\OutputStream',
-                                $injector->getInstance('net\\stubbles\\streams\\OutputStream', 'stdout')
+        $this->assertTrue($injector->hasBinding('net\stubbles\streams\OutputStream', 'stdout'));
+        $this->assertInstanceOf('net\stubbles\streams\OutputStream',
+                                $injector->getInstance('net\stubbles\streams\OutputStream', 'stdout')
         );
     }
 
@@ -75,9 +75,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindingsConfiguredForErrorStream()
     {
         $injector = $this->configure();
-        $this->assertTrue($injector->hasBinding('net\\stubbles\\streams\\OutputStream', 'stderr'));
-        $this->assertInstanceOf('net\\stubbles\\streams\\OutputStream',
-                                $injector->getInstance('net\\stubbles\\streams\\OutputStream', 'stderr')
+        $this->assertTrue($injector->hasBinding('net\stubbles\streams\OutputStream', 'stderr'));
+        $this->assertInstanceOf('net\stubbles\streams\OutputStream',
+                                $injector->getInstance('net\stubbles\streams\OutputStream', 'stderr')
         );
     }
 
@@ -87,9 +87,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindingsConfiguredForExecutor()
     {
         $injector = $this->configure();
-        $this->assertTrue($injector->hasBinding('net\\stubbles\\console\\Executor'));
-        $this->assertInstanceOf('net\\stubbles\\console\\Executor',
-                                $injector->getInstance('net\\stubbles\\console\\Executor')
+        $this->assertTrue($injector->hasBinding('net\stubbles\console\Executor'));
+        $this->assertInstanceOf('net\stubbles\console\Executor',
+                                $injector->getInstance('net\stubbles\console\Executor')
         );
     }
 
@@ -99,8 +99,8 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function inputStreamIsSingleton()
     {
         $injector = $this->configure();
-        $this->assertSame($injector->getInstance('net\\stubbles\\streams\\InputStream', 'stdin'),
-                          $injector->getInstance('net\\stubbles\\streams\\InputStream', 'stdin')
+        $this->assertSame($injector->getInstance('net\stubbles\streams\InputStream', 'stdin'),
+                          $injector->getInstance('net\stubbles\streams\InputStream', 'stdin')
         );
     }
 
@@ -110,8 +110,8 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function outputStreamIsSingleton()
     {
         $injector = $this->configure();
-        $this->assertSame($injector->getInstance('net\\stubbles\\streams\\OutputStream', 'stdout'),
-                          $injector->getInstance('net\\stubbles\\streams\\OutputStream', 'stdout')
+        $this->assertSame($injector->getInstance('net\stubbles\streams\OutputStream', 'stdout'),
+                          $injector->getInstance('net\stubbles\streams\OutputStream', 'stdout')
         );
     }
 
@@ -121,8 +121,8 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function errorStreamIsSingleton()
     {
         $injector = $this->configure();
-        $this->assertSame($injector->getInstance('net\\stubbles\\streams\\OutputStream', 'stderr'),
-                          $injector->getInstance('net\\stubbles\\streams\\OutputStream', 'stderr')
+        $this->assertSame($injector->getInstance('net\stubbles\streams\OutputStream', 'stderr'),
+                          $injector->getInstance('net\stubbles\streams\OutputStream', 'stderr')
         );
     }
 }

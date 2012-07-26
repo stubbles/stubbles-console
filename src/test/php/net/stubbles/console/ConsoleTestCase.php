@@ -45,9 +45,9 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockInputStream  = $this->getMock('net\\stubbles\\streams\\InputStream');
-        $this->mockOutputStream = $this->getMock('net\\stubbles\\streams\\OutputStream');
-        $this->mockErrorStream  = $this->getMock('net\\stubbles\\streams\\OutputStream');
+        $this->mockInputStream  = $this->getMock('net\stubbles\streams\InputStream');
+        $this->mockOutputStream = $this->getMock('net\stubbles\streams\OutputStream');
+        $this->mockErrorStream  = $this->getMock('net\stubbles\streams\OutputStream');
         $this->console          = new Console($this->mockInputStream,
                                               $this->mockOutputStream,
                                               $this->mockErrorStream

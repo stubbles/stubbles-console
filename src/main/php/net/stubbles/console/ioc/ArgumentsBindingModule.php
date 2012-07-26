@@ -118,13 +118,17 @@ class ArgumentsBindingModule extends BaseObject implements BindingModule
         }
 
         $request = new \net\stubbles\input\console\BaseConsoleRequest($args, $_SERVER);
-        $binder->bind('net\\stubbles\\input\\Request')
+        $binder->bind('net\stubbles\input\Request')
                ->toInstance($request);
-        $binder->bind('net\\stubbles\\input\\console\\ConsoleRequest')
+        $binder->bind('net\stubbles\input\console\ConsoleRequest')
                ->toInstance($request);
         if (null !== $this->userInput) {
             $binder->bind($this->userInput)
-                   ->toProviderClass('net\\stubbles\\console\\input\\UserInputProvider');
+                   ->toProviderClass('net\stubbles\console\input\UserInputProvider')
+                   ->asSingleton();
+            $binder->bind($this->userInput)
+                   ->named('net.stubbles.console.input.instance')
+                   ->to($this->userInput);
             $binder->bindConstant('net.stubbles.console.input.class')
                    ->to($this->userInput);
         }

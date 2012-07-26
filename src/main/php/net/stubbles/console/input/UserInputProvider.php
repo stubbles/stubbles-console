@@ -9,12 +9,8 @@
  */
 namespace net\stubbles\console\input;
 use net\stubbles\ioc\InjectionProvider;
-use net\stubbles\console\Console;
-use net\stubbles\console\ConsoleAppException;
-use net\stubbles\input\Request;
-use net\stubbles\input\broker\RequestBrokerFacade;
+use net\stubbles\ioc\Injector;
 use net\stubbles\lang\BaseObject;
-use net\stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
  *
@@ -34,18 +30,26 @@ class UserInputProvider extends BaseObject implements InjectionProvider
      * @type  RequestParser
      */
     private $requestParser;
+    /**
+     * injector to create input class with
+     *
+     * @type  Injector
+     */
+    private $injector;
 
     /**
      * constructor
      *
      * @param  RequestParser  $requestParser
+     * @param  Injector       $injector
      * @param  string         $userInputClass
      * @Inject
      * @Named{userInputClass}('net.stubbles.console.input.class')
      */
-    public function __construct(RequestParser $requestParser, $userInputClass)
+    public function __construct(RequestParser $requestParser, Injector $injector, $userInputClass)
     {
         $this->requestParser  = $requestParser;
+        $this->injector       = $injector;
         $this->userInputClass = $userInputClass;
     }
 
@@ -57,7 +61,11 @@ class UserInputProvider extends BaseObject implements InjectionProvider
      */
     public function get($name = null)
     {
-        return $this->requestParser->parseTo($this->userInputClass, $name);
+        return $this->requestParser->parseInto($this->injector->getInstance($this->userInputClass,
+                                                                            'net.stubbles.console.input.instance'
+                                               ),
+                                               $name
+        );
     }
 }
 ?>
