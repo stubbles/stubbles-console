@@ -36,7 +36,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->argumentsBindingModule = $this->getMock('net\\stubbles\\console\\ioc\\ArgumentsBindingModule',
+        $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
                                                        array('getopt')
                                         );
         $this->argvBackup             = $_SERVER['argv'];
@@ -123,7 +123,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestIfAvailable()
     {
-        $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\Request'));
+        $this->assertTrue($this->bindArguments()->hasBinding('net\stubbles\input\Request'));
     }
 
     /**
@@ -131,7 +131,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsConsoleRequestIfAvailable()
     {
-        $this->assertTrue($this->bindArguments()->hasBinding('net\\stubbles\\input\\console\\ConsoleRequest'));
+        $this->assertTrue($this->bindArguments()->hasBinding('net\stubbles\input\console\ConsoleRequest'));
     }
 
     /**
@@ -139,8 +139,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestToConsoleRequest()
     {
-        $this->assertInstanceOf('net\\stubbles\\input\\console\\ConsoleRequest',
-                                $this->bindArguments()->getInstance('net\\stubbles\\input\\Request')
+        $this->assertInstanceOf('net\stubbles\input\console\ConsoleRequest',
+                                $this->bindArguments()->getInstance('net\stubbles\input\Request')
         );
     }
 
@@ -149,8 +149,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestToBaseConsoleRequest()
     {
-        $this->assertInstanceOf('net\\stubbles\\input\\console\\BaseConsoleRequest',
-                                $this->bindArguments()->getInstance('net\\stubbles\\input\\Request')
+        $this->assertInstanceOf('net\stubbles\input\console\BaseConsoleRequest',
+                                $this->bindArguments()->getInstance('net\stubbles\input\Request')
         );
     }
 
@@ -159,8 +159,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsConsoleRequestToBaseConsoleRequest()
     {
-        $this->assertInstanceOf('net\\stubbles\\input\\console\\BaseConsoleRequest',
-                                $this->bindArguments()->getInstance('net\\stubbles\\input\\console\\ConsoleRequest')
+        $this->assertInstanceOf('net\stubbles\input\console\BaseConsoleRequest',
+                                $this->bindArguments()->getInstance('net\stubbles\input\console\ConsoleRequest')
         );
     }
 
@@ -170,8 +170,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindsRequestAsSingleton()
     {
         $injector = $this->bindArguments();
-        $this->assertSame($injector->getInstance('net\\stubbles\\input\\Request'),
-                          $injector->getInstance('net\\stubbles\\input\\Request')
+        $this->assertSame($injector->getInstance('net\stubbles\input\Request'),
+                          $injector->getInstance('net\stubbles\input\Request')
         );
     }
 
@@ -181,8 +181,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindsConsoleRequestAsSingleton()
     {
         $injector = $this->bindArguments();
-        $this->assertSame($injector->getInstance('net\\stubbles\\input\\Request'),
-                          $injector->getInstance('net\\stubbles\\input\\console\\ConsoleRequest')
+        $this->assertSame($injector->getInstance('net\stubbles\input\Request'),
+                          $injector->getInstance('net\stubbles\input\console\ConsoleRequest')
         );
     }
 
@@ -205,7 +205,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     private function bindRequest()
     {
-        return $this->bindArguments()->getInstance('net\\stubbles\\input\\Request');
+        return $this->bindArguments()->getInstance('net\stubbles\input\Request');
     }
 
     /**
@@ -261,7 +261,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabled()
     {
-        $this->argumentsBindingModule = $this->getMock('net\\stubbles\\console\\ioc\\ArgumentsBindingModule',
+        $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
                                                        array('getopt'),
                                                        array(true)
                                         );
@@ -279,7 +279,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabledAndOnlyLongOptionsSet()
     {
-        $this->argumentsBindingModule = $this->getMock('net\\stubbles\\console\\ioc\\ArgumentsBindingModule',
+        $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
                                                        array('getopt'),
                                                        array(true)
                                         );
@@ -296,7 +296,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabledAndLongOptionsSetFirst()
     {
-        $this->argumentsBindingModule = $this->getMock('net\\stubbles\\console\\ioc\\ArgumentsBindingModule',
+        $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
                                                        array('getopt'),
                                                        array(true)
                                         );
@@ -323,14 +323,14 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsUserInputIfSet()
     {
-        $this->argumentsBindingModule->withUserInput('org\\stubbles\\console\\test\\BrokeredUserInput');
+        $this->argumentsBindingModule->withUserInput('org\stubbles\console\test\BrokeredUserInput');
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
                                      ->with($this->equalTo('vo:u:h'), $this->equalTo(array('verbose', 'bar1:', 'bar2:', 'help')))
                                      ->will($this->returnValue(array()));
         $injector = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('net.stubbles.console.input.class'));
-        $this->assertTrue($injector->hasBinding('org\\stubbles\\console\\test\\BrokeredUserInput'));
+        $this->assertTrue($injector->hasBinding('org\stubbles\console\test\BrokeredUserInput'));
     }
 }
 ?>

@@ -50,9 +50,9 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockOutputStream   = $this->getMock('net\\stubbles\\streams\\OutputStream');
-        $this->mockConsoleRequest = $this->getMock('net\\stubbles\\input\\console\ConsoleRequest');
-        $this->mockRequestBroker  = $this->getMockBuilder('net\\stubbles\\input\\broker\\RequestBrokerFacade')
+        $this->mockOutputStream   = $this->getMock('net\stubbles\streams\OutputStream');
+        $this->mockConsoleRequest = $this->getMock('net\stubbles\input\console\ConsoleRequest');
+        $this->mockRequestBroker  = $this->getMockBuilder('net\stubbles\input\broker\RequestBrokerFacade')
                                          ->disableOriginalConstructor()
                                          ->getMock();
         $this->requestParser      = new RequestParser($this->mockOutputStream,
@@ -94,7 +94,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
         $this->mockRequestBroker->expects($this->once())
                                     ->method('getAnnotations')
                                     ->will($this->returnValue(array()));
-        $this->requestParser->parseTo('org\\stubbles\\console\\test\\BrokeredUserInput');
+        $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
     }
 
     /**
@@ -115,7 +115,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
         $this->mockRequestBroker->expects($this->once())
                                     ->method('getAnnotations')
                                     ->will($this->returnValue(array()));
-        $this->requestParser->parseTo('org\\stubbles\\console\\test\\BrokeredUserInput');
+        $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
     }
 
     /**
@@ -139,8 +139,8 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                                        )
                                   );
         try {
-            $this->requestParser->parseTo('org\\stubbles\\console\\test\\BrokeredUserInput');
-            $this->fail('Excpected net\\stubbles\\console\\ConsoleAppException');
+            $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
+            $this->fail('Excpected net\stubbles\console\ConsoleAppException');
         } catch (ConsoleAppException $cae) {
             $this->mockOutputStream->expects($this->at(0))
                                    ->method('write')
@@ -201,8 +201,8 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                                  ->will($this->returnValue(false));
         $this->mockRequestBroker->expects($this->once())
                                 ->method('procure');
-        $this->assertInstanceOf('org\\stubbles\\console\\test\\BrokeredUserInput',
-                                $this->requestParser->parseTo('org\\stubbles\\console\\test\\BrokeredUserInput')
+        $this->assertInstanceOf('org\stubbles\console\test\BrokeredUserInput',
+                                $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput')
         );
     }
 
@@ -224,7 +224,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                                                              }
                                        )
                                   );
-        $this->requestParser->parseTo('org\\stubbles\\console\\test\\BrokeredUserInput');
+        $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
     }
 }
 ?>

@@ -82,11 +82,9 @@ abstract class FileCreator extends BaseObject
 
         file_put_contents($fileName,
                           str_replace(array('{NAMESPACE}',
-                                            '{NAMESPACE_ESCAPED}',
                                             '{CLASS}'
                                       ),
                                       array($this->getNamespace($className),
-                                            str_replace('\\', '\\\\', $this->getNamespace($className)),
                                             $this->getNonQualifiedClassName($className)
                                       ),
                                       file_get_contents(__DIR__ . '/' . $template)

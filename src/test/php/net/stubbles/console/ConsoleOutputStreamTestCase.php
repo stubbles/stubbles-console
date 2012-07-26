@@ -20,7 +20,7 @@ class ConsoleOutputStreamTestCase extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfOutputStreamForOut()
     {
-        $this->assertInstanceOf('net\\stubbles\\streams\\OutputStream',
+        $this->assertInstanceOf('net\stubbles\streams\OutputStream',
                                 ConsoleOutputStream::forOut()
         );
     }
@@ -42,7 +42,7 @@ class ConsoleOutputStreamTestCase extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfOutputStreamForError()
     {
-        $this->assertInstanceOf('net\\stubbles\\streams\\OutputStream',
+        $this->assertInstanceOf('net\stubbles\streams\OutputStream',
                                 ConsoleOutputStream::forError()
         );
     }

@@ -34,11 +34,11 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockRequestParser = $this->getMockBuilder('net\\stubbles\\console\\input\\RequestParser')
+        $this->mockRequestParser = $this->getMockBuilder('net\stubbles\console\input\RequestParser')
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $this->userInputProvider = new UserInputProvider($this->mockRequestParser,
-                                                         'org\\stubbles\\console\\test\\BrokeredUserInput'
+                                                         'org\stubbles\console\test\BrokeredUserInput'
                                    );
     }
 
@@ -65,7 +65,7 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
         $brokeredUserInput = new BrokeredUserInput();
         $this->mockRequestParser->expects($this->once())
                                 ->method('parseTo')
-                                ->with($this->equalTo('org\\stubbles\\console\\test\\BrokeredUserInput'),
+                                ->with($this->equalTo('org\stubbles\console\test\BrokeredUserInput'),
                                        $this->equalTo('main')
                                   )
                                 ->will($this->returnValue($brokeredUserInput));
