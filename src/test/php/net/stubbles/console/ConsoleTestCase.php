@@ -8,6 +8,7 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
+use net\stubbles\input\ParamErrors;
 /**
  * Test for net\stubbles\console\Console.
  *
@@ -149,6 +150,171 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
                               ->method('writeLine')
                               ->with($this->equalTo('foo'));
         $this->assertSame($this->console, $this->console->writeErrorLine('foo'));
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function promptWritesMessageToOutputStreamAndReturnsValueFromInputStream()
+    {
+        $this->mockOutputStream->expects($this->once())
+                               ->method('write')
+                               ->with($this->equalTo('Please enter a number: '));
+        $this->mockInputStream->expects($this->once())
+                              ->method('readLine')
+                              ->will($this->returnValue('303'));
+        $this->assertEquals(303,
+                            $this->console->prompt('Please enter a number: ')
+                                          ->asInt()
+        );
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function promptEnrichesParamErrors()
+    {
+        $paramErrors = new ParamErrors();
+        $this->mockInputStream->expects($this->once())
+                              ->method('readLine')
+                              ->will($this->returnValue('no date here'));
+        $this->assertNull($this->console->prompt('Please enter a number: ', $paramErrors)
+                                        ->asDate()
+        );
+        $this->assertTrue($paramErrors->existFor('stdin'));
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function readValueReturnsValueFromInputStream()
+    {
+        $this->mockInputStream->expects($this->once())
+                              ->method('readLine')
+                              ->will($this->returnValue('303'));
+        $this->assertEquals(303,
+                            $this->console->readValue()
+                                          ->asInt()
+        );
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function readValueEnrichesParamErrors()
+    {
+        $paramErrors = new ParamErrors();
+        $this->mockInputStream->expects($this->once())
+                              ->method('readLine')
+                              ->will($this->returnValue('no date here'));
+        $this->assertNull($this->console->readValue($paramErrors)
+                                        ->asDate()
+        );
+        $this->assertTrue($paramErrors->existFor('stdin'));
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function confirmReturnsTrueWhenInputValueIsLowercaseY()
+    {
+        $this->mockOutputStream->expects($this->once())
+                               ->method('write')
+                               ->with($this->equalTo('Do you want to continue: '));
+        $this->mockInputStream->expects($this->once())
+                              ->method('readLine')
+                              ->will($this->returnValue('y'));
+        $this->assertTrue($this->console->confirm('Do you want to continue: '));
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function confirmReturnsTrueWhenInputValueIsUppercaseY()
+    {
+        $this->mockOutputStream->expects($this->once())
+                               ->method('write')
+                               ->with($this->equalTo('Do you want to continue: '));
+        $this->mockInputStream->expects($this->once())
+                              ->method('readLine')
+                              ->will($this->returnValue('Y'));
+        $this->assertTrue($this->console->confirm('Do you want to continue: '));
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function confirmReturnsFalseWhenInputValueIsLowercaseN()
+    {
+        $this->mockOutputStream->expects($this->once())
+                               ->method('write')
+                               ->with($this->equalTo('Do you want to continue: '));
+        $this->mockInputStream->expects($this->once())
+                              ->method('readLine')
+                              ->will($this->returnValue('n'));
+        $this->assertFalse($this->console->confirm('Do you want to continue: '));
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function confirmReturnsFalseWhenInputValueIsUppercaseN()
+    {
+        $this->mockOutputStream->expects($this->once())
+                               ->method('write')
+                               ->with($this->equalTo('Do you want to continue: '));
+        $this->mockInputStream->expects($this->once())
+                              ->method('readLine')
+                              ->will($this->returnValue('N'));
+        $this->assertFalse($this->console->confirm('Do you want to continue: '));
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function confirmRepeatsQuestionUntilValidInput()
+    {
+        $this->mockOutputStream->expects($this->exactly(3))
+                               ->method('write')
+                               ->with($this->equalTo('Do you want to continue: '));
+        $this->mockInputStream->expects($this->exactly(3))
+                              ->method('readLine')
+                              ->will($this->onConsecutiveCalls('foo', '', 'n'));
+        $this->assertFalse($this->console->confirm('Do you want to continue: '));
+    }
+
+    /**
+     * @since  2.1.0
+     * @group  issue_13
+     * @test
+     */
+    public function confirmUsesDefaultWhenInputIsEmpty()
+    {
+        $this->mockOutputStream->expects($this->exactly(2))
+                               ->method('write')
+                               ->with($this->equalTo('Do you want to continue: '));
+        $this->mockInputStream->expects($this->exactly(2))
+                              ->method('readLine')
+                              ->will($this->onConsecutiveCalls('foo', ''));
+        $this->assertFalse($this->console->confirm('Do you want to continue: ', 'n'));
     }
 }
 ?>
