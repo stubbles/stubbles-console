@@ -80,7 +80,7 @@ class Console extends BaseObject
      * ask the user to confirm something
      *
      * Repeats the message until user enters <y> or <n> (case insensitive). In
-     * case a default ist given and the users enters nothing this default will
+     * case a default is given and the users enters nothing this default will
      * be used - if the default is <y> it will return <true>, and <false>
      * otherwise.
      *
