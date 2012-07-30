@@ -7,7 +7,7 @@
         },
         {
             "package": "stubbles/input",
-            "version": "v2.0.0"
+            "version": "v2.0.2"
         }
     ],
     "packages-dev": [
@@ -19,7 +19,7 @@
     "aliases": [
 
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": [
 
     ]
