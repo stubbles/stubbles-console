@@ -13,6 +13,7 @@ use net\stubbles\input\console\ConsoleRequest;
 use net\stubbles\input\broker\RequestBrokerFacade;
 use net\stubbles\lang\BaseObject;
 use net\stubbles\lang\reflect\annotation\Annotation;
+use net\stubbles\lang\reflect\ReflectionObject;
 use net\stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
@@ -118,17 +119,36 @@ class RequestParser extends BaseObject
         foreach ($this->requestBroker->getAnnotations($object, $group) as $requestAnnotation) {
             if (substr($requestAnnotation->getName(), 0, 5) !== 'argv.') {
                 $options[$this->getOptionName($requestAnnotation)] = $requestAnnotation->getDescription();
+            } elseif (!$requestAnnotation->isRequired()) {
+                $parameters[] = '[' . $requestAnnotation->getDescription() . ']';
             } else {
-                $parameters[] = $requestAnnotation->getAnnotationName();
+                $parameters[] = $requestAnnotation->getDescription();
             }
         }
 
         $options['-h or --help'] = 'Prints this help.';
-        return $this->creatHelpWriter($this->out,
+        return $this->creatHelpWriter($this->getAppDescription($object),
+                                      $this->out,
                                       $this->request->readEnv('SCRIPT_NAME')->unsecure(),
                                       $options,
                                       $parameters
         );
+    }
+
+    /**
+     * retrieves app description for given object
+     *
+     * @param   object  $object
+     * @return  string
+     */
+    private function getAppDescription($object)
+    {
+        $class = new ReflectionObject($object);
+        if (!$class->hasAnnotation('AppDescription')) {
+            return null;
+        }
+
+        return $class->getAnnotation('AppDescription')->getValue();
     }
 
     /**
@@ -154,19 +174,24 @@ class RequestParser extends BaseObject
     /**
      * creates help writing closure
      *
+     * @param   string        $appDescription
      * @param   OutputStream  $out
      * @param   string        $scriptName
      * @param   array         $options
      * @param   array         $parameters
      * @return  Closure
      */
-    private function creatHelpWriter(OutputStream $out, $scriptName, array $options, array $parameters)
+    private function creatHelpWriter($appDescription, OutputStream $out, $scriptName, array $options, array $parameters)
     {
-        return function() use ($out, $scriptName, $options, $parameters)
+        return function() use ($appDescription, $out, $scriptName, $options, $parameters)
                {
+                   if (!empty($appDescription)) {
+                       $out->writeLine($appDescription);
+                   }
+
                    $out->write('Usage: ' . $scriptName . ' [options]');
                    foreach ($parameters as $type) {
-                       $out->write(' <' . $type . '>');
+                       $out->write(' ' . $type);
                    }
 
                    $out->writeLine('');

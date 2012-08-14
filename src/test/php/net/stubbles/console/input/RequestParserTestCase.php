@@ -9,7 +9,6 @@
  */
 namespace net\stubbles\console\input;
 use net\stubbles\console\ConsoleAppException;
-use net\stubbles\lang\exception\Exception;
 use net\stubbles\lang\reflect\annotation\Annotation;
 use org\stubbles\console\test\BrokeredUserInput;
 /**
@@ -129,12 +128,15 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
         $this->mockConsoleRequest->expects($this->once())
                                  ->method('readEnv')
                                  ->will($this->returnValue(\net\stubbles\input\ValueReader::forValue('bin/http')));
+        $argv1 = $this->createRequestAnnotation('argv.1', 'HttpUri', null, 'HttpUri');
+        $argv1->required = true;
         $this->mockRequestBroker->expects($this->once())
                                 ->method('getAnnotations')
                                 ->will($this->returnValue(array($this->createRequestAnnotation('foo', 'Set the foo option.', '-f FOO'),
                                                                 $this->createRequestAnnotation('bar', 'Set the bar option.'),
                                                                 $this->createRequestAnnotation('o', 'Set another option.'),
-                                                                $this->createRequestAnnotation('argv.1', 'Set another option.', null, 'HttpUri')
+                                                                $argv1,
+                                                                $this->createRequestAnnotation('argv.2', 'Request method', null, 'String')
                                                           )
                                        )
                                   );
@@ -143,27 +145,33 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
             $this->fail('Excpected net\stubbles\console\ConsoleAppException');
         } catch (ConsoleAppException $cae) {
             $this->mockOutputStream->expects($this->at(0))
-                                   ->method('write')
-                                   ->with($this->equalTo('Usage: bin/http [options]'));
+                                   ->method('writeLine')
+                                   ->with($this->equalTo("Real awesome command line app (c) 2012 Stubbles Development Team"));
             $this->mockOutputStream->expects($this->at(1))
                                    ->method('write')
-                                   ->with($this->equalTo(' <HttpUri>'));
+                                   ->with($this->equalTo('Usage: bin/http [options]'));
             $this->mockOutputStream->expects($this->at(2))
-                                   ->method('writeLine')
-                                   ->with($this->equalTo(''));
+                                   ->method('write')
+                                   ->with($this->equalTo(' HttpUri'));
             $this->mockOutputStream->expects($this->at(3))
-                                   ->method('writeLine')
-                                   ->with($this->equalTo('Options:'));
+                                   ->method('write')
+                                   ->with($this->equalTo(' [Request method]'));
             $this->mockOutputStream->expects($this->at(4))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('   -f FOO         Set the foo option.'));
+                                   ->with($this->equalTo(''));
             $this->mockOutputStream->expects($this->at(5))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('   --bar          Set the bar option.'));
+                                   ->with($this->equalTo('Options:'));
             $this->mockOutputStream->expects($this->at(6))
                                    ->method('writeLine')
-                                   ->with($this->equalTo('   -o             Set another option.'));
+                                   ->with($this->equalTo('   -f FOO         Set the foo option.'));
             $this->mockOutputStream->expects($this->at(7))
+                                   ->method('writeLine')
+                                   ->with($this->equalTo('   --bar          Set the bar option.'));
+            $this->mockOutputStream->expects($this->at(8))
+                                   ->method('writeLine')
+                                   ->with($this->equalTo('   -o             Set another option.'));
+            $this->mockOutputStream->expects($this->at(9))
                                    ->method('writeLine')
                                    ->with($this->equalTo('   -h or --help   Prints this help.'));
             $messenger = $cae->getMessenger();
