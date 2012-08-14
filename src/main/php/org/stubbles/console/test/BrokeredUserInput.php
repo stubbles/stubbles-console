@@ -11,6 +11,8 @@ namespace org\stubbles\console\test;
 use net\stubbles\lang\BaseObject;
 /**
  * Helper class for the test.
+ *
+ * @AppDescription("Real awesome command line app (c) 2012 Stubbles Development Team")
  */
 class BrokeredUserInput extends BaseObject
 {
@@ -66,7 +68,7 @@ class BrokeredUserInput extends BaseObject
     /**
      * test method
      *
-     * @Request[String](name='argv.0', group='arg')
+     * @Request[String](name='argv.0', group='arg', description='application-id')
      * @param  string  $bar
      */
     public function setArgument($arg)
