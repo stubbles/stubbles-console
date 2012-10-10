@@ -1,21 +1,20 @@
 {
-    "hash": "9084afb1848e311d3b584ea3177f52b1",
+    "hash": "c021e5e60dce6acc7a6a6cb5900d7d30",
     "packages": [
         {
             "package": "stubbles/core",
-            "version": "v2.1.1"
+            "version": "v2.1.2"
         },
         {
             "package": "stubbles/input",
-            "version": "v2.1.0"
-        }
-    ],
-    "packages-dev": [
+            "version": "v2.2.0"
+        },
         {
-            "package": "mikey179/vfsStream",
-            "version": "v1.0.0"
+            "package": "symfony/finder",
+            "version": "v2.1.2"
         }
     ],
+    "packages-dev": null,
     "aliases": [
 
     ],
