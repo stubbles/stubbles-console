@@ -68,8 +68,17 @@ class Compiler
                               ->files()
                               ->ignoreVCS(true)
                               ->exclude('Tests')
+                              ->exclude('vendor/bin')
                               ->exclude('composer')
-                              ->exclude('autoload.php')
+                              ->exclude('examples')
+                              ->exclude('nbproject')
+                              ->exclude('src/test')
+                              ->notName('CHANGES')
+                              ->notName('composer.*')
+                              ->notName('phpdoc.dist.xml')
+                              ->notName('phpunit.xml.dist')
+                              ->notName('readme.*')
+                              ->notName('autoload.php')
                               ->in($this->dir . '/vendor')
         );
         $phar->addFile($this->dir . '/vendor/autoload.php');
