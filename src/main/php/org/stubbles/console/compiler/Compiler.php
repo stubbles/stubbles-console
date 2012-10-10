@@ -53,7 +53,6 @@ class Compiler
     /**
      * compiles given script into a single phar file
      *
-     *
      * @param   string  $bin  script to create phar file for
      * @return  PharFileCreator
      */
