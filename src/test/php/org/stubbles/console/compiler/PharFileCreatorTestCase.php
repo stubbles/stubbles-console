@@ -118,15 +118,9 @@ class PharFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     public function canAddFilesFromFinderToPhar()
     {
         $this->pharFileCreator = new PharFileCreator($this->mockPhar, vfsStream::url('root/test.phar'), __DIR__);
-        $this->mockPhar->expects($this->at(0))
+        $this->mockPhar->expects($this->exactly(3))
                        ->method('addFromString')
-                       ->with($this->equalTo('CompilerTestCase.php'));
-        $this->mockPhar->expects($this->at(1))
-                       ->method('addFromString')
-                       ->with($this->equalTo('ConsoleCompilerAppTestCase.php'));
-        $this->mockPhar->expects($this->at(2))
-                       ->method('addFromString')
-                       ->with($this->equalTo('PharFileCreatorTestCase.php'));
+                       ->with($this->matchesRegularExpression('/^(CompilerTestCase.php|ConsoleCompilerAppTestCase.php|PharFileCreatorTestCase.php)$/'));
         $this->pharFileCreator->addFiles(Finder::create()
                                                ->files()
                                                ->ignoreVCS(true)
