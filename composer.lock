@@ -1,25 +1,166 @@
 {
-    "hash": "c021e5e60dce6acc7a6a6cb5900d7d30",
+    "hash": "b5c1c3a15fa843f901370916d81522c0",
     "packages": [
         {
-            "package": "stubbles/core",
-            "version": "v2.1.2"
+            "name": "stubbles/core",
+            "version": "dev-phar-support",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stubbles/stubbles-core",
+                "reference": "94538d8a05a4f99053074f92b219519da01850bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/stubbles/stubbles-core/zipball/94538d8a05a4f99053074f92b219519da01850bf",
+                "reference": "94538d8a05a4f99053074f92b219519da01850bf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "1.1.*"
+            },
+            "time": "1349799465",
+            "bin": [
+                "bin/clearCache"
+            ],
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "net\\stubbles": "src/main/php",
+                    "org\\stubbles": "src/main/php"
+                }
+            },
+            "license": [
+                "BSD-3"
+            ],
+            "description": "Provides base classes for Stubbles packages.",
+            "homepage": "http://stubbles.net/"
         },
         {
-            "package": "stubbles/input",
-            "version": "v2.2.0"
+            "name": "stubbles/input",
+            "version": "dev-phar-support",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stubbles/stubbles-input",
+                "reference": "8427be00358e3af16737b1c258329b03d6d0af82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/stubbles/stubbles-input/zipball/8427be00358e3af16737b1c258329b03d6d0af82",
+                "reference": "8427be00358e3af16737b1c258329b03d6d0af82",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "stubbles/core": "dev-phar-support"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "1.0.*"
+            },
+            "time": "1349969184",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "net\\stubbles\\input": "src/main/php",
+                    "org\\stubbles\\input": "src/main/php"
+                }
+            },
+            "license": [
+                "BSD-3"
+            ],
+            "description": "Stubbles Input enables to handle input data via validation and filtering.",
+            "homepage": "http://stubbles.net/"
         },
         {
-            "package": "symfony/finder",
-            "version": "v2.1.2"
+            "name": "symfony/finder",
+            "version": "v2.1.2",
+            "target-dir": "Symfony/Component/Finder",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Finder",
+                "reference": "v2.1.0-RC2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/symfony/Finder/zipball/v2.1.0-RC2",
+                "reference": "v2.1.0-RC2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "time": "2012-08-22 13:48:41",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Finder": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Finder Component",
+            "homepage": "http://symfony.com"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "name": "mikey179/vfsStream",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mikey179/vfsStream",
+                "reference": "v1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/mikey179/vfsStream/zipball/v1.0.0",
+                "reference": "v1.0.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2012-05-15 19:05:40",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "org\\bovigo\\vfs": "src/main/php"
+                }
+            },
+            "license": [
+                "BSD"
+            ],
+            "homepage": "http://vfs.bovigo.org/"
+        }
+    ],
     "aliases": [
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ]
+    "stability-flags": {
+        "stubbles/core": 20,
+        "stubbles/input": 20
+    }
 }
