@@ -157,6 +157,10 @@ class PharFileCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function saveDoesNotCreatePharWhenNothingAdded()
     {
+        if (ini_get('phar.readonly') == 1) {
+            $this->markTestSkipped('creating archive disabled by the php.ini setting phar.readonly');
+        }
+
         PharFileCreator::create(__DIR__ . DIRECTORY_SEPARATOR . 'test.phar', 'test.phar', __DIR__)
                        ->save();
         $this->assertFileNotExists(__DIR__ . DIRECTORY_SEPARATOR . 'test.phar');
@@ -167,6 +171,10 @@ class PharFileCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function saveDoesCreatePharWhenSomethingAdded()
     {
+        if (ini_get('phar.readonly') == 1) {
+            $this->markTestSkipped('creating archive disabled by the php.ini setting phar.readonly');
+        }
+
         PharFileCreator::create(__DIR__ . DIRECTORY_SEPARATOR . 'test.phar', 'test.phar', __DIR__)
                        ->addContent('foo.txt', 'some content')
                        ->save();
