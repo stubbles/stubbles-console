@@ -6,12 +6,17 @@
  * @package  net\stubbles\console
  */
 namespace org\stubbles\console\scripts\creator;
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    $rootDir = __DIR__ . '/../';
+if (\Phar::running() !== '') {
+    $rootDir     = \Phar::running();
+    $projectPath = getcwd();
+} elseif (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    $rootDir     = __DIR__ . '/../';
+    $projectPath = $rootDir;
 } else {
-    $rootDir = __DIR__ . '/../../../../';
+    $rootDir     = __DIR__ . '/../../../../';
+    $projectPath = $rootDir;
 }
 
 require $rootDir . '/vendor/autoload.php';
-exit(ConsoleAppCreator::main($rootDir, \net\stubbles\console\ConsoleOutputStream::forError()));
+exit(ConsoleAppCreator::main($projectPath, \net\stubbles\console\ConsoleOutputStream::forError()));
 ?>

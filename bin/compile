@@ -1,0 +1,17 @@
+#!/usr/bin/php
+<?php
+/**
+ * Script to execute org\stubbles\console\compiler\ConsoleCompilerApp.
+ *
+ * @package  org\stubbles\console\compiler
+ */
+namespace org\stubbles\console\compiler;
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    $rootDir = __DIR__ . '/../';
+} else {
+    $rootDir = __DIR__ . '/../../../../';
+}
+
+require $rootDir . '/vendor/autoload.php';
+exit(ConsoleCompilerApp::main($rootDir, \net\stubbles\console\ConsoleOutputStream::forError()));
+?>
