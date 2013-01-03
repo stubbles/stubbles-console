@@ -27,7 +27,7 @@ class ConsoleInputStream extends ResourceInputStream
      */
     protected function __construct()
     {
-        $this->setHandle(STDIN);
+        $this->setHandle(fopen('php://stdin', 'r'));
     }
 
     /**
