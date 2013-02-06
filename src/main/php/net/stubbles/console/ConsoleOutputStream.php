@@ -46,7 +46,7 @@ class ConsoleOutputStream extends ResourceOutputStream
     public static function forOut()
     {
         if (null === self::$out) {
-            self::$out      = new self(STDOUT);
+            self::$out      = new self(fopen('php://stdout', 'w'));
             $outputEncoding = self::detectOutputEncoding();
             if ('UTF-8' !== $outputEncoding) {
                 self::$out = new EncodingOutputStream(self::$out, $outputEncoding . '//IGNORE');
@@ -64,7 +64,7 @@ class ConsoleOutputStream extends ResourceOutputStream
     public static function forError()
     {
         if (null === self::$err) {
-            self::$err      = new self(STDERR);
+            self::$err      = new self(fopen('php://stderr', 'w'));
             $outputEncoding = self::detectOutputEncoding();
             if ('UTF-8' !== $outputEncoding) {
                 self::$err = new EncodingOutputStream(self::$err, $outputEncoding . '//IGNORE');
