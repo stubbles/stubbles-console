@@ -1,3 +1,8 @@
+2.?.?, 2013-??-??
+==================
+- ensure scripts always pass a realpath to prevent ugly pathes within application
+
+
 2.2.0, 2013-02-06
 ==================
 - added initial phar support to run stubbles-console from inside a phar
