@@ -9,11 +9,10 @@
  */
 namespace org\stubbles\console\scripts\creator;
 use net\stubbles\console\Console;
-use net\stubbles\lang\BaseObject;
 /**
  * Base class for file creation.
  */
-abstract class FileCreator extends BaseObject
+abstract class FileCreator
 {
     /**
      * stresm to read data from

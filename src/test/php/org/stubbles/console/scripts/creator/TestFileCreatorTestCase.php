@@ -8,6 +8,7 @@
  * @package  net\stubbles\console
  */
 namespace org\stubbles\console\scripts\creator;
+use net\stubbles\lang\reflect\ReflectionObject;
 use org\bovigo\vfs\vfsStream;
 /**
  * Test for org\stubbles\console\scripts\creator\TestFileCreator.
@@ -64,6 +65,7 @@ class TestFileCreatorTestCase extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
+use net\stubbles\lang\reflect\ReflectionObject;
 /**
  * Test for example\console\ExampleConsoleApp.
  */
@@ -89,9 +91,9 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue($this->instance->getClass()
-                                         ->getConstructor()
-                                         ->hasAnnotation(\'Inject\')
+        $this->assertTrue(ReflectionObject::fromInstance($this->instance)
+                                          ->getConstructor()
+                                          ->hasAnnotation(\'Inject\')
         );
     }
 

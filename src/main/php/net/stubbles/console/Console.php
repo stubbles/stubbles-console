@@ -11,13 +11,12 @@ namespace net\stubbles\console;
 use net\stubbles\input\Param;
 use net\stubbles\input\ParamErrors;
 use net\stubbles\input\ValueReader;
-use net\stubbles\lang\BaseObject;
 use net\stubbles\streams\InputStream;
 use net\stubbles\streams\OutputStream;
 /**
  * Interface to read and write on command line.
  */
-class Console extends BaseObject
+class Console
 {
     /**
      * stresm to read data from

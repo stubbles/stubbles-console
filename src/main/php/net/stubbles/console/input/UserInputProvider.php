@@ -10,13 +10,12 @@
 namespace net\stubbles\console\input;
 use net\stubbles\ioc\InjectionProvider;
 use net\stubbles\ioc\Injector;
-use net\stubbles\lang\BaseObject;
 /**
  * Interface for command executors.
  *
  * @since  2.0.0
  */
-class UserInputProvider extends BaseObject implements InjectionProvider
+class UserInputProvider implements InjectionProvider
 {
     /**
      * user input class to provide

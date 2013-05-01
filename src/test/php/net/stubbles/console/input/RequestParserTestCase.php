@@ -9,6 +9,7 @@
  */
 namespace net\stubbles\console\input;
 use net\stubbles\console\ConsoleAppException;
+use net\stubbles\lang\reflect\ReflectionObject;
 use net\stubbles\lang\reflect\annotation\Annotation;
 use org\stubbles\console\test\BrokeredUserInput;
 /**
@@ -65,7 +66,8 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $constructor = $this->requestParser->getClass()->getConstructor();
+        $constructor = ReflectionObject::fromInstance($this->requestParser)
+                                       ->getConstructor();
         $this->assertTrue($constructor->hasAnnotation('Inject'));
 
         $parameters = $constructor->getParameters();

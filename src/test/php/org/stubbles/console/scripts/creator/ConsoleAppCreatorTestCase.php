@@ -5,6 +5,7 @@
  * @package  org\stubbles\console\scripts\creator
  */
 namespace org\stubbles\console\scripts\creator;
+use net\stubbles\lang\reflect\ReflectionObject;
 /**
  * Test for org\stubbles\console\scripts\creator\ConsoleAppCreator.
  */
@@ -73,9 +74,9 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue($this->consoleAppCreator->getClass()
-                                                  ->getConstructor()
-                                                  ->hasAnnotation('Inject')
+        $this->assertTrue(ReflectionObject::fromInstance($this->consoleAppCreator)
+                                          ->getConstructor()
+                                          ->hasAnnotation('Inject')
         );
     }
 
