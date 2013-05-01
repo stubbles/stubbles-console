@@ -8,13 +8,12 @@
  * @package  net\stubbles\console
  */
 namespace org\stubbles\console\test;
-use net\stubbles\lang\BaseObject;
 /**
  * Helper class for the test.
  *
  * @AppDescription("Real awesome command line app (c) 2012 Stubbles Development Team")
  */
-class BrokeredUserInput extends BaseObject
+class BrokeredUserInput
 {
     /**
      * test property

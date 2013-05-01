@@ -8,14 +8,13 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\lang\Object;
 use net\stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
  *
  * @api
  */
-interface Executor extends Object
+interface Executor
 {
     /**
      * sets the output stream to write data outputted by executed command to

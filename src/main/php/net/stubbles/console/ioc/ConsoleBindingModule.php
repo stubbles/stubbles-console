@@ -12,11 +12,10 @@ use net\stubbles\console\ConsoleInputStream;
 use net\stubbles\console\ConsoleOutputStream;
 use net\stubbles\ioc\Binder;
 use net\stubbles\ioc\module\BindingModule;
-use net\stubbles\lang\BaseObject;
 /**
  * Binding module for console classes.
  */
-class ConsoleBindingModule extends BaseObject implements BindingModule
+class ConsoleBindingModule implements BindingModule
 {
     /**
      * configure the binder

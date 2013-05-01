@@ -8,13 +8,12 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\lang\BaseObject;
 use net\stubbles\lang\exception\RuntimeException;
 use net\stubbles\streams\OutputStream;
 /**
  * Class to execute commands on the command line.
  */
-class ConsoleExecutor extends BaseObject implements Executor
+class ConsoleExecutor implements Executor
 {
     /**
      * output stream to write data outputted by executed command to

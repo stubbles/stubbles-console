@@ -5,6 +5,7 @@
  * @package  org\stubbles\console\compiler
  */
 namespace org\stubbles\console\compiler;
+use net\stubbles\lang\reflect\ReflectionObject;
 /**
  * Test for org\stubbles\console\compiler\ConsoleCompilerApp.
  */
@@ -46,9 +47,9 @@ class ConsoleCompilerAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue($this->consoleCompilerApp->getClass()
-                                         ->getConstructor()
-                                         ->hasAnnotation('Inject')
+        $this->assertTrue(ReflectionObject::fromInstance($this->consoleCompilerApp)
+                                          ->getConstructor()
+                                          ->hasAnnotation('Inject')
         );
     }
 
@@ -57,7 +58,8 @@ class ConsoleCompilerAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentSetScriptMethod()
     {
-        $method = $this->consoleCompilerApp->getClass()->getMethod('setScript');
+        $method = ReflectionObject::fromInstance($this->consoleCompilerApp)
+                                  ->getMethod('setScript');
         $this->assertTrue($method->hasAnnotation('Inject'));
         $this->assertTrue($method->getAnnotation('Inject')->isOptional());
         $this->assertTrue($method->hasAnnotation('Named'));

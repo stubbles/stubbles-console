@@ -8,6 +8,7 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console\input;
+use net\stubbles\lang\reflect\ReflectionObject;
 use org\stubbles\console\test\BrokeredUserInput;
 /**
  * Test for net\stubbles\console\input\UserInputProvider.
@@ -54,7 +55,8 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $constructor = $this->userInputProvider->getClass()->getConstructor();
+        $constructor = ReflectionObject::fromInstance($this->userInputProvider)
+                                       ->getConstructor();
         $this->assertTrue($constructor->hasAnnotation('Inject'));
 
         $parameters = $constructor->getParameters();

@@ -1,5 +1,6 @@
-2.?.?, 2013-??-??
+2.3.0, 2013-??-??
 ==================
+- upgraded stubbles/core to ~3.0
 - ensure scripts always pass a realpath to prevent ugly pathes within application
 
 

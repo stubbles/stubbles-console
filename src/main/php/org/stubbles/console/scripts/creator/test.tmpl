@@ -5,6 +5,7 @@
  * @package  {NAMESPACE}
  */
 namespace {NAMESPACE};
+use net\stubbles\lang\reflect\ReflectionObject;
 /**
  * Test for {NAMESPACE}\{CLASS}.
  */
@@ -30,9 +31,9 @@ class {CLASS}TestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue($this->instance->getClass()
-                                         ->getConstructor()
-                                         ->hasAnnotation('Inject')
+        $this->assertTrue(ReflectionObject::fromInstance($this->instance)
+                                          ->getConstructor()
+                                          ->hasAnnotation('Inject')
         );
     }
 

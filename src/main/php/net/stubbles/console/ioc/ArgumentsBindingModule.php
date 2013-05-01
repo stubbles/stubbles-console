@@ -10,12 +10,11 @@
 namespace net\stubbles\console\ioc;
 use net\stubbles\ioc\Binder;
 use net\stubbles\ioc\module\BindingModule;
-use net\stubbles\lang\BaseObject;
 use net\stubbles\lang\exception\ConfigurationException;
 /**
  * Binding module to configure the binder with arguments.
  */
-class ArgumentsBindingModule extends BaseObject implements BindingModule
+class ArgumentsBindingModule implements BindingModule
 {
     /**
      * switch whether stubcli was used to run the command
