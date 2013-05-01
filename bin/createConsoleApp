@@ -18,5 +18,5 @@ if (\Phar::running() !== '') {
 }
 
 require $rootDir . '/vendor/autoload.php';
-exit(ConsoleAppCreator::main($projectPath, \net\stubbles\console\ConsoleOutputStream::forError()));
+exit(ConsoleAppCreator::main(realpath($projectPath), \net\stubbles\console\ConsoleOutputStream::forError()));
 ?>

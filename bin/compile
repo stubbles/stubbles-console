@@ -13,5 +13,5 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 }
 
 require $rootDir . '/vendor/autoload.php';
-exit(ConsoleCompilerApp::main($rootDir, \net\stubbles\console\ConsoleOutputStream::forError()));
+exit(ConsoleCompilerApp::main(realpath($rootDir), \net\stubbles\console\ConsoleOutputStream::forError()));
 ?>

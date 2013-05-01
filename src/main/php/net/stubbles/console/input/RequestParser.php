@@ -11,7 +11,6 @@ namespace net\stubbles\console\input;
 use net\stubbles\console\ConsoleAppException;
 use net\stubbles\input\console\ConsoleRequest;
 use net\stubbles\input\broker\RequestBrokerFacade;
-use net\stubbles\lang\BaseObject;
 use net\stubbles\lang\reflect\annotation\Annotation;
 use net\stubbles\lang\reflect\ReflectionObject;
 use net\stubbles\streams\OutputStream;
@@ -20,7 +19,7 @@ use net\stubbles\streams\OutputStream;
  *
  * @since  2.0.0
  */
-class RequestParser extends BaseObject
+class RequestParser
 {
     /**
      * Console

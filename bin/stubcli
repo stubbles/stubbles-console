@@ -13,5 +13,5 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 }
 
 require $rootDir . '/vendor/autoload.php';
-exit(ConsoleApp::stubcli($rootDir, $argv, ConsoleOutputStream::forError()));
+exit(ConsoleApp::stubcli(realpath($rootDir), $argv, ConsoleOutputStream::forError()));
 ?>
