@@ -9,7 +9,7 @@
  */
 namespace net\stubbles\console;
 use net\stubbles\input\ParamErrors;
-use net\stubbles\lang\reflect\ReflectionObject;
+use net\stubbles\lang;
 /**
  * Test for net\stubbles\console\Console.
  *
@@ -61,8 +61,7 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $constructor = ReflectionObject::fromInstance($this->console)
-                                       ->getConstructor();
+        $constructor = lang\reflectConstructor($this->console);
         $this->assertTrue($constructor->hasAnnotation('Inject'));
 
         $parameters = $constructor->getParameters();
