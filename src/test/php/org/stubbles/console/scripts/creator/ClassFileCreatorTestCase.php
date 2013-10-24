@@ -105,7 +105,7 @@ class ExampleConsoleApp extends ConsoleApp
         return 0;
     }
 }
-?>',
+',
                             $this->root->getChild('src/main/php/example/console/ExampleConsoleApp.php')
                                        ->getContent()
         );
