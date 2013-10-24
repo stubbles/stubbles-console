@@ -67,6 +67,8 @@ namespace example\console;
 use net\stubbles\console\ConsoleApp;
 /**
  * Your own console app.
+ *
+ * @AppDescription(\'Description of what the app does\')
  */
 class ExampleConsoleApp extends ConsoleApp
 {
