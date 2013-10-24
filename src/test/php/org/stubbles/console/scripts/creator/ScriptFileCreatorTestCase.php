@@ -81,7 +81,7 @@ if (\Phar::running() !== \'\') {
 
 require $rootDir . \'/vendor/autoload.php\';
 exit(ExampleConsoleApp::main(realpath($projectPath), \net\stubbles\console\ConsoleOutputStream::forError()));
-?>',
+',
                             $this->root->getChild('bin/example')
                                        ->getContent()
         );

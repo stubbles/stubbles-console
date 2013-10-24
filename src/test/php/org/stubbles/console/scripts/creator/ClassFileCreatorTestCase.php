@@ -67,6 +67,8 @@ namespace example\console;
 use net\stubbles\console\ConsoleApp;
 /**
  * Your own console app.
+ *
+ * @AppDescription(\'Description of what the app does\')
  */
 class ExampleConsoleApp extends ConsoleApp
 {
@@ -105,7 +107,7 @@ class ExampleConsoleApp extends ConsoleApp
         return 0;
     }
 }
-?>',
+',
                             $this->root->getChild('src/main/php/example/console/ExampleConsoleApp.php')
                                        ->getContent()
         );

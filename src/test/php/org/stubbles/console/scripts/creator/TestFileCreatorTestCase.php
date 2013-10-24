@@ -65,7 +65,7 @@ class TestFileCreatorTestCase extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
-use net\stubbles\lang\reflect\ReflectionObject;
+use net\stubbles\lang;
 /**
  * Test for example\console\ExampleConsoleApp.
  */
@@ -91,10 +91,7 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue(ReflectionObject::fromInstance($this->instance)
-                                          ->getConstructor()
-                                          ->hasAnnotation(\'Inject\')
-        );
+        $this->assertTrue(lang\reflectConstructor($this->instance)->hasAnnotation(\'Inject\'));
     }
 
     /**
@@ -115,7 +112,7 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 }
-?>',
+',
                             $this->root->getChild('src/test/php/example/console/ExampleConsoleAppTestCase.php')
                                        ->getContent()
         );

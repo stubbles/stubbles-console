@@ -16,7 +16,7 @@ use net\stubbles\streams\OutputStream;
 /**
  * Interface to read and write on command line.
  */
-class Console
+class Console implements InputStream, OutputStream
 {
     /**
      * stresm to read data from
@@ -149,6 +149,28 @@ class Console
     }
 
     /**
+     * returns the amount of byted left to be read
+     *
+     * @return  int
+     * @since   2.4.0
+     */
+    public function bytesLeft()
+    {
+        return $this->in->bytesLeft();
+    }
+
+    /**
+     * returns true if the stream pointer is at EOF
+     *
+     * @return  bool
+     * @since   2.4.0
+     */
+    public function eof()
+    {
+        return $this->in->eof();
+    }
+
+    /**
      * writes given bytes
      *
      * @api
@@ -171,6 +193,22 @@ class Console
     public function writeLine($bytes)
     {
         $this->out->writeLine($bytes);
+        return $this;
+    }
+
+    /**
+     * writes given lines and appends a line break after each line
+     *
+     * @param   string[]  $lines
+     * @return  Console
+     * @since   2.4.0
+     */
+    public function writeLines(array $lines)
+    {
+        foreach ($lines as $line) {
+            $this->out->writeLine($line);
+        }
+
         return $this;
     }
 
@@ -199,5 +237,32 @@ class Console
         $this->err->writeLine($bytes);
         return $this;
     }
+
+    /**
+     * writes given lines and appends a line break after each line
+     *
+     * @param   string[]  $lines
+     * @return  Console
+     * @since   2.4.0
+     */
+    public function writeErrorLines(array $lines)
+    {
+        foreach ($lines as $line) {
+            $this->err->writeLine($line);
+        }
+
+        return $this;
+    }
+
+    /**
+     * closes all underlying streams
+     *
+     * @since  2.4.0
+     */
+    public function close()
+    {
+        $this->in->close();
+        $this->out->close();
+        $this->err->close();
+    }
 }
-?>
