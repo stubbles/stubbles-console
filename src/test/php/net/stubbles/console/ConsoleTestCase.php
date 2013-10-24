@@ -103,6 +103,30 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @since  2.4.0
+     */
+    public function usesInputStreamForBytesLeft()
+    {
+        $this->mockInputStream->expects($this->once())
+                              ->method('bytesLeft')
+                              ->will($this->returnValue(20));
+        $this->assertEquals(20, $this->console->bytesLeft());
+    }
+
+    /**
+     * @test
+     * @since  2.4.0
+     */
+    public function usesInputStreamForEof()
+    {
+        $this->mockInputStream->expects($this->once())
+                              ->method('eof')
+                              ->will($this->returnValue(true));
+        $this->assertTrue($this->console->eof());
+    }
+
+    /**
+     * @test
      */
     public function usesOutputStreamForWrite()
     {
@@ -129,6 +153,28 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @since  2.4.0
+     */
+    public function usesOutputStreamForWriteLines()
+    {
+        $this->mockOutputStream->expects($this->at(0))
+                               ->method('writeLine')
+                               ->with($this->equalTo('foo'));
+        $this->mockOutputStream->expects($this->at(1))
+                               ->method('writeLine')
+                               ->with($this->equalTo('bar'));
+        $this->mockOutputStream->expects($this->at(2))
+                               ->method('writeLine')
+                               ->with($this->equalTo('baz'));
+        $this->mockErrorStream->expects($this->never())
+                              ->method('writeLine');
+        $this->assertSame($this->console,
+                          $this->console->writeLines(array('foo', 'bar', 'baz'))
+        );
+    }
+
+    /**
+     * @test
      */
     public function usesErrorStreamForWriteError()
     {
@@ -151,6 +197,25 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
                               ->method('writeLine')
                               ->with($this->equalTo('foo'));
         $this->assertSame($this->console, $this->console->writeErrorLine('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function usesErrorStreamForWriteErrorLines()
+    {
+        $this->mockOutputStream->expects($this->never())
+                               ->method('writeLine');
+        $this->mockErrorStream->expects($this->at(0))
+                              ->method('writeLine')
+                              ->with($this->equalTo('foo'));
+        $this->mockErrorStream->expects($this->at(1))
+                              ->method('writeLine')
+                              ->with($this->equalTo('bar'));
+        $this->mockErrorStream->expects($this->at(2))
+                              ->method('writeLine')
+                              ->with($this->equalTo('baz'));
+        $this->assertSame($this->console, $this->console->writeErrorLines(array('foo', 'bar', 'baz')));
     }
 
     /**
@@ -317,5 +382,19 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
                               ->will($this->onConsecutiveCalls('foo', ''));
         $this->assertFalse($this->console->confirm('Do you want to continue: ', 'n'));
     }
+
+    /**
+     * @test
+     * @since  2.4.0
+     */
+    public function closeClosesAllStreams()
+    {
+        $this->mockInputStream->expects($this->once())
+                               ->method('close');
+        $this->mockOutputStream->expects($this->once())
+                               ->method('close');
+        $this->mockErrorStream->expects($this->once())
+                              ->method('close');
+        $this->console->close();
+    }
 }
-?>

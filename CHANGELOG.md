@@ -1,3 +1,10 @@
+2.4.0 (YYYY-MM-DD)
+------------------
+
+  * added `net\stubbles\console\Console::writeLines()` and `net\stubbles\console\Console::writeErrorLines()`
+  * `net\stubbles\console\Console` now implements `net\stubbles\streams\InputStream` and `net\stubbles\streams\OutputStream`
+
+
 2.3.0 (2013-05-02)
 ------------------
 
