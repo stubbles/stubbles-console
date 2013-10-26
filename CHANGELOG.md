@@ -1,3 +1,9 @@
+2.5.0 (2013-10-26)
+------------------
+
+  * remove script for compiling console apps to phars, use https://packagist.org/packages/clue/phar-composer instead
+
+
 2.4.0 (2013-10-25)
 ------------------
 
