@@ -175,6 +175,20 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @since  2.6.0
+     */
+    public function usesOutputStreamForWriteEmptyLine()
+    {
+        $this->mockOutputStream->expects($this->once())
+                               ->method('writeLine')
+                               ->with($this->equalTo(''));
+        $this->mockErrorStream->expects($this->never())
+                              ->method('writeLine');
+        $this->assertSame($this->console, $this->console->writeEmptyLine());
+    }
+
+    /**
+     * @test
      */
     public function usesErrorStreamForWriteError()
     {
@@ -201,6 +215,7 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @since  2.4.0
      */
     public function usesErrorStreamForWriteErrorLines()
     {
@@ -216,6 +231,20 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
                               ->method('writeLine')
                               ->with($this->equalTo('baz'));
         $this->assertSame($this->console, $this->console->writeErrorLines(array('foo', 'bar', 'baz')));
+    }
+
+    /**
+     * @test
+     * @since  2.6.0
+     */
+    public function usesErrorStreamForWriteEmptyErrorLine()
+    {
+        $this->mockOutputStream->expects($this->never())
+                               ->method('writeLine');
+        $this->mockErrorStream->expects($this->once())
+                              ->method('writeLine')
+                              ->with($this->equalTo(''));
+        $this->assertSame($this->console, $this->console->writeEmptyErrorLine(''));
     }
 
     /**

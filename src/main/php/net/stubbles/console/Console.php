@@ -213,6 +213,18 @@ class Console implements InputStream, OutputStream
     }
 
     /**
+     * writes empty line and appends a line break
+     *
+     * @return  Console
+     * @since   2.6.0
+     */
+    public function writeEmptyLine()
+    {
+        $this->writeLine('');
+        return $this;
+    }
+
+    /**
      * writes given bytes
      *
      * @api
@@ -251,6 +263,18 @@ class Console implements InputStream, OutputStream
             $this->err->writeLine($line);
         }
 
+        return $this;
+    }
+
+    /**
+     * writes empty line and appends a line break
+     *
+     * @return  Console
+     * @since   2.6.0
+     */
+    public function writeEmptyErrorLine()
+    {
+        $this->writeErrorLine('');
         return $this;
     }
 

@@ -1,3 +1,10 @@
+2.6.0 (2013-10-28)
+------------------
+
+  * implemented #40: add new method `net\stubbles\console\Console::writeEmptyLine()` and `net\stubbles\console\Console::writeEmptyErrorLine()`
+  * implemented #39: show stacktrace of uncatched exceptions
+
+
 2.5.0 (2013-10-26)
 ------------------
 
