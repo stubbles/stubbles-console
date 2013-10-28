@@ -1,3 +1,9 @@
+2.6.0 (2013-10-28)
+------------------
+
+  * implement #40: add new method `net\stubbles\console\Console::writeEmptyLine()` and `net\stubbles\console\Console::writeEmptyErrorLine()`
+
+
 2.5.0 (2013-10-26)
 ------------------
 
