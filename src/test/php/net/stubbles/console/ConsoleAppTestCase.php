@@ -80,7 +80,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     public function thrownConsoleAppExceptionWithMessageIsCatchedInStubcli()
     {
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
-        $this->mockOutputStream->expects($this->once())
+        $this->mockOutputStream->expects($this->at(0))
                                ->method('writeLine')
                                ->with($this->equalTo('*** Exception: failure'));
         $this->assertEquals(10, ConsoleApp::stubcli('projectPath',
@@ -101,7 +101,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->mockOutputStream->expects($this->never())
                                ->method('writeLine');
         $out = $this->getMock('net\stubbles\streams\OutputStream');
-        $out->expects($this->once())
+        $out->expects($this->at(0))
             ->method('writeLine')
             ->with($this->equalTo('something happened'));
         TestConsoleApp::$exception = new ConsoleAppException(function() use($out)
@@ -126,7 +126,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     public function thrownApplicationExceptionIsCatchedInStubcli()
     {
         TestConsoleApp::$exception = new \Exception('failure');
-        $this->mockOutputStream->expects($this->once())
+        $this->mockOutputStream->expects($this->at(0))
                                ->method('writeLine')
                                ->with($this->equalTo('*** Exception: failure'));
         $this->assertEquals(20, ConsoleApp::stubcli('projectPath',
@@ -145,7 +145,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     public function thrownApplicationStubExceptionIsCatchedInStubcli()
     {
         TestConsoleApp::$exception = new Exception('failure');
-        $this->mockOutputStream->expects($this->once())
+        $this->mockOutputStream->expects($this->at(0))
                                ->method('writeLine')
                                ->with($this->equalTo('*** net\stubbles\lang\exception\Exception: failure'));
         $this->assertEquals(20, ConsoleApp::stubcli('projectPath',
@@ -239,7 +239,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     public function thrownApplicationExceptionIsCatched()
     {
         TestConsoleApp::$exception = new \Exception('failure');
-        $this->mockOutputStream->expects($this->once())
+        $this->mockOutputStream->expects($this->at(0))
                                ->method('writeLine')
                                ->with($this->equalTo('*** Exception: failure'));
         $this->assertEquals(20, TestConsoleApp::main('projectPath',
@@ -254,7 +254,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     public function thrownApplicationStubExceptionIsCatched()
     {
         TestConsoleApp::$exception = new Exception('failure');
-        $this->mockOutputStream->expects($this->once())
+        $this->mockOutputStream->expects($this->at(0))
                                ->method('writeLine')
                                ->with($this->equalTo('*** net\stubbles\lang\exception\Exception: failure'));
         $this->assertEquals(20, TestConsoleApp::main('projectPath',

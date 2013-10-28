@@ -112,6 +112,8 @@ abstract class ConsoleApp extends App
         }
 
         $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
+        $err->writeLine('Stacktrace:');
+        $err->writeLine($e->getTraceAsString());
         return 20;
     }
 
