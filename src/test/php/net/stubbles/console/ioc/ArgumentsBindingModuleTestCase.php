@@ -8,8 +8,8 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console\ioc;
-use net\stubbles\ioc\Binder;
-use net\stubbles\ioc\Injector;
+use stubbles\ioc\Binder;
+use stubbles\ioc\Injector;
 /**
  * Test for net\stubbles\console\ioc\ArgumentsBindingModule.
  *
@@ -37,7 +37,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
-                                                       array('getopt')
+                                                       ['getopt']
                                         );
         $this->argvBackup             = $_SERVER['argv'];
     }
@@ -55,7 +55,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function argumentsAreBoundAsRecievedWhenNoOptionsDefined()
     {
-        $_SERVER['argv'] = array('foo.php', 'bar', 'baz');
+        $_SERVER['argv'] = ['foo.php', 'bar', 'baz'];
         $injector        = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('argv.0'));
         $this->assertTrue($injector->hasConstant('argv.1'));
@@ -69,10 +69,10 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function argumentsAreBoundAsListWhenNoOptionsDefined()
     {
-        $_SERVER['argv'] = array('foo.php', 'bar', 'baz');
+        $_SERVER['argv'] = ['foo.php', 'bar', 'baz'];
         $injector        = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('argv'));
-        $this->assertEquals(array('argv.0' => 'bar', 'argv.1' => 'baz'),
+        $this->assertEquals(['argv.0' => 'bar', 'argv.1' => 'baz'],
                             $injector->getConstant('argv')
         );
     }
@@ -82,13 +82,13 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function argumentsAreBoundAfterParsingWhenOptionsDefined()
     {
-        $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'install');
+        $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'install'];
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
-                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+                                     ->with($this->equalTo('n:f::'), $this->equalTo(['verbose']))
+                                     ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
         $this->argumentsBindingModule->withOptions('n:f::')
-                                     ->withLongOptions(array('verbose'));
+                                     ->withLongOptions(['verbose']);
         $injector = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('argv.n'));
         $this->assertTrue($injector->hasConstant('argv.verbose'));
@@ -104,16 +104,16 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function argumentsAreBoundAsListAfterParsingWhenOptionsDefined()
     {
-        $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'install');
+        $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'install'];
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
-                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+                                     ->with($this->equalTo('n:f::'), $this->equalTo(['verbose']))
+                                     ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
         $this->argumentsBindingModule->withOptions('n:f::')
-                                     ->withLongOptions(array('verbose'));
+                                     ->withLongOptions(['verbose']);
         $injector = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('argv'));
-        $this->assertEquals(array('n' => 'example', 'verbose' => false, 'argv.0' => 'install'),
+        $this->assertEquals(['n' => 'example', 'verbose' => false, 'argv.0' => 'install'],
                             $injector->getConstant('argv')
         );
     }
@@ -123,7 +123,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestIfAvailable()
     {
-        $this->assertTrue($this->bindArguments()->hasBinding('net\stubbles\input\Request'));
+        $this->assertTrue($this->bindArguments()->hasBinding('stubbles\input\Request'));
     }
 
     /**
@@ -131,7 +131,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsConsoleRequestIfAvailable()
     {
-        $this->assertTrue($this->bindArguments()->hasBinding('net\stubbles\input\console\ConsoleRequest'));
+        $this->assertTrue($this->bindArguments()->hasBinding('stubbles\input\console\ConsoleRequest'));
     }
 
     /**
@@ -139,8 +139,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestToConsoleRequest()
     {
-        $this->assertInstanceOf('net\stubbles\input\console\ConsoleRequest',
-                                $this->bindArguments()->getInstance('net\stubbles\input\Request')
+        $this->assertInstanceOf('stubbles\input\console\ConsoleRequest',
+                                $this->bindArguments()->getInstance('stubbles\input\Request')
         );
     }
 
@@ -149,8 +149,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestToBaseConsoleRequest()
     {
-        $this->assertInstanceOf('net\stubbles\input\console\BaseConsoleRequest',
-                                $this->bindArguments()->getInstance('net\stubbles\input\Request')
+        $this->assertInstanceOf('stubbles\input\console\BaseConsoleRequest',
+                                $this->bindArguments()->getInstance('stubbles\input\Request')
         );
     }
 
@@ -159,8 +159,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function bindsConsoleRequestToBaseConsoleRequest()
     {
-        $this->assertInstanceOf('net\stubbles\input\console\BaseConsoleRequest',
-                                $this->bindArguments()->getInstance('net\stubbles\input\console\ConsoleRequest')
+        $this->assertInstanceOf('stubbles\input\console\BaseConsoleRequest',
+                                $this->bindArguments()->getInstance('stubbles\input\console\ConsoleRequest')
         );
     }
 
@@ -170,8 +170,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindsRequestAsSingleton()
     {
         $injector = $this->bindArguments();
-        $this->assertSame($injector->getInstance('net\stubbles\input\Request'),
-                          $injector->getInstance('net\stubbles\input\Request')
+        $this->assertSame($injector->getInstance('stubbles\input\Request'),
+                          $injector->getInstance('stubbles\input\Request')
         );
     }
 
@@ -181,8 +181,8 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindsConsoleRequestAsSingleton()
     {
         $injector = $this->bindArguments();
-        $this->assertSame($injector->getInstance('net\stubbles\input\Request'),
-                          $injector->getInstance('net\stubbles\input\console\ConsoleRequest')
+        $this->assertSame($injector->getInstance('stubbles\input\Request'),
+                          $injector->getInstance('stubbles\input\console\ConsoleRequest')
         );
     }
 
@@ -201,11 +201,11 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * binds request
      *
-     * @return  net\stubbles\input\Request
+     * @return  stubbles\input\Request
      */
     private function bindRequest()
     {
-        return $this->bindArguments()->getInstance('net\stubbles\input\Request');
+        return $this->bindArguments()->getInstance('stubbles\input\Request');
     }
 
     /**
@@ -213,7 +213,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function argumentsAvailableViaRequestWhenNoOptionsDefined()
     {
-        $_SERVER['argv'] = array('foo', 'bar', 'baz');
+        $_SERVER['argv'] = ['foo', 'bar', 'baz'];
         $request        = $this->bindRequest();
         $this->assertTrue($request->hasParam('argv.0'));
         $this->assertTrue($request->hasParam('argv.1'));
@@ -226,13 +226,13 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function argumentsAvailableViaRequestAfterParsingWhenOptionsDefined()
     {
-        $_SERVER['argv'] = array('foo.php', '-n', 'example', '--verbose', 'bar');
+        $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'bar'];
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('n:f::'), $this->equalTo(array('verbose')))
-                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+                                     ->with($this->equalTo('n:f::'), $this->equalTo(['verbose']))
+                                     ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
         $this->argumentsBindingModule->withOptions('n:f::')
-                                     ->withLongOptions(array('verbose'));
+                                     ->withLongOptions(['verbose']);
         $request        = $this->bindRequest();
         $this->assertTrue($request->hasParam('n'));
         $this->assertTrue($request->hasParam('verbose'));
@@ -244,13 +244,13 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  net\stubbles\lang\exception\ConfigurationException
+     * @expectedException  stubbles\lang\exception\ConfigurationException
      */
     public function invalidOptionsThrowConfigurationException()
     {
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('//'), $this->equalTo(array()))
+                                     ->with($this->equalTo('//'), $this->equalTo([]))
                                      ->will($this->returnValue(false));
         $this->argumentsBindingModule->withOptions('//');
         $this->bindArguments();
@@ -262,15 +262,15 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function optionsContainCIfStubCliEnabled()
     {
         $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
-                                                       array('getopt'),
-                                                       array(true)
+                                                       ['getopt'],
+                                                       [true]
                                         );
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('n:f::c:'), $this->equalTo(array('verbose')))
-                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
+                                     ->with($this->equalTo('n:f::c:'), $this->equalTo(['verbose']))
+                                     ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
         $this->argumentsBindingModule->withOptions('n:f::')
-                                     ->withLongOptions(array('verbose'));
+                                     ->withLongOptions(['verbose']);
         $this->bindArguments();
     }
 
@@ -280,14 +280,14 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function optionsContainCIfStubCliEnabledAndOnlyLongOptionsSet()
     {
         $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
-                                                       array('getopt'),
-                                                       array(true)
+                                                       ['getopt'],
+                                                       [true]
                                         );
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('c:'), $this->equalTo(array('verbose')))
-                                     ->will($this->returnValue(array('verbose' => false)));
-        $this->argumentsBindingModule->withLongOptions(array('verbose'));
+                                     ->with($this->equalTo('c:'), $this->equalTo(['verbose']))
+                                     ->will($this->returnValue(['verbose' => false]));
+        $this->argumentsBindingModule->withLongOptions(['verbose']);
         $this->bindArguments();
     }
 
@@ -297,14 +297,14 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function optionsContainCIfStubCliEnabledAndLongOptionsSetFirst()
     {
         $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
-                                                       array('getopt'),
-                                                       array(true)
+                                                       ['getopt'],
+                                                       [true]
                                         );
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('n:f::c:'), $this->equalTo(array('verbose')))
-                                     ->will($this->returnValue(array('n' => 'example', 'verbose' => false)));
-        $this->argumentsBindingModule->withLongOptions(array('verbose'))
+                                     ->with($this->equalTo('n:f::c:'), $this->equalTo(['verbose']))
+                                     ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
+        $this->argumentsBindingModule->withLongOptions(['verbose'])
                                      ->withOptions('n:f::');
         $this->bindArguments();
     }
@@ -315,7 +315,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindsNoUserInputByDefault()
     {
         $injector = $this->bindArguments();
-        $this->assertFalse($injector->hasConstant('net.stubbles.console.input.class'));
+        $this->assertFalse($injector->hasConstant('stubbles.console.input.class'));
     }
 
     /**
@@ -326,10 +326,10 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
         $this->argumentsBindingModule->withUserInput('org\stubbles\console\test\BrokeredUserInput');
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('vo:u:h'), $this->equalTo(array('verbose', 'bar1:', 'bar2:', 'help')))
-                                     ->will($this->returnValue(array()));
+                                     ->with($this->equalTo('vo:u:h'), $this->equalTo(['verbose', 'bar1:', 'bar2:', 'help']))
+                                     ->will($this->returnValue([]));
         $injector = $this->bindArguments();
-        $this->assertTrue($injector->hasConstant('net.stubbles.console.input.class'));
+        $this->assertTrue($injector->hasConstant('stubbles.console.input.class'));
         $this->assertTrue($injector->hasBinding('org\stubbles\console\test\BrokeredUserInput'));
     }
 
@@ -342,25 +342,24 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
         $this->argumentsBindingModule->withUserInput('org\stubbles\console\test\BrokeredUserInput');
         $this->argumentsBindingModule->expects($this->once())
                                      ->method('getopt')
-                                     ->with($this->equalTo('vo:u:h'), $this->equalTo(array('verbose', 'bar1:', 'bar2:', 'help')))
-                                     ->will($this->returnValue(array('bar2' => 'foo', 'o' => 'baz')));
+                                     ->with($this->equalTo('vo:u:h'), $this->equalTo(['verbose', 'bar1:', 'bar2:', 'help']))
+                                     ->will($this->returnValue(['bar2' => 'foo', 'o' => 'baz']));
         $binder = new Binder();
         $this->argumentsBindingModule->configure($binder);
-        $binder->bind('net\stubbles\streams\OutputStream')
+        $binder->bind('stubbles\streams\OutputStream')
                ->named('stdout')
-               ->toInstance($this->getMock('net\stubbles\streams\OutputStream'));
-        $binder->bind('net\stubbles\streams\OutputStream')
+               ->toInstance($this->getMock('stubbles\streams\OutputStream'));
+        $binder->bind('stubbles\streams\OutputStream')
                ->named('stderr')
-               ->toInstance($this->getMock('net\stubbles\streams\OutputStream'));
-        $binder->bind('net\stubbles\streams\InputStream')
+               ->toInstance($this->getMock('stubbles\streams\OutputStream'));
+        $binder->bind('stubbles\streams\InputStream')
                ->named('stdin')
-               ->toInstance($this->getMock('net\stubbles\streams\InputStream'));
-        $binder->bindMap('net\stubbles\input\broker\param\ParamBroker')
-               ->withEntry('Mock', $this->getMock('net\stubbles\input\broker\param\ParamBroker'));
+               ->toInstance($this->getMock('stubbles\streams\InputStream'));
+        $binder->bindMap('stubbles\input\broker\param\ParamBroker')
+               ->withEntry('Mock', $this->getMock('stubbles\input\broker\param\ParamBroker'));
         $injector = $binder->getInjector();
         $this->assertSame($injector->getInstance('org\stubbles\console\test\BrokeredUserInput'),
                           $injector->getInstance('org\stubbles\console\test\BrokeredUserInput')
         );
     }
 }
-?>

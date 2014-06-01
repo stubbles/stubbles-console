@@ -139,4 +139,3 @@ class BrokeredUserInput
         return $this->baz;
     }
 }
-?>

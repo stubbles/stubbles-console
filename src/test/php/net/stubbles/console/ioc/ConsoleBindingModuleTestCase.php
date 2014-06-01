@@ -8,8 +8,8 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console\ioc;
-use net\stubbles\ioc\Binder;
-use net\stubbles\ioc\Injector;
+use stubbles\ioc\Binder;
+use stubbles\ioc\Injector;
 /**
  * Test for net\stubbles\console\ioc\ConsoleBindingModule.
  *
@@ -51,9 +51,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindingsConfiguredForInputStream()
     {
         $injector = $this->configure();
-        $this->assertTrue($injector->hasBinding('net\stubbles\streams\InputStream', 'stdin'));
-        $this->assertInstanceOf('net\stubbles\streams\InputStream',
-                                $injector->getInstance('net\stubbles\streams\InputStream', 'stdin')
+        $this->assertTrue($injector->hasBinding('stubbles\streams\InputStream', 'stdin'));
+        $this->assertInstanceOf('stubbles\streams\InputStream',
+                                $injector->getInstance('stubbles\streams\InputStream', 'stdin')
         );
     }
 
@@ -63,9 +63,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindingsConfiguredForOutputStream()
     {
         $injector = $this->configure();
-        $this->assertTrue($injector->hasBinding('net\stubbles\streams\OutputStream', 'stdout'));
-        $this->assertInstanceOf('net\stubbles\streams\OutputStream',
-                                $injector->getInstance('net\stubbles\streams\OutputStream', 'stdout')
+        $this->assertTrue($injector->hasBinding('stubbles\streams\OutputStream', 'stdout'));
+        $this->assertInstanceOf('stubbles\streams\OutputStream',
+                                $injector->getInstance('stubbles\streams\OutputStream', 'stdout')
         );
     }
 
@@ -75,9 +75,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindingsConfiguredForErrorStream()
     {
         $injector = $this->configure();
-        $this->assertTrue($injector->hasBinding('net\stubbles\streams\OutputStream', 'stderr'));
-        $this->assertInstanceOf('net\stubbles\streams\OutputStream',
-                                $injector->getInstance('net\stubbles\streams\OutputStream', 'stderr')
+        $this->assertTrue($injector->hasBinding('stubbles\streams\OutputStream', 'stderr'));
+        $this->assertInstanceOf('stubbles\streams\OutputStream',
+                                $injector->getInstance('stubbles\streams\OutputStream', 'stderr')
         );
     }
 
@@ -99,8 +99,8 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function inputStreamIsSingleton()
     {
         $injector = $this->configure();
-        $this->assertSame($injector->getInstance('net\stubbles\streams\InputStream', 'stdin'),
-                          $injector->getInstance('net\stubbles\streams\InputStream', 'stdin')
+        $this->assertSame($injector->getInstance('stubbles\streams\InputStream', 'stdin'),
+                          $injector->getInstance('stubbles\streams\InputStream', 'stdin')
         );
     }
 
@@ -110,8 +110,8 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function outputStreamIsSingleton()
     {
         $injector = $this->configure();
-        $this->assertSame($injector->getInstance('net\stubbles\streams\OutputStream', 'stdout'),
-                          $injector->getInstance('net\stubbles\streams\OutputStream', 'stdout')
+        $this->assertSame($injector->getInstance('stubbles\streams\OutputStream', 'stdout'),
+                          $injector->getInstance('stubbles\streams\OutputStream', 'stdout')
         );
     }
 
@@ -121,9 +121,8 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function errorStreamIsSingleton()
     {
         $injector = $this->configure();
-        $this->assertSame($injector->getInstance('net\stubbles\streams\OutputStream', 'stderr'),
-                          $injector->getInstance('net\stubbles\streams\OutputStream', 'stderr')
+        $this->assertSame($injector->getInstance('stubbles\streams\OutputStream', 'stderr'),
+                          $injector->getInstance('stubbles\streams\OutputStream', 'stderr')
         );
     }
 }
-?>

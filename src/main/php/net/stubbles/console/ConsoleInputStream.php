@@ -8,8 +8,8 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\streams\DecodingInputStream;
-use net\stubbles\streams\ResourceInputStream;
+use stubbles\streams\DecodingInputStream;
+use stubbles\streams\ResourceInputStream;
 /**
  * Class for console input streams.
  */
@@ -48,4 +48,3 @@ class ConsoleInputStream extends ResourceInputStream
         return self::$in;
     }
 }
-?>

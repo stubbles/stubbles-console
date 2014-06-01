@@ -8,7 +8,6 @@
  * @package  net\stubbles\console
  */
 namespace org\stubbles\console\scripts\creator;
-use net\stubbles\lang\reflect\ReflectionObject;
 use org\bovigo\vfs\vfsStream;
 /**
  * Test for org\stubbles\console\scripts\creator\TestFileCreator.
@@ -65,7 +64,7 @@ class TestFileCreatorTestCase extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
-use net\stubbles\lang;
+use stubbles\lang;
 /**
  * Test for example\console\ExampleConsoleApp.
  */
@@ -108,7 +107,7 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         $this->assertInstanceOf(\'example\console\ExampleConsoleApp\',
-                                ExampleConsoleApp::create(\net\stubbles\lang\ResourceLoader::getRootPath())
+                                ExampleConsoleApp::create(\stubbles\lang\ResourceLoader::getRootPath())
         );
     }
 }
@@ -135,4 +134,3 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $testFile->getContent());
     }
 }
-?>

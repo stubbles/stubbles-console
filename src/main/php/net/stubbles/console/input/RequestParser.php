@@ -9,11 +9,11 @@
  */
 namespace net\stubbles\console\input;
 use net\stubbles\console\ConsoleAppException;
-use net\stubbles\input\console\ConsoleRequest;
-use net\stubbles\input\broker\RequestBrokerFacade;
-use net\stubbles\lang\reflect\annotation\Annotation;
-use net\stubbles\lang\reflect\ReflectionObject;
-use net\stubbles\streams\OutputStream;
+use stubbles\input\console\ConsoleRequest;
+use stubbles\input\broker\RequestBrokerFacade;
+use stubbles\lang;
+use stubbles\lang\reflect\annotation\Annotation;
+use stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
  *
@@ -113,8 +113,8 @@ class RequestParser
      */
     private function createHelp($object, $group)
     {
-        $options    = array();
-        $parameters = array();
+        $options    = [];
+        $parameters = [];
         foreach ($this->requestBroker->getAnnotations($object, $group) as $requestAnnotation) {
             if (substr($requestAnnotation->getName(), 0, 5) !== 'argv.') {
                 $options[$this->getOptionName($requestAnnotation)] = $requestAnnotation->getDescription();
@@ -142,7 +142,7 @@ class RequestParser
      */
     private function getAppDescription($object)
     {
-        $class = new ReflectionObject($object);
+        $class = lang\reflect($object);
         if (!$class->hasAnnotation('AppDescription')) {
             return null;
         }
@@ -204,4 +204,3 @@ class RequestParser
                };
     }
 }
-?>

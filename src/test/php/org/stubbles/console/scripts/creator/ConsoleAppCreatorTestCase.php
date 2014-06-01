@@ -5,7 +5,7 @@
  * @package  org\stubbles\console\scripts\creator
  */
 namespace org\stubbles\console\scripts\creator;
-use net\stubbles\lang\reflect\ReflectionObject;
+use stubbles\lang;
 /**
  * Test for org\stubbles\console\scripts\creator\ConsoleAppCreator.
  */
@@ -74,9 +74,8 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue(ReflectionObject::fromInstance($this->consoleAppCreator)
-                                          ->getConstructor()
-                                          ->hasAnnotation('Inject')
+        $this->assertTrue(
+                lang\reflectConstructor($this->consoleAppCreator)->hasAnnotation('Inject')
         );
     }
 
@@ -180,8 +179,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         $this->assertInstanceOf('org\stubbles\console\scripts\creator\ConsoleAppCreator',
-                                ConsoleAppCreator::create(\net\stubbles\lang\ResourceLoader::getRootPath())
+                                ConsoleAppCreator::create(\stubbles\lang\ResourceLoader::getRootPath())
         );
     }
 }
-?>

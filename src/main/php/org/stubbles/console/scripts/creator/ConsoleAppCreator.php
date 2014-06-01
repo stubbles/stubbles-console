@@ -41,13 +41,13 @@ class ConsoleAppCreator extends ConsoleApp
      * returns list of bindings used for this application
      *
      * @param   string  $projectPath
-     * @return  \net\stubbles\ioc\module\BindingModule[]
+     * @return  \stubbles\ioc\module\BindingModule[]
      */
     public static function __bindings($projectPath)
     {
-        return array(self::createConsoleBindingModule(),
-                     self::createPropertiesBindingModule($projectPath)
-        );
+        return [self::createModeBindingModule($projectPath),
+                self::createConsoleBindingModule()
+        ];
     }
 
     /**
@@ -78,7 +78,7 @@ class ConsoleAppCreator extends ConsoleApp
     public function run()
     {
         $this->console->writeLine('Stubbles ConsoleAppCreator')
-                      ->writeLine(' (c) 2012 Stubbles Development Group')
+                      ->writeLine(' (c) 2012-2014 Stubbles Development Group')
                       ->writeLine('')
                       ->writeLine('Please enter the full qualified class name for the console app: ');
         $className = str_replace('\\\\', '\\', trim($this->console->readLine()));
@@ -121,4 +121,3 @@ class ConsoleAppCreator extends ConsoleApp
         return substr($className, strrpos($className, '\\') + 1);
     }
 }
-?>

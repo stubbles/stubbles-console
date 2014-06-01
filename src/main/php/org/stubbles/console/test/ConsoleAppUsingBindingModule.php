@@ -42,4 +42,3 @@ class ConsoleAppUsingBindingModule extends ConsoleApp
      */
     public function run() { }
 }
-?>

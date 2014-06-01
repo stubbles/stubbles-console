@@ -8,9 +8,10 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console\ioc;
-use net\stubbles\ioc\Binder;
-use net\stubbles\ioc\module\BindingModule;
-use net\stubbles\lang\exception\ConfigurationException;
+use stubbles\ioc\Binder;
+use stubbles\ioc\module\BindingModule;
+use stubbles\lang\exception\ConfigurationException;
+use stubbles\lang\reflect\annotation\Annotation;
 /**
  * Binding module to configure the binder with arguments.
  */
@@ -33,7 +34,7 @@ class ArgumentsBindingModule implements BindingModule
      *
      * @type  string[]
      */
-    protected $longopts  = array();
+    protected $longopts  = [];
     /**
      * name of user input class
      *
@@ -116,19 +117,19 @@ class ArgumentsBindingModule implements BindingModule
                    ->to($value);
         }
 
-        $request = new \net\stubbles\input\console\BaseConsoleRequest($args, $_SERVER);
-        $binder->bind('net\stubbles\input\Request')
+        $request = new \stubbles\input\console\BaseConsoleRequest($args, $_SERVER);
+        $binder->bind('stubbles\input\Request')
                ->toInstance($request);
-        $binder->bind('net\stubbles\input\console\ConsoleRequest')
+        $binder->bind('stubbles\input\console\ConsoleRequest')
                ->toInstance($request);
         if (null !== $this->userInput) {
             $binder->bind($this->userInput)
                    ->toProviderClass('net\stubbles\console\input\UserInputProvider')
                    ->asSingleton();
             $binder->bind($this->userInput)
-                   ->named('net.stubbles.console.input.instance')
+                   ->named('stubbles.console.input.instance')
                    ->to($this->userInput);
-            $binder->bindConstant('net.stubbles.console.input.class')
+            $binder->bindConstant('stubbles.console.input.class')
                    ->to($this->userInput);
         }
     }
@@ -161,10 +162,10 @@ class ArgumentsBindingModule implements BindingModule
      * @param   array  $parsedVars
      * @return  array
      */
-    private function fixArgs(array $args, array $parsedVars = array())
+    private function fixArgs(array $args, array $parsedVars = [])
     {
         array_shift($args); // script name
-        $vars     = array();
+        $vars     = [];
         $position = 0;
         foreach ($args as $arg) {
             if (isset($parsedVars[substr($arg, 1)]) || isset($parsedVars[substr($arg, 2)]) || in_array($arg, $parsedVars)) {
@@ -187,7 +188,7 @@ class ArgumentsBindingModule implements BindingModule
             return;
         }
 
-        $requestMethods = new \net\stubbles\input\broker\RequestBrokerMethods();
+        $requestMethods = new \stubbles\input\broker\RequestBrokerMethods();
         foreach ($requestMethods->getAnnotations($this->userInput) as $annotation) {
             $name = $annotation->getName();
             if (substr($name, 0, 5) === 'argv.') {
@@ -213,10 +214,10 @@ class ArgumentsBindingModule implements BindingModule
     /**
      * returns option name
      *
-     * @param   \net\stubbles\lang\reflect\annotation\Annotation  $annotation
+     * @param   Annotation  $annotation
      * @return  string
      */
-    private function getOptionName(\net\stubbles\lang\reflect\annotation\Annotation $annotation)
+    private function getOptionName(Annotation $annotation)
     {
         $name = $annotation->getName();
         if (!$annotation->requiresValue()) {
@@ -238,4 +239,3 @@ class ArgumentsBindingModule implements BindingModule
         return getopt($options, $longopts);
     }
 }
-?>

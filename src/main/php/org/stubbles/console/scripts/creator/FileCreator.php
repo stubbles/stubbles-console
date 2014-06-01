@@ -33,7 +33,7 @@ abstract class FileCreator
      * @param  Console  $console
      * @param  string   $projectPath  path to project
      * @Inject
-     * @Named{projectPath}('net.stubbles.project.path')
+     * @Named{projectPath}('stubbles.project.path')
      */
     public function __construct(Console $console, $projectPath)
     {
@@ -80,12 +80,12 @@ abstract class FileCreator
         }
 
         file_put_contents($fileName,
-                          str_replace(array('{NAMESPACE}',
-                                            '{CLASS}'
-                                      ),
-                                      array($this->getNamespace($className),
-                                            $this->getNonQualifiedClassName($className)
-                                      ),
+                          str_replace(['{NAMESPACE}',
+                                       '{CLASS}'
+                                      ],
+                                      [$this->getNamespace($className),
+                                       $this->getNonQualifiedClassName($className)
+                                      ],
                                       file_get_contents(__DIR__ . '/' . $template)
                           )
         );
@@ -113,4 +113,3 @@ abstract class FileCreator
         return substr($className, strrpos($className, '\\') + 1);
     }
 }
-?>

@@ -8,8 +8,8 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\lang\exception\Exception;
-use net\stubbles\streams\OutputStream;
+use stubbles\lang\exception\Exception;
+use stubbles\streams\OutputStream;
 /**
  * Exception for signaling errors on app execution.
  *
@@ -59,4 +59,3 @@ class ConsoleAppException extends Exception
                };
     }
 }
-?>

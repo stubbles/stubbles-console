@@ -10,8 +10,8 @@
 namespace net\stubbles\console;
 use net\stubbles\console\ioc\ArgumentsBindingModule;
 use net\stubbles\console\ioc\ConsoleBindingModule;
-use net\stubbles\ioc\App;
-use net\stubbles\streams\OutputStream;
+use stubbles\ioc\App;
+use stubbles\streams\OutputStream;
 /**
  * Base class for console applications.
  *
@@ -139,4 +139,3 @@ abstract class ConsoleApp extends App
         return new ConsoleBindingModule();
     }
 }
-?>

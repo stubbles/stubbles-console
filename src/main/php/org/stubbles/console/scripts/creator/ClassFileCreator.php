@@ -29,4 +29,3 @@ class ClassFileCreator extends FileCreator
         }
     }
 }
-?>

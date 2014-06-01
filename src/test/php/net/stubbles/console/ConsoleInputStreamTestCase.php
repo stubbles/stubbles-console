@@ -20,7 +20,7 @@ class ConsoleInputStreamTestCase extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfInputStream()
     {
-        $this->assertInstanceOf('net\stubbles\streams\InputStream',
+        $this->assertInstanceOf('stubbles\streams\InputStream',
                                 ConsoleInputStream::forIn()
         );
     }
@@ -35,4 +35,3 @@ class ConsoleInputStreamTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 }
-?>

@@ -107,4 +107,3 @@ exit(ExampleConsoleApp::main(realpath($projectPath), \net\stubbles\console\Conso
         $this->assertEquals('foo', $testFile->getContent());
     }
 }
-?>

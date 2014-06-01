@@ -8,11 +8,11 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\lang\exception\IllegalArgumentException;
-use net\stubbles\lang\exception\IllegalStateException;
-use net\stubbles\lang\exception\IOException;
-use net\stubbles\lang\exception\RuntimeException;
-use net\stubbles\streams\ResourceInputStream;
+use stubbles\lang\exception\IllegalArgumentException;
+use stubbles\lang\exception\IllegalStateException;
+use stubbles\lang\exception\IOException;
+use stubbles\lang\exception\RuntimeException;
+use stubbles\streams\ResourceInputStream;
 /**
  * Input stream to read output of an executed command.
  *
@@ -100,4 +100,3 @@ class CommandInputStream extends ResourceInputStream
         }
     }
 }
-?>

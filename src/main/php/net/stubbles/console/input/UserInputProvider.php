@@ -8,8 +8,8 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console\input;
-use net\stubbles\ioc\InjectionProvider;
-use net\stubbles\ioc\Injector;
+use stubbles\ioc\InjectionProvider;
+use stubbles\ioc\Injector;
 /**
  * Interface for command executors.
  *
@@ -43,7 +43,7 @@ class UserInputProvider implements InjectionProvider
      * @param  Injector       $injector
      * @param  string         $userInputClass
      * @Inject
-     * @Named{userInputClass}('net.stubbles.console.input.class')
+     * @Named{userInputClass}('stubbles.console.input.class')
      */
     public function __construct(RequestParser $requestParser, Injector $injector, $userInputClass)
     {
@@ -61,10 +61,9 @@ class UserInputProvider implements InjectionProvider
     public function get($name = null)
     {
         return $this->requestParser->parseInto($this->injector->getInstance($this->userInputClass,
-                                                                            'net.stubbles.console.input.instance'
+                                                                            'stubbles.console.input.instance'
                                                ),
                                                $name
         );
     }
 }
-?>

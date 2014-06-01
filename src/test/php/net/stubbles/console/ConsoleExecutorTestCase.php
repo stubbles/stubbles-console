@@ -52,7 +52,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function executeWithOutputStreamWritesResponseDataToOutputStream()
     {
-        $mockOutputStream = $this->getMock('net\stubbles\streams\OutputStream');
+        $mockOutputStream = $this->getMock('stubbles\streams\OutputStream');
         $mockOutputStream->expects($this->once())
                          ->method('writeLine')
                          ->with($this->equalTo('foo'));
@@ -63,7 +63,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  net\stubbles\lang\exception\RuntimeException
+     * @expectedException  stubbles\lang\exception\RuntimeException
      */
     public function executeFailsThrowsRuntimeException()
     {
@@ -82,7 +82,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  net\stubbles\lang\exception\RuntimeException
+     * @expectedException  stubbles\lang\exception\RuntimeException
      */
     public function executeAsyncFailsThrowsRuntimeException()
     {
@@ -97,7 +97,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  net\stubbles\lang\exception\IllegalArgumentException
+     * @expectedException  stubbles\lang\exception\IllegalArgumentException
      */
     public function illegalResourceForCommandInputStreamThrowsIllegalArgumentException()
     {
@@ -106,7 +106,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  net\stubbles\lang\exception\IllegalStateException
+     * @expectedException  stubbles\lang\exception\IllegalStateException
      */
     public function readAfterCloseThrowsIllegalStateException()
     {
@@ -122,12 +122,12 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function executeDirectReturnsOutputAsArray()
     {
-        $this->assertEquals(array('foo'), $this->executor->executeDirect('echo foo'));
+        $this->assertEquals(['foo'], $this->executor->executeDirect('echo foo'));
     }
 
     /**
      * @test
-     * @expectedException  net\stubbles\lang\exception\RuntimeException
+     * @expectedException  stubbles\lang\exception\RuntimeException
      */
     public function executeDirectFailsThrowsRuntimeException()
     {
@@ -135,4 +135,3 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
     }
 
 }
-?>

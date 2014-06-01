@@ -8,7 +8,7 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\streams\OutputStream;
+use stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
  *
@@ -58,4 +58,3 @@ interface Executor
      */
     public function executeDirect($command);
 }
-?>

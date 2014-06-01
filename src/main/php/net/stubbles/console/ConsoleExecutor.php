@@ -8,8 +8,8 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\lang\exception\RuntimeException;
-use net\stubbles\streams\OutputStream;
+use stubbles\lang\exception\RuntimeException;
+use stubbles\streams\OutputStream;
 /**
  * Class to execute commands on the command line.
  */
@@ -125,7 +125,7 @@ class ConsoleExecutor implements Executor
             throw new RuntimeException('Can not execute ' . $command);
         }
 
-        $result = array();
+        $result = [];
         while (!feof($pd) && false !== ($line = fgets($pd, 4096))) {
             $result[] = chop($line);
         }
@@ -138,4 +138,3 @@ class ConsoleExecutor implements Executor
         return $result;
     }
 }
-?>

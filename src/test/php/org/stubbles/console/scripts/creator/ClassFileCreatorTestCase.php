@@ -76,14 +76,14 @@ class ExampleConsoleApp extends ConsoleApp
      * returns list of bindings used for this application
      *
      * @param   string  $projectPath
-     * @return  \net\stubbles\ioc\module\BindingModule[]
+     * @return  \stubbles\ioc\module\BindingModule[]
      */
     public static function __bindings($projectPath)
     {
-        return array(self::createArgumentsBindingModule(),
-                     self::createConsoleBindingModule(),
-                     self::createPropertiesBindingModule($projectPath)
-        );
+        return [self::createModeBindingModule($projectPath),
+                self::createArgumentsBindingModule(),
+                self::createConsoleBindingModule()
+        ];
     }
 
     /**
@@ -125,4 +125,3 @@ class ExampleConsoleApp extends ConsoleApp
         $this->assertFalse($this->root->hasChild('src/main/php/org/stubbles/console/scripts/creator/ClassFileCreator.php'));
     }
 }
-?>

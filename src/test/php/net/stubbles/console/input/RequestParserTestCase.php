@@ -9,8 +9,9 @@
  */
 namespace net\stubbles\console\input;
 use net\stubbles\console\ConsoleAppException;
-use net\stubbles\lang;
-use net\stubbles\lang\reflect\annotation\Annotation;
+use stubbles\input\ValueReader;
+use stubbles\lang;
+use stubbles\lang\reflect\annotation\Annotation;
 use org\stubbles\console\test\BrokeredUserInput;
 /**
  * Test for net\stubbles\console\input\RequestParser.
@@ -50,9 +51,9 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockOutputStream   = $this->getMock('net\stubbles\streams\OutputStream');
-        $this->mockConsoleRequest = $this->getMock('net\stubbles\input\console\ConsoleRequest');
-        $this->mockRequestBroker  = $this->getMockBuilder('net\stubbles\input\broker\RequestBrokerFacade')
+        $this->mockOutputStream   = $this->getMock('stubbles\streams\OutputStream');
+        $this->mockConsoleRequest = $this->getMock('stubbles\input\console\ConsoleRequest');
+        $this->mockRequestBroker  = $this->getMockBuilder('stubbles\input\broker\RequestBrokerFacade')
                                          ->disableOriginalConstructor()
                                          ->getMock();
         $this->requestParser      = new RequestParser($this->mockOutputStream,
@@ -88,12 +89,12 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                                  ->will($this->returnValue(true));
         $this->mockConsoleRequest->expects($this->once())
                                  ->method('readEnv')
-                                 ->will($this->returnValue(\net\stubbles\input\ValueReader::forValue('bin/http')));
+                                 ->will($this->returnValue(ValueReader::forValue('bin/http')));
         $this->mockRequestBroker->expects($this->never())
                                 ->method('procure');
         $this->mockRequestBroker->expects($this->once())
                                     ->method('getAnnotations')
-                                    ->will($this->returnValue(array()));
+                                    ->will($this->returnValue([]));
         $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
     }
 
@@ -109,12 +110,12 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                                  ->will($this->onConsecutiveCalls(false, true));
         $this->mockConsoleRequest->expects($this->once())
                                  ->method('readEnv')
-                                 ->will($this->returnValue(\net\stubbles\input\ValueReader::forValue('bin/http')));
+                                 ->will($this->returnValue(ValueReader::forValue('bin/http')));
         $this->mockRequestBroker->expects($this->never())
                                 ->method('procure');
         $this->mockRequestBroker->expects($this->once())
                                     ->method('getAnnotations')
-                                    ->will($this->returnValue(array()));
+                                    ->will($this->returnValue([]));
         $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
     }
 
@@ -128,17 +129,17 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                                  ->will($this->returnValue(true));
         $this->mockConsoleRequest->expects($this->once())
                                  ->method('readEnv')
-                                 ->will($this->returnValue(\net\stubbles\input\ValueReader::forValue('bin/http')));
+                                 ->will($this->returnValue(ValueReader::forValue('bin/http')));
         $argv1 = $this->createRequestAnnotation('argv.1', 'HttpUri', null, 'HttpUri');
         $argv1->required = true;
         $this->mockRequestBroker->expects($this->once())
                                 ->method('getAnnotations')
-                                ->will($this->returnValue(array($this->createRequestAnnotation('foo', 'Set the foo option.', '-f FOO'),
-                                                                $this->createRequestAnnotation('bar', 'Set the bar option.'),
-                                                                $this->createRequestAnnotation('o', 'Set another option.'),
-                                                                $argv1,
-                                                                $this->createRequestAnnotation('argv.2', 'Request method', null, 'String')
-                                                          )
+                                ->will($this->returnValue([$this->createRequestAnnotation('foo', 'Set the foo option.', '-f FOO'),
+                                                           $this->createRequestAnnotation('bar', 'Set the bar option.'),
+                                                           $this->createRequestAnnotation('o', 'Set another option.'),
+                                                           $argv1,
+                                                           $this->createRequestAnnotation('argv.2', 'Request method', null, 'String')
+                                                          ]
                                        )
                                   );
         try {
@@ -236,4 +237,3 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
         $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
     }
 }
-?>

@@ -8,11 +8,11 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\input\Param;
-use net\stubbles\input\ParamErrors;
-use net\stubbles\input\ValueReader;
-use net\stubbles\streams\InputStream;
-use net\stubbles\streams\OutputStream;
+use stubbles\input\Param;
+use stubbles\input\ParamErrors;
+use stubbles\input\ValueReader;
+use stubbles\streams\InputStream;
+use stubbles\streams\OutputStream;
 /**
  * Interface to read and write on command line.
  */
@@ -93,7 +93,7 @@ class Console implements InputStream, OutputStream
     {
         $result = null;
         while (null === $result) {
-            $result = $this->prompt($message)->ifIsOneOf(array('y', 'Y', 'n', 'N', ''));
+            $result = $this->prompt($message)->ifIsOneOf(['y', 'Y', 'n', 'N', '']);
             if ('' === $result) {
                 $result = ((null !== $default) ? ($default) : (null));
             }

@@ -27,15 +27,15 @@ class SelfBoundConsoleApp extends ConsoleApp
      * returns list of bindings used for this application
      *
      * @param   string  $projectPath
-     * @return  \net\stubbles\ioc\module\BindingModule[]
+     * @return  \stubbles\ioc\module\BindingModule[]
      */
     public static function __bindings($projectPath)
     {
-        return array(self::createArgumentsBindingModule()
-                         ->withUserInput(__CLASS__),
-                     self::createConsoleBindingModule(),
-                     self::createPropertiesBindingModule($projectPath)
-        );
+        return [self::createModeBindingModule($projectPath),
+                self::createArgumentsBindingModule()
+                    ->withUserInput(__CLASS__),
+                self::createConsoleBindingModule()
+        ];
     }
 
     /**
@@ -59,4 +59,3 @@ class SelfBoundConsoleApp extends ConsoleApp
         return 0;
     }
 }
-?>

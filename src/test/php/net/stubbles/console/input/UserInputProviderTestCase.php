@@ -8,7 +8,7 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console\input;
-use net\stubbles\lang;
+use stubbles\lang;
 use org\stubbles\console\test\BrokeredUserInput;
 /**
  * Test for net\stubbles\console\input\UserInputProvider.
@@ -41,7 +41,7 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
         $this->mockRequestParser = $this->getMockBuilder('net\stubbles\console\input\RequestParser')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->mockInjector      = $this->getMockBuilder('net\stubbles\ioc\Injector')
+        $this->mockInjector      = $this->getMockBuilder('stubbles\ioc\Injector')
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $this->userInputProvider = new UserInputProvider($this->mockRequestParser,
@@ -60,7 +60,7 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
 
         $parameters = $constructor->getParameters();
         $this->assertTrue($parameters[2]->hasAnnotation('Named'));
-        $this->assertEquals('net.stubbles.console.input.class',
+        $this->assertEquals('stubbles.console.input.class',
                             $parameters[2]->getAnnotation('Named')->getName()
         );
     }
@@ -74,7 +74,7 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
         $this->mockInjector->expects($this->once())
                            ->method('getInstance')
                            ->with($this->equalTo('org\stubbles\console\test\BrokeredUserInput'),
-                                  $this->equalTo('net.stubbles.console.input.instance')
+                                  $this->equalTo('stubbles.console.input.instance')
                              )
                            ->will($this->returnValue($brokeredUserInput));
         $this->mockRequestParser->expects($this->once())
@@ -88,4 +88,3 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 }
-?>

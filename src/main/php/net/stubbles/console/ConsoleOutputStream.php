@@ -8,8 +8,8 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\streams\EncodingOutputStream;
-use net\stubbles\streams\ResourceOutputStream;
+use stubbles\streams\EncodingOutputStream;
+use stubbles\streams\ResourceOutputStream;
 /**
  * Class for console output streams.
  */
@@ -89,4 +89,3 @@ class ConsoleOutputStream extends ResourceOutputStream
         return $outputEncoding;
     }
 }
-?>

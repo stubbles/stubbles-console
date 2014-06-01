@@ -8,8 +8,8 @@
  * @package  net\stubbles\console
  */
 namespace net\stubbles\console;
-use net\stubbles\input\ParamErrors;
-use net\stubbles\lang;
+use stubbles\input\ParamErrors;
+use stubbles\lang;
 /**
  * Test for net\stubbles\console\Console.
  *
@@ -47,9 +47,9 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockInputStream  = $this->getMock('net\stubbles\streams\InputStream');
-        $this->mockOutputStream = $this->getMock('net\stubbles\streams\OutputStream');
-        $this->mockErrorStream  = $this->getMock('net\stubbles\streams\OutputStream');
+        $this->mockInputStream  = $this->getMock('stubbles\streams\InputStream');
+        $this->mockOutputStream = $this->getMock('stubbles\streams\OutputStream');
+        $this->mockErrorStream  = $this->getMock('stubbles\streams\OutputStream');
         $this->console          = new Console($this->mockInputStream,
                                               $this->mockOutputStream,
                                               $this->mockErrorStream
@@ -169,7 +169,7 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
         $this->mockErrorStream->expects($this->never())
                               ->method('writeLine');
         $this->assertSame($this->console,
-                          $this->console->writeLines(array('foo', 'bar', 'baz'))
+                          $this->console->writeLines(['foo', 'bar', 'baz'])
         );
     }
 
@@ -230,7 +230,7 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
         $this->mockErrorStream->expects($this->at(2))
                               ->method('writeLine')
                               ->with($this->equalTo('baz'));
-        $this->assertSame($this->console, $this->console->writeErrorLines(array('foo', 'bar', 'baz')));
+        $this->assertSame($this->console, $this->console->writeErrorLines(['foo', 'bar', 'baz']));
     }
 
     /**
@@ -278,7 +278,7 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
                               ->method('readLine')
                               ->will($this->returnValue('no date here'));
         $this->assertNull($this->console->prompt('Please enter a number: ', $paramErrors)
-                                        ->asDate()
+                                        ->asHttpUri()
         );
         $this->assertTrue($paramErrors->existFor('stdin'));
     }
@@ -311,7 +311,7 @@ class ConsoleTestCase extends \PHPUnit_Framework_TestCase
                               ->method('readLine')
                               ->will($this->returnValue('no date here'));
         $this->assertNull($this->console->readValue($paramErrors)
-                                        ->asDate()
+                                        ->asHttpUri()
         );
         $this->assertTrue($paramErrors->existFor('stdin'));
     }

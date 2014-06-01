@@ -30,4 +30,3 @@ class ScriptFileCreator extends FileCreator
         }
     }
 }
-?>

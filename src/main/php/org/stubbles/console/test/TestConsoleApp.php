@@ -35,4 +35,3 @@ class TestConsoleApp extends ConsoleApp
         return 0;
     }
 }
-?>
