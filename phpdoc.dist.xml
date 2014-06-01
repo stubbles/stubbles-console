@@ -3,12 +3,12 @@
   <title>Stubbles Console API Doc</title>
   <parser>
     <target>docs/api</target>
-    <default-package-name>net\stubbles\console</default-package-name>
+    <default-package-name>stubbles\console</default-package-name>
   </parser>
   <transformer>
     <target>docs/api</target>
   </transformer>
   <files>
-    <directory>src/main/php/net</directory>
+    <directory>src/main/php</directory>
   </files>
 </phpdoc>

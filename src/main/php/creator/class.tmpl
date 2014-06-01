@@ -1,0 +1,50 @@
+<?php
+/**
+ * Your license or something other here.
+ *
+ * @package  {NAMESPACE}
+ */
+namespace {NAMESPACE};
+use stubbles\console\ConsoleApp;
+/**
+ * Your own console app.
+ *
+ * @AppDescription('Description of what the app does')
+ */
+class {CLASS} extends ConsoleApp
+{
+    /**
+     * returns list of bindings used for this application
+     *
+     * @param   string  $projectPath
+     * @return  \stubbles\ioc\module\BindingModule[]
+     */
+    public static function __bindings($projectPath)
+    {
+        return [self::createModeBindingModule($projectPath),
+                self::createArgumentsBindingModule(),
+                self::createConsoleBindingModule()
+        ];
+    }
+
+    /**
+     * constructor
+     *
+     * @Inject
+     */
+    public function __construct()
+    {
+        // TODO add your constructor parameters and code
+    }
+
+    /**
+     * runs the command and returns an exit code
+     *
+     * @return  int
+     */
+    public function run()
+    {
+        // TODO add your application code
+        return 0;
+    }
+}

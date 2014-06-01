@@ -1,11 +1,11 @@
 #!/usr/bin/php
 <?php
 /**
- * Script to execute an implementation of net\stubbles\console\ConsoleApp.
+ * Script to execute an implementation of nstubbles\console\ConsoleApp.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console;
+namespace stubbles\console;
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     $rootDir = __DIR__ . '/../';
 } else {
@@ -14,4 +14,3 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 
 require $rootDir . '/vendor/autoload.php';
 exit(ConsoleApp::stubcli(realpath($rootDir), $argv, ConsoleOutputStream::forError()));
-?>
