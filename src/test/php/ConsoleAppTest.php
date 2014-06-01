@@ -20,7 +20,7 @@ use org\stubbles\console\test\TestConsoleApp;
  *
  * @group  console
  */
-class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
+class ConsoleAppTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * mocked output stream

@@ -14,7 +14,7 @@ use org\bovigo\vfs\vfsStream;
  *
  * @group  scripts
  */
-class TestFileCreatorTestCase extends \PHPUnit_Framework_TestCase
+class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test

@@ -9,7 +9,7 @@ use stubbles\lang;
 /**
  * Test for stubbles\console\creator\ConsoleAppCreator.
  */
-class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
+class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test

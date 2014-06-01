@@ -16,7 +16,7 @@ use stubbles\ioc\Injector;
  * @group  console
  * @group  console_ioc
  */
-class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
+class ArgumentsBindingModuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test

@@ -13,7 +13,7 @@ namespace stubbles\console;
  *
  * @group  console
  */
-class ConsoleInputStreamTestCase extends \PHPUnit_Framework_TestCase
+class ConsoleInputStreamTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

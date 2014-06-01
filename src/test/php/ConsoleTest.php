@@ -15,7 +15,7 @@ use stubbles\lang;
  *
  * @group  console
  */
-class ConsoleTestCase extends \PHPUnit_Framework_TestCase
+class ConsoleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test

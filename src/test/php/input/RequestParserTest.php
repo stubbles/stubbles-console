@@ -20,7 +20,7 @@ use org\stubbles\console\test\BrokeredUserInput;
  * @since  2.0.0
  * @group  input
  */
-class RequestParserTestCase extends \PHPUnit_Framework_TestCase
+class RequestParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test

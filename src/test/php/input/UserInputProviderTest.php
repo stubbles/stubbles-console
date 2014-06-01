@@ -17,7 +17,7 @@ use org\stubbles\console\test\BrokeredUserInput;
  * @since  2.0.0
  * @group  input
  */
-class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
+class UserInputProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test

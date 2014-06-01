@@ -13,7 +13,7 @@ namespace stubbles\console;
  *
  * @group  console
  */
-class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
+class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test
