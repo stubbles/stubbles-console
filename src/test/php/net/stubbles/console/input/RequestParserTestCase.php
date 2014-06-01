@@ -5,17 +5,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console\input;
-use net\stubbles\console\ConsoleAppException;
+namespace stubbles\console\input;
+use stubbles\console\ConsoleAppException;
 use stubbles\input\ValueReader;
 use stubbles\lang;
 use stubbles\lang\reflect\annotation\Annotation;
 require_once __DIR__ . '/BrokeredUserInput.php';
 use org\stubbles\console\test\BrokeredUserInput;
 /**
- * Test for net\stubbles\console\input\RequestParser.
+ * Test for stubbles\console\input\RequestParser.
  *
  * @since  2.0.0
  * @group  input
@@ -80,7 +80,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException     net\stubbles\console\ConsoleAppException
+     * @expectedException     stubbles\console\ConsoleAppException
      * @expectedExceptionCode 0
      */
     public function throwsConsoleAppExceptionWhenHelpIsRequestedWithDashH()
@@ -101,7 +101,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException     net\stubbles\console\ConsoleAppException
+     * @expectedException     stubbles\console\ConsoleAppException
      * @expectedExceptionCode 0
      */
     public function throwsConsoleAppExceptionWhenHelpIsRequestedWithDashDashHelp()
@@ -145,7 +145,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
                                   );
         try {
             $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
-            $this->fail('Excpected net\stubbles\console\ConsoleAppException');
+            $this->fail('Excpected stubbles\console\ConsoleAppException');
         } catch (ConsoleAppException $cae) {
             $this->mockOutputStream->expects($this->at(0))
                                    ->method('writeLine')
@@ -219,7 +219,7 @@ class RequestParserTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException         net\stubbles\console\ConsoleAppException
+     * @expectedException         stubbles\console\ConsoleAppException
      * @expectedExceptionCode     10
      */
     public function failureWhileParsingThrowsConsoleAppException()

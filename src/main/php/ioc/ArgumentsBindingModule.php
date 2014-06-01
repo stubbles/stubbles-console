@@ -5,9 +5,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console\ioc;
+namespace stubbles\console\ioc;
 use stubbles\ioc\Binder;
 use stubbles\ioc\module\BindingModule;
 use stubbles\lang\exception\ConfigurationException;
@@ -124,7 +124,7 @@ class ArgumentsBindingModule implements BindingModule
                ->toInstance($request);
         if (null !== $this->userInput) {
             $binder->bind($this->userInput)
-                   ->toProviderClass('net\stubbles\console\input\UserInputProvider')
+                   ->toProviderClass('stubbles\console\input\UserInputProvider')
                    ->asSingleton();
             $binder->bind($this->userInput)
                    ->named('stubbles.console.input.instance')

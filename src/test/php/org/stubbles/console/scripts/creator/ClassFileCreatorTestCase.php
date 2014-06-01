@@ -5,12 +5,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace org\stubbles\console\scripts\creator;
+namespace stubbles\console\creator;
 use org\bovigo\vfs\vfsStream;
 /**
- * Test for org\stubbles\console\scripts\creator\ClassFileCreator.
+ * Test for stubbles\console\creator\ClassFileCreator.
  *
  * @group  scripts
  */
@@ -41,7 +41,7 @@ class ClassFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root             = vfsStream::setup();
-        $this->mockConsole      = $this->getMockBuilder('net\stubbles\console\Console')
+        $this->mockConsole      = $this->getMockBuilder('stubbles\console\Console')
                                        ->disableOriginalConstructor()
                                        ->getMock();
         $this->classFileCreator = new ClassFileCreator($this->mockConsole, vfsStream::url('root'));
@@ -64,7 +64,7 @@ class ClassFileCreatorTestCase extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
-use net\stubbles\console\ConsoleApp;
+use stubbles\console\ConsoleApp;
 /**
  * Your own console app.
  *
@@ -120,8 +120,8 @@ class ExampleConsoleApp extends ConsoleApp
     {
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
-                          ->with($this->equalTo('Class org\stubbles\console\scripts\creator\ClassFileCreator already exists, skipped creating the class'));
-        $this->classFileCreator->create('org\stubbles\console\scripts\creator\ClassFileCreator');
-        $this->assertFalse($this->root->hasChild('src/main/php/org/stubbles/console/scripts/creator/ClassFileCreator.php'));
+                          ->with($this->equalTo('Class stubbles\console\creator\ClassFileCreator already exists, skipped creating the class'));
+        $this->classFileCreator->create('stubbles\console\creator\ClassFileCreator');
+        $this->assertFalse($this->root->hasChild('src/main/php/stubbles/console/creator/ClassFileCreator.php'));
     }
 }

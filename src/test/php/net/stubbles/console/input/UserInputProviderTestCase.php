@@ -5,14 +5,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console\input;
+namespace stubbles\console\input;
 use stubbles\lang;
 require_once __DIR__ . '/BrokeredUserInput.php';
 use org\stubbles\console\test\BrokeredUserInput;
 /**
- * Test for net\stubbles\console\input\UserInputProvider.
+ * Test for stubbles\console\input\UserInputProvider.
  *
  * @since  2.0.0
  * @group  input
@@ -39,7 +39,7 @@ class UserInputProviderTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockRequestParser = $this->getMockBuilder('net\stubbles\console\input\RequestParser')
+        $this->mockRequestParser = $this->getMockBuilder('stubbles\console\input\RequestParser')
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $this->mockInjector      = $this->getMockBuilder('stubbles\ioc\Injector')

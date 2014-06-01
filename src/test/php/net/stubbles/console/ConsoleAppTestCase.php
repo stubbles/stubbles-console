@@ -5,9 +5,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console;
+namespace stubbles\console;
 use stubbles\lang\exception\Exception;
 require_once __DIR__ . '/ConsoleAppUsingBindingModule.php';
 require_once __DIR__ . '/SelfBoundConsoleApp.php';
@@ -16,7 +16,7 @@ use org\stubbles\console\test\ConsoleAppUsingBindingModule;
 use org\stubbles\console\test\SelfBoundConsoleApp;
 use org\stubbles\console\test\TestConsoleApp;
 /**
- * Test for net\stubbles\console\ConsoleApp.
+ * Test for stubbles\console\ConsoleApp.
  *
  * @group  console
  */
@@ -285,7 +285,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function canCreateArgumentsBindingModule()
     {
-        $this->assertInstanceOf('net\stubbles\console\ioc\ArgumentsBindingModule',
+        $this->assertInstanceOf('stubbles\console\ioc\ArgumentsBindingModule',
                                 ConsoleAppUsingBindingModule::getArgumentsBindingModule()
         );
     }
@@ -296,7 +296,7 @@ class ConsoleAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function canCreateConsoleBindingModule()
     {
-        $this->assertInstanceOf('net\stubbles\console\ioc\ConsoleBindingModule',
+        $this->assertInstanceOf('stubbles\console\ioc\ConsoleBindingModule',
                                 ConsoleAppUsingBindingModule::getConsoleBindingModule()
         );
     }

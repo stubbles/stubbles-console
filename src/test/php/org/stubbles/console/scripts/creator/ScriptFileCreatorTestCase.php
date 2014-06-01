@@ -5,12 +5,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace org\stubbles\console\scripts\creator;
+namespace stubbles\console\creator;
 use org\bovigo\vfs\vfsStream;
 /**
- * Test for org\stubbles\console\scripts\creator\ScriptFileCreator.
+ * Test for stubbles\console\creator\ScriptFileCreator.
  *
  * @group  scripts
  */
@@ -41,7 +41,7 @@ class ScriptFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root              = vfsStream::setup();
-        $this->mockConsole       = $this->getMockBuilder('net\stubbles\console\Console')
+        $this->mockConsole       = $this->getMockBuilder('stubbles\console\Console')
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $this->scriptFileCreator = new ScriptFileCreator($this->mockConsole, vfsStream::url('root'));
@@ -80,7 +80,7 @@ if (\Phar::running() !== \'\') {
 }
 
 require $rootDir . \'/vendor/autoload.php\';
-exit(ExampleConsoleApp::main(realpath($projectPath), \net\stubbles\console\ConsoleOutputStream::forError()));
+exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOutputStream::forError()));
 ',
                             $this->root->getChild('bin/example')
                                        ->getContent()

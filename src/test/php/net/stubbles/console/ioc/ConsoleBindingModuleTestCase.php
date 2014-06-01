@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console\ioc;
+namespace stubbles\console\ioc;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
 /**
- * Test for net\stubbles\console\ioc\ConsoleBindingModule.
+ * Test for stubbles\console\ioc\ConsoleBindingModule.
  *
  * @group  console
  * @group  console_ioc
@@ -87,9 +87,9 @@ class ConsoleBindingModuleTestCase extends \PHPUnit_Framework_TestCase
     public function bindingsConfiguredForExecutor()
     {
         $injector = $this->configure();
-        $this->assertTrue($injector->hasBinding('net\stubbles\console\Executor'));
-        $this->assertInstanceOf('net\stubbles\console\Executor',
-                                $injector->getInstance('net\stubbles\console\Executor')
+        $this->assertTrue($injector->hasBinding('stubbles\console\Executor'));
+        $this->assertInstanceOf('stubbles\console\Executor',
+                                $injector->getInstance('stubbles\console\Executor')
         );
     }
 

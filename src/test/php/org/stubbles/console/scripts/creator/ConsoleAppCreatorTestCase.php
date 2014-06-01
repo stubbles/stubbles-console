@@ -2,12 +2,12 @@
 /**
  * Your license or something other here.
  *
- * @package  org\stubbles\console\scripts\creator
+ * @package  stubbles\console
  */
-namespace org\stubbles\console\scripts\creator;
+namespace stubbles\console\creator;
 use stubbles\lang;
 /**
- * Test for org\stubbles\console\scripts\creator\ConsoleAppCreator.
+ * Test for stubbles\console\creator\ConsoleAppCreator.
  */
 class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -47,16 +47,16 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockConsole       = $this->getMockBuilder('net\stubbles\console\Console')
+        $this->mockConsole       = $this->getMockBuilder('stubbles\console\Console')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->mockClassFile     = $this->getMockBuilder('org\stubbles\console\scripts\creator\ClassFileCreator')
+        $this->mockClassFile     = $this->getMockBuilder('stubbles\console\creator\ClassFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->mockScriptFile    = $this->getMockBuilder('org\stubbles\console\scripts\creator\ScriptFileCreator')
+        $this->mockScriptFile    = $this->getMockBuilder('stubbles\console\creator\ScriptFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->mockTestFile      = $this->getMockBuilder('org\stubbles\console\scripts\creator\TestFileCreator')
+        $this->mockTestFile      = $this->getMockBuilder('stubbles\console\creator\TestFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $this->consoleAppCreator = new ConsoleAppCreator($this->mockConsole,
@@ -178,7 +178,7 @@ class ConsoleAppCreatorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstance()
     {
-        $this->assertInstanceOf('org\stubbles\console\scripts\creator\ConsoleAppCreator',
+        $this->assertInstanceOf('stubbles\console\creator\ConsoleAppCreator',
                                 ConsoleAppCreator::create(\stubbles\lang\ResourceLoader::getRootPath())
         );
     }

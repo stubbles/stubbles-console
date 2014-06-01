@@ -5,12 +5,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace org\stubbles\console\scripts\creator;
+namespace stubbles\console\creator;
 use org\bovigo\vfs\vfsStream;
 /**
- * Test for org\stubbles\console\scripts\creator\TestFileCreator.
+ * Test for stubbles\console\creator\TestFileCreator.
  *
  * @group  scripts
  */
@@ -41,7 +41,7 @@ class TestFileCreatorTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root            = vfsStream::setup();
-        $this->mockConsole     = $this->getMockBuilder('net\stubbles\console\Console')
+        $this->mockConsole     = $this->getMockBuilder('stubbles\console\Console')
                                       ->disableOriginalConstructor()
                                       ->getMock();
         $this->testFileCreator = new TestFileCreator($this->mockConsole, vfsStream::url('root'));

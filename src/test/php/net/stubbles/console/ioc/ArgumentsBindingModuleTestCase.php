@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console\ioc;
+namespace stubbles\console\ioc;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
 /**
- * Test for net\stubbles\console\ioc\ArgumentsBindingModule.
+ * Test for stubbles\console\ioc\ArgumentsBindingModule.
  *
  * @group  console
  * @group  console_ioc
@@ -36,7 +36,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
+        $this->argumentsBindingModule = $this->getMock('stubbles\console\ioc\ArgumentsBindingModule',
                                                        ['getopt']
                                         );
         $this->argvBackup             = $_SERVER['argv'];
@@ -261,7 +261,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabled()
     {
-        $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
+        $this->argumentsBindingModule = $this->getMock('stubbles\console\ioc\ArgumentsBindingModule',
                                                        ['getopt'],
                                                        [true]
                                         );
@@ -279,7 +279,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabledAndOnlyLongOptionsSet()
     {
-        $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
+        $this->argumentsBindingModule = $this->getMock('stubbles\console\ioc\ArgumentsBindingModule',
                                                        ['getopt'],
                                                        [true]
                                         );
@@ -296,7 +296,7 @@ class ArgumentsBindingModuleTestCase extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabledAndLongOptionsSetFirst()
     {
-        $this->argumentsBindingModule = $this->getMock('net\stubbles\console\ioc\ArgumentsBindingModule',
+        $this->argumentsBindingModule = $this->getMock('stubbles\console\ioc\ArgumentsBindingModule',
                                                        ['getopt'],
                                                        [true]
                                         );

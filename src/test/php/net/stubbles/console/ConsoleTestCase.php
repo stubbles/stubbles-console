@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console;
+namespace stubbles\console;
 use stubbles\input\ParamErrors;
 use stubbles\lang;
 /**
- * Test for net\stubbles\console\Console.
+ * Test for stubbles\console\Console.
  *
  * @group  console
  */

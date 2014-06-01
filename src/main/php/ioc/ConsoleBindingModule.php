@@ -5,11 +5,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console\ioc;
-use net\stubbles\console\ConsoleInputStream;
-use net\stubbles\console\ConsoleOutputStream;
+namespace stubbles\console\ioc;
+use stubbles\console\ConsoleInputStream;
+use stubbles\console\ConsoleOutputStream;
 use stubbles\ioc\Binder;
 use stubbles\ioc\module\BindingModule;
 /**
@@ -33,7 +33,7 @@ class ConsoleBindingModule implements BindingModule
         $binder->bind('stubbles\streams\OutputStream')
                ->named('stderr')
                ->toInstance(ConsoleOutputStream::forError());
-        $binder->bind('net\stubbles\console\Executor')
-               ->to('net\stubbles\console\ConsoleExecutor');
+        $binder->bind('stubbles\console\Executor')
+               ->to('stubbles\console\ConsoleExecutor');
     }
 }

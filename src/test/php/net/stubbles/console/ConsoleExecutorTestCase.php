@@ -5,11 +5,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console;
+namespace stubbles\console;
 /**
- * Test for net\stubbles\console\ConsoleExecutor.
+ * Test for stubbles\console\ConsoleExecutor.
  *
  * @group  console
  */
@@ -76,7 +76,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
     public function executeAsyncReturnsStreamToReadResultFrom()
     {
         $commandInputStream = $this->executor->executeAsync('echo foo');
-        $this->assertInstanceOf('net\stubbles\console\CommandInputStream', $commandInputStream);
+        $this->assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
         $this->assertEquals('foo', chop($commandInputStream->read()));
     }
 
@@ -87,7 +87,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
     public function executeAsyncFailsThrowsRuntimeException()
     {
         $commandInputStream = $this->executor->executeAsync('php -r "throw new Exception();"');
-        $this->assertInstanceOf('net\stubbles\console\CommandInputStream', $commandInputStream);
+        $this->assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
         while (!$commandInputStream->eof()) {
             $commandInputStream->readLine();
         }
@@ -111,7 +111,7 @@ class ConsoleExecutorTestCase extends \PHPUnit_Framework_TestCase
     public function readAfterCloseThrowsIllegalStateException()
     {
         $commandInputStream = $this->executor->executeAsync('echo foo');
-        $this->assertInstanceOf('net\stubbles\console\CommandInputStream', $commandInputStream);
+        $this->assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
         $this->assertEquals('foo', chop($commandInputStream->read()));
         $commandInputStream->close();
         $commandInputStream->read();

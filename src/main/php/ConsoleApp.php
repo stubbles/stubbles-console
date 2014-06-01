@@ -5,11 +5,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console;
-use net\stubbles\console\ioc\ArgumentsBindingModule;
-use net\stubbles\console\ioc\ConsoleBindingModule;
+namespace stubbles\console;
+use stubbles\console\ioc\ArgumentsBindingModule;
+use stubbles\console\ioc\ConsoleBindingModule;
 use stubbles\ioc\App;
 use stubbles\streams\OutputStream;
 /**

@@ -5,9 +5,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace org\stubbles\console\scripts\creator;
+namespace stubbles\console\creator;
 /**
  * Creates a script file for given console class name.
  */

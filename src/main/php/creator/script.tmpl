@@ -18,4 +18,4 @@ if (\Phar::running() !== '') {
 }
 
 require $rootDir . '/vendor/autoload.php';
-exit({CLASS}::main(realpath($projectPath), \net\stubbles\console\ConsoleOutputStream::forError()));
+exit({CLASS}::main(realpath($projectPath), \stubbles\console\ConsoleOutputStream::forError()));

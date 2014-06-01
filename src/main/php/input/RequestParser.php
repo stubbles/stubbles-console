@@ -5,10 +5,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace net\stubbles\console\input;
-use net\stubbles\console\ConsoleAppException;
+namespace stubbles\console\input;
+use stubbles\console\ConsoleAppException;
 use stubbles\input\console\ConsoleRequest;
 use stubbles\input\broker\RequestBrokerFacade;
 use stubbles\lang;

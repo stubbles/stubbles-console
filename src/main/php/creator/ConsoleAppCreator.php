@@ -2,11 +2,11 @@
 /**
  * Your license or something other here.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace org\stubbles\console\scripts\creator;
-use net\stubbles\console\Console;
-use net\stubbles\console\ConsoleApp;
+namespace stubbles\console\creator;
+use stubbles\console\Console;
+use stubbles\console\ConsoleApp;
 /**
  * Your own console app.
  */

@@ -5,10 +5,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace org\stubbles\console\scripts\creator;
-use net\stubbles\console\Console;
+namespace stubbles\console\creator;
+use stubbles\console\Console;
 /**
  * Base class for file creation.
  */

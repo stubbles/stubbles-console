@@ -5,10 +5,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package  net\stubbles
+ * @package  stubbles/console
  */
 namespace org\stubbles\console\test;
-use net\stubbles\console\ConsoleApp;
+use stubbles\console\ConsoleApp;
 /**
  * Helper class to test binding module creations.
  *

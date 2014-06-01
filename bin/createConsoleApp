@@ -1,11 +1,11 @@
 #!/usr/bin/php
 <?php
 /**
- * Script to execute org\stubbles\console\scripts\creator\ConsoleAppCreator.
+ * Script to execute stubbles\console\creator\ConsoleAppCreator.
  *
- * @package  net\stubbles\console
+ * @package  stubbles\console
  */
-namespace org\stubbles\console\scripts\creator;
+namespace stubbles\console\creator;
 if (\Phar::running() !== '') {
     $rootDir     = \Phar::running();
     $projectPath = getcwd();
@@ -18,5 +18,4 @@ if (\Phar::running() !== '') {
 }
 
 require $rootDir . '/vendor/autoload.php';
-exit(ConsoleAppCreator::main(realpath($projectPath), \net\stubbles\console\ConsoleOutputStream::forError()));
-?>
+exit(ConsoleAppCreator::main(realpath($projectPath), \stubbles\console\ConsoleOutputStream::forError()));
