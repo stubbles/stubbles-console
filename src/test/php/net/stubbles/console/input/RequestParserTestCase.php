@@ -12,6 +12,7 @@ use net\stubbles\console\ConsoleAppException;
 use stubbles\input\ValueReader;
 use stubbles\lang;
 use stubbles\lang\reflect\annotation\Annotation;
+require_once __DIR__ . '/BrokeredUserInput.php';
 use org\stubbles\console\test\BrokeredUserInput;
 /**
  * Test for net\stubbles\console\input\RequestParser.

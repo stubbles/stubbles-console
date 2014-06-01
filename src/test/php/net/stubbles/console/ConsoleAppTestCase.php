@@ -9,6 +9,9 @@
  */
 namespace net\stubbles\console;
 use stubbles\lang\exception\Exception;
+require_once __DIR__ . '/ConsoleAppUsingBindingModule.php';
+require_once __DIR__ . '/SelfBoundConsoleApp.php';
+require_once __DIR__ . '/TestConsoleApp.php';
 use org\stubbles\console\test\ConsoleAppUsingBindingModule;
 use org\stubbles\console\test\SelfBoundConsoleApp;
 use org\stubbles\console\test\TestConsoleApp;

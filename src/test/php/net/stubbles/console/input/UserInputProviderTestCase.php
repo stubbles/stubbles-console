@@ -9,6 +9,7 @@
  */
 namespace net\stubbles\console\input;
 use stubbles\lang;
+require_once __DIR__ . '/BrokeredUserInput.php';
 use org\stubbles\console\test\BrokeredUserInput;
 /**
  * Test for net\stubbles\console\input\UserInputProvider.
