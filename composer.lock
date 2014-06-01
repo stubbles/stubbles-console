@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d6552bfe1d337458d7a0c4238fc9ef29",
+    "hash": "a6c9cf33cad627a0144867ffa3bb6173",
     "packages": [
         {
             "name": "stubbles/core",

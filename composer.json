@@ -14,9 +14,9 @@
         "phpunit/phpunit": "~4.1"
     },
     "autoload": {
-        "psr-0": {
-            "net\\stubbles\\console": "src/main/php",
-            "org\\stubbles\\console": "src/main/php"
+        "psr-4": {
+            "net\\stubbles\\console\\": "src/main/php",
+            "org\\stubbles\\console\\scripts\\": "src/main/php"
         }
     },
     "bin": ["bin/stubcli", "bin/createConsoleApp"],
