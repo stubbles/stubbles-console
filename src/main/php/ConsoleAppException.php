@@ -27,9 +27,9 @@ class ConsoleAppException extends Exception
     /**
      * constructor
      *
-     * @param  string|Closure  $message  failure message
-     * @param  int             $code     return code for application
-     * @param  Exception       $cause
+     * @param  string|Closure   $message  failure message
+     * @param  int              $code     return code for application
+     * @param  \Exception       $cause
      */
     public function __construct($message, $code, \Exception $cause = null)
     {
