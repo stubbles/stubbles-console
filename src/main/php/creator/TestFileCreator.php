@@ -20,7 +20,7 @@ class TestFileCreator extends FileCreator
      */
     public function create($className)
     {
-        $testClassFile = $this->getClassFileName($className . 'TestCase', 'test');
+        $testClassFile = $this->getClassFileName($className . 'Test', 'test');
         if (!file_exists($testClassFile)) {
             $this->createFile($testClassFile, $className, 'test.tmpl');
             $this->console->writeLine('Test for ' . $className . ' created at ' . $testClassFile);

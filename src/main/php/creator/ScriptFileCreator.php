@@ -21,7 +21,7 @@ class ScriptFileCreator extends FileCreator
     public function create($className)
     {
         $this->console->writeLine('Please enter the script name for the console app: ');
-        $stubFileName = $this->projectPath . '/bin/'  . $this->console->readLine();
+        $stubFileName = $this->rootpath->to('bin',  $this->console->readLine());
         if (!file_exists($stubFileName)) {
             $this->createFile($stubFileName, $className, 'script.tmpl');
             $this->console->writeLine('Script for ' . $className . ' created at ' . $stubFileName);

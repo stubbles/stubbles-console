@@ -9,7 +9,7 @@ use stubbles\lang;
 /**
  * Test for {NAMESPACE}\{CLASS}.
  */
-class {CLASS}TestCase extends \PHPUnit_Framework_TestCase
+class {CLASS}Test extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test
@@ -31,7 +31,9 @@ class {CLASS}TestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue(lang\reflectConstructor($this->instance)->hasAnnotation('Inject'));
+        $this->assertTrue(
+                lang\reflectConstructor($this->instance)->hasAnnotation('Inject')
+        );
     }
 
     /**
@@ -48,7 +50,7 @@ class {CLASS}TestCase extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         $this->assertInstanceOf('{NAMESPACE}\{CLASS}',
-                                {CLASS}::create(\stubbles\lang\ResourceLoader::getRootPath())
+                                {CLASS}::create(new lang\Rootpath())
         );
     }
 }

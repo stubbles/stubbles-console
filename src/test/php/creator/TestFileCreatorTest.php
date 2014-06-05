@@ -9,6 +9,7 @@
  */
 namespace stubbles\console\creator;
 use org\bovigo\vfs\vfsStream;
+use stubbles\lang\Rootpath;
 /**
  * Test for stubbles\console\creator\TestFileCreator.
  *
@@ -31,20 +32,20 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
     /**
      * root directory
      *
-     * @type  \org\bovigo\vfs\vfsStreamDirectory
+     * @type  Rootpath
      */
-    private $root;
+    private $rootpath;
 
     /**
      * set up test environment
      */
     public function setUp()
     {
-        $this->root            = vfsStream::setup();
+        $this->rootpath        = new Rootpath(vfsStream::setup()->url());
         $this->mockConsole     = $this->getMockBuilder('stubbles\console\Console')
                                       ->disableOriginalConstructor()
                                       ->getMock();
-        $this->testFileCreator = new TestFileCreator($this->mockConsole, vfsStream::url('root'));
+        $this->testFileCreator = new TestFileCreator($this->mockConsole, $this->rootpath);
     }
 
     /**
@@ -54,10 +55,11 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
-                          ->with($this->equalTo('Test for example\console\ExampleConsoleApp created at ' . vfsStream::url('root/src/test/php/example/console/ExampleConsoleAppTestCase.php')));
+                          ->with($this->equalTo('Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')));
         $this->testFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertTrue($this->root->hasChild('src/test/php/example/console/ExampleConsoleAppTestCase.php'));
-        $this->assertEquals('<?php
+        $this->assertTrue(file_exists($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')));
+        $this->assertEquals(
+                '<?php
 /**
  * Your license or something other here.
  *
@@ -68,7 +70,7 @@ use stubbles\lang;
 /**
  * Test for example\console\ExampleConsoleApp.
  */
-class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
+class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test
@@ -90,7 +92,9 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue(lang\reflectConstructor($this->instance)->hasAnnotation(\'Inject\'));
+        $this->assertTrue(
+                lang\reflectConstructor($this->instance)->hasAnnotation(\'Inject\')
+        );
     }
 
     /**
@@ -107,13 +111,12 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         $this->assertInstanceOf(\'example\console\ExampleConsoleApp\',
-                                ExampleConsoleApp::create(\stubbles\lang\ResourceLoader::getRootPath())
+                                ExampleConsoleApp::create(new lang\Rootpath())
         );
     }
 }
 ',
-                            $this->root->getChild('src/test/php/example/console/ExampleConsoleAppTestCase.php')
-                                       ->getContent()
+                file_get_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'))
         );
     }
 
@@ -122,15 +125,17 @@ class ExampleConsoleAppTestCase extends \PHPUnit_Framework_TestCase
      */
     public function skipsTestCreationIfTestAlreadyExists()
     {
-        vfsStream::newDirectory('src/test/php/org/stubbles/console/scripts/creator')
-                 ->at($this->root);
-        $testFile = vfsStream::newFile('TestFileCreatorTestCase.php')
-                             ->withContent('foo')
-                             ->at($this->root->getChild('src/test/php/org/stubbles/console/scripts/creator'));
+        mkdir($this->rootpath->to('src/test/php/example/console'), 0755, true);
+        file_put_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'), 'foo');
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
-                          ->with($this->equalTo('Test for org\stubbles\console\scripts\creator\TestFileCreator already exists, skipped creating the test'));
-        $this->testFileCreator->create('org\stubbles\console\scripts\creator\TestFileCreator');
-        $this->assertEquals('foo', $testFile->getContent());
+                          ->with($this->equalTo('Test for example\console\ExampleConsoleApp already exists, skipped creating the test'));
+        $this->testFileCreator->create('example\console\ExampleConsoleApp');
+        $this->assertEquals(
+                'foo',
+                file_get_contents(
+                        $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')
+                 )
+         );
     }
 }

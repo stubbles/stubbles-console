@@ -179,7 +179,7 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         $this->assertInstanceOf('stubbles\console\creator\ConsoleAppCreator',
-                                ConsoleAppCreator::create(\stubbles\lang\ResourceLoader::getRootPath())
+                                ConsoleAppCreator::create(new lang\Rootpath())
         );
     }
 }

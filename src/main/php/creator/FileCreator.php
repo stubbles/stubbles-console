@@ -9,6 +9,7 @@
  */
 namespace stubbles\console\creator;
 use stubbles\console\Console;
+use stubbles\lang\Rootpath;
 /**
  * Base class for file creation.
  */
@@ -23,22 +24,21 @@ abstract class FileCreator
     /**
      * path to project
      *
-     * @type  string
+     * @type  Rootpath
      */
-    protected $projectPath;
+    protected $rootpath;
 
     /**
      * constructor
      *
-     * @param  Console  $console
-     * @param  string   $projectPath  path to project
+     * @param  Console    $console
+     * @param  Rootpath   $rootpath
      * @Inject
-     * @Named{projectPath}('stubbles.project.path')
      */
-    public function __construct(Console $console, $projectPath)
+    public function __construct(Console $console, Rootpath $rootpath)
     {
-        $this->console     = $console;
-        $this->projectPath = $projectPath;
+        $this->console  = $console;
+        $this->rootpath = $rootpath;
     }
 
     /**
@@ -57,12 +57,13 @@ abstract class FileCreator
      */
     protected function getClassFileName($className, $type = 'main')
     {
-        return $this->projectPath
-               . '/src/' .  $type . '/php/'
-               . str_replace('\\', DIRECTORY_SEPARATOR, $this->getNamespace($className))
-               . DIRECTORY_SEPARATOR
-               . $this->getNonQualifiedClassName($className)
-               . '.php';
+        return $this->rootpath->to(
+                'src',
+                $type,
+                'php',
+                str_replace('\\', DIRECTORY_SEPARATOR, $this->getNamespace($className)),
+                $this->getNonQualifiedClassName($className) . '.php'
+        );
     }
 
     /**

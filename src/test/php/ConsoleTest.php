@@ -8,7 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use stubbles\input\ParamErrors;
+use stubbles\input\errors\ParamErrors;
 use stubbles\lang;
 /**
  * Test for stubbles\console\Console.
