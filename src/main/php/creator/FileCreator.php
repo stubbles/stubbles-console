@@ -61,8 +61,7 @@ abstract class FileCreator
                 'src',
                 $type,
                 'php',
-                str_replace('\\', DIRECTORY_SEPARATOR, $this->getNamespace($className)),
-                $this->getNonQualifiedClassName($className) . '.php'
+                str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php'
         );
     }
 
