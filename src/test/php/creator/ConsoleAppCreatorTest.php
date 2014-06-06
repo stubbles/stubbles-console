@@ -5,6 +5,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
+use stubbles\input\ValueReader;
 use stubbles\lang;
 /**
  * Test for stubbles\console\creator\ConsoleAppCreator.
@@ -84,26 +85,9 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function doesNotCreateClassWhenClassNameIsInvalid()
     {
-        $this->mockConsole->expects(($this->any()))
-                          ->method('readLine')
-                          ->will($this->returnValue('500'));
-        $this->mockClassFile->expects($this->never())
-                            ->method('create');
-        $this->mockScriptFile->expects($this->never())
-                           ->method('create');
-        $this->mockTestFile->expects($this->never())
-                           ->method('create');
-        $this->assertEquals(-10, $this->consoleAppCreator->run());
-    }
-
-    /**
-     * @test
-     */
-    public function doesNotCreateNonQualifiedPartOfClassWhenClassNameIsInvalid()
-    {
-        $this->mockConsole->expects(($this->any()))
-                          ->method('readLine')
-                          ->will($this->returnValue('foo\500'));
+        $this->mockConsole->expects(($this->once()))
+                          ->method('prompt')
+                          ->will($this->returnValue(ValueReader::forValue(null)));
         $this->mockClassFile->expects($this->never())
                             ->method('create');
         $this->mockScriptFile->expects($this->never())
@@ -118,9 +102,9 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsExitCodeZeroOnSuccess()
     {
-        $this->mockConsole->expects(($this->any()))
-                          ->method('readLine')
-                          ->will($this->returnValue('foo\bar\Example'));
+        $this->mockConsole->expects(($this->once()))
+                          ->method('prompt')
+                          ->will($this->returnValue(ValueReader::forValue('foo\\bar\\Example')));
         $this->mockClassFile->expects($this->once())
                             ->method('create')
                             ->with($this->equalTo('foo\bar\Example'));
@@ -130,46 +114,6 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
         $this->mockTestFile->expects($this->once())
                            ->method('create')
                            ->with($this->equalTo('foo\bar\Example'));
-        $this->assertEquals(0, $this->consoleAppCreator->run());
-    }
-
-    /**
-     * @test
-     */
-    public function trimsInputClassName()
-    {
-        $this->mockConsole->expects(($this->any()))
-                          ->method('readLine')
-                          ->will($this->returnValue(' foo\bar\Example   '));
-        $this->mockClassFile->expects($this->once())
-                            ->method('create')
-                            ->with($this->equalTo('foo\bar\Example'));
-        $this->mockScriptFile->expects($this->once())
-                           ->method('create')
-                           ->with($this->equalTo('foo\bar\Example'));
-        $this->mockTestFile->expects($this->once())
-                           ->method('create')
-                           ->with($this->equalTo('foo\bar\Example'));
-        $this->assertEquals(0, $this->consoleAppCreator->run());
-    }
-
-    /**
-     * @test
-     */
-    public function fixesQuotedNamespaceSeparator()
-    {
-        $this->mockConsole->expects(($this->any()))
-                          ->method('readLine')
-                          ->will($this->returnValue('foo\\\\bar\\\\Example'));
-        $this->mockClassFile->expects($this->once())
-                            ->method('create')
-                            ->with($this->equalTo('foo\\bar\\Example'));
-        $this->mockScriptFile->expects($this->once())
-                           ->method('create')
-                           ->with($this->equalTo('foo\\bar\\Example'));
-        $this->mockTestFile->expects($this->once())
-                           ->method('create')
-                           ->with($this->equalTo('foo\\bar\\Example'));
         $this->assertEquals(0, $this->consoleAppCreator->run());
     }
 
