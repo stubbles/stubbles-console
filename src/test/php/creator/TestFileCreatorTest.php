@@ -9,6 +9,7 @@
  */
 namespace stubbles\console\creator;
 use org\bovigo\vfs\vfsStream;
+use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
 /**
  * Test for stubbles\console\creator\TestFileCreator.
@@ -45,7 +46,7 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
         $this->mockConsole     = $this->getMockBuilder('stubbles\console\Console')
                                       ->disableOriginalConstructor()
                                       ->getMock();
-        $this->testFileCreator = new TestFileCreator($this->mockConsole, $this->rootpath);
+        $this->testFileCreator = new TestFileCreator($this->mockConsole, $this->rootpath, new ResourceLoader());
     }
 
     /**

@@ -21,7 +21,7 @@ class ClassFileCreator extends FileCreator
     public function create($className)
     {
         if (!class_exists($className)) {
-            $classFileName = $this->getClassFileName($className);
+            $classFileName = $this->fileNameforClass($className);
             $this->createFile($classFileName, $className, 'class.tmpl');
             $this->console->writeLine('Class ' . $className . ' created at ' . $classFileName);
         } else {
