@@ -9,6 +9,8 @@
  */
 namespace stubbles\console\creator;
 use org\bovigo\vfs\vfsStream;
+use stubbles\lang\ResourceLoader;
+use stubbles\lang\Rootpath;
 /**
  * Test for stubbles\console\creator\ClassFileCreator.
  *
@@ -31,20 +33,20 @@ class ClassFileCreatorTest extends \PHPUnit_Framework_TestCase
     /**
      * root directory
      *
-     * @type  \org\bovigo\vfs\vfsStreamDirectory
+     * @type  Rootpath
      */
-    private $root;
+    private $rootpath;
 
     /**
      * set up test environment
      */
     public function setUp()
     {
-        $this->root             = vfsStream::setup();
+        $this->rootpath         = new Rootpath(vfsStream::setup()->url());
         $this->mockConsole      = $this->getMockBuilder('stubbles\console\Console')
                                        ->disableOriginalConstructor()
                                        ->getMock();
-        $this->classFileCreator = new ClassFileCreator($this->mockConsole, vfsStream::url('root'));
+        $this->classFileCreator = new ClassFileCreator($this->mockConsole, $this->rootpath, new ResourceLoader());
     }
 
     /**
@@ -54,10 +56,11 @@ class ClassFileCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockConsole->expects($this->once())
                           ->method('writeLine')
-                          ->with($this->equalTo('Class example\console\ExampleConsoleApp created at ' . vfsStream::url('root/src/main/php/example/console/ExampleConsoleApp.php')));
+                          ->with($this->equalTo('Class example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php')));
         $this->classFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertTrue($this->root->hasChild('src/main/php/example/console/ExampleConsoleApp.php'));
-        $this->assertEquals('<?php
+        $this->assertTrue(file_exists($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php')));
+        $this->assertEquals(
+                '<?php
 /**
  * Your license or something other here.
  *
@@ -108,8 +111,7 @@ class ExampleConsoleApp extends ConsoleApp
     }
 }
 ',
-                            $this->root->getChild('src/main/php/example/console/ExampleConsoleApp.php')
-                                       ->getContent()
+                file_get_contents($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php'))
         );
     }
 
@@ -122,6 +124,6 @@ class ExampleConsoleApp extends ConsoleApp
                           ->method('writeLine')
                           ->with($this->equalTo('Class stubbles\console\creator\ClassFileCreator already exists, skipped creating the class'));
         $this->classFileCreator->create('stubbles\console\creator\ClassFileCreator');
-        $this->assertFalse($this->root->hasChild('src/main/php/stubbles/console/creator/ClassFileCreator.php'));
+        $this->assertFalse(file_exists($this->rootpath->to('src/main/php/stubbles/console/creator/ClassFileCreator.php')));
     }
 }

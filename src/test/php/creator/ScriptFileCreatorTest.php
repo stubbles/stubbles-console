@@ -9,6 +9,8 @@
  */
 namespace stubbles\console\creator;
 use org\bovigo\vfs\vfsStream;
+use stubbles\lang\ResourceLoader;
+use stubbles\lang\Rootpath;
 /**
  * Test for stubbles\console\creator\ScriptFileCreator.
  *
@@ -31,20 +33,20 @@ class ScriptFileCreatorTest extends \PHPUnit_Framework_TestCase
     /**
      * root directory
      *
-     * @type  \org\bovigo\vfs\vfsStreamDirectory
+     * @type  Rootpath
      */
-    private $root;
+    private $rootpath;
 
     /**
      * set up test environment
      */
     public function setUp()
     {
-        $this->root              = vfsStream::setup();
+        $this->rootpath          = new Rootpath(vfsStream::setup()->url());
         $this->mockConsole       = $this->getMockBuilder('stubbles\console\Console')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->scriptFileCreator = new ScriptFileCreator($this->mockConsole, vfsStream::url('root'));
+        $this->scriptFileCreator = new ScriptFileCreator($this->mockConsole, $this->rootpath, new ResourceLoader());
     }
 
     /**
@@ -57,10 +59,11 @@ class ScriptFileCreatorTest extends \PHPUnit_Framework_TestCase
                           ->will($this->returnValue('example'));
         $this->mockConsole->expects($this->at(2))
                           ->method('writeLine')
-                          ->with($this->equalTo('Script for example\console\ExampleConsoleApp created at ' . vfsStream::url('root/bin/example')));
+                          ->with($this->equalTo('Script for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('bin/example')));
         $this->scriptFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertTrue($this->root->hasChild('bin/example'));
-        $this->assertEquals('#!/usr/bin/php
+        $this->assertTrue(file_exists($this->rootpath->to('bin/example')));
+        $this->assertEquals(
+                '#!/usr/bin/php
 <?php
 /**
  * Script to execute example\console\ExampleConsoleApp.
@@ -82,8 +85,7 @@ if (\Phar::running() !== \'\') {
 require $rootDir . \'/vendor/autoload.php\';
 exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOutputStream::forError()));
 ',
-                            $this->root->getChild('bin/example')
-                                       ->getContent()
+                file_get_contents($this->rootpath->to('bin/example'))
         );
     }
 
@@ -92,18 +94,15 @@ exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOu
      */
     public function skipsScriptCreationIfTestAlreadyExists()
     {
-        vfsStream::newDirectory('bin')
-                 ->at($this->root);
-        $testFile = vfsStream::newFile('example')
-                             ->withContent('foo')
-                             ->at($this->root->getChild('bin'));
+        mkdir($this->rootpath->to('bin'));
+        file_put_contents($this->rootpath->to('bin/example'), 'foo');
         $this->mockConsole->expects($this->at(1))
                           ->method('readLine')
                           ->will($this->returnValue('example'));
         $this->mockConsole->expects($this->at(2))
                           ->method('writeLine')
-                          ->with($this->equalTo('Script for org\stubbles\console\scripts\creator\TestFileCreator already exists, skipped creating the script'));
-        $this->scriptFileCreator->create('org\stubbles\console\scripts\creator\TestFileCreator');
-        $this->assertEquals('foo', $testFile->getContent());
+                          ->with($this->equalTo('Script for example\console\ExampleConsoleApp already exists, skipped creating the script'));
+        $this->scriptFileCreator->create('example\console\ExampleConsoleApp');
+        $this->assertEquals('foo', file_get_contents($this->rootpath->to('bin/example')));
     }
 }

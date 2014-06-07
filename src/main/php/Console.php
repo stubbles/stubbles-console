@@ -9,8 +9,8 @@
  */
 namespace stubbles\console;
 use stubbles\input\Param;
-use stubbles\input\ParamErrors;
 use stubbles\input\ValueReader;
+use stubbles\input\errors\ParamErrors;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
 /**

@@ -1,6 +1,9 @@
 <?php
 /**
- * Your license or something other here.
+ * This file is part of stubbles.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  *
  * @package  stubbles\console
  */
@@ -8,7 +11,7 @@ namespace stubbles\console\creator;
 use stubbles\console\Console;
 use stubbles\console\ConsoleApp;
 /**
- * Your own console app.
+ * App to create initial source files for other console apps.
  */
 class ConsoleAppCreator extends ConsoleApp
 {
@@ -77,13 +80,13 @@ class ConsoleAppCreator extends ConsoleApp
      */
     public function run()
     {
-        $this->console->writeLine('Stubbles ConsoleAppCreator')
-                      ->writeLine(' (c) 2012-2014 Stubbles Development Group')
-                      ->writeLine('')
-                      ->writeLine('Please enter the full qualified class name for the console app: ');
-        $className = str_replace('\\\\', '\\', trim($this->console->readLine()));
-        if (!$this->isValid($className)) {
-            $this->console->writeLine('The class name ' . $className . ' is not a valid class name');
+        $className = $this->console->writeLine('Stubbles ConsoleAppCreator')
+                                   ->writeLine(' (c) 2012-2014 Stubbles Development Group')
+                                   ->writeLine('')
+                                   ->prompt('Please enter the full qualified class name for the console app: ')
+                                   ->applyFilter(new ClassNameFilter());
+        if (null === $className) {
+            $this->console->writeLine('The entered class name is not a valid class name');
             return -10;
         }
 
@@ -91,33 +94,5 @@ class ConsoleAppCreator extends ConsoleApp
         $this->scriptFile->create($className);
         $this->testFile->create($className);
         return 0;
-    }
-
-    /**
-     * checks if given class name is valid
-     *
-     * @param   string  $className
-     * @return  bool
-     */
-    private function isValid($className)
-    {
-        if (! (bool) preg_match('/^([a-zA-Z_]{1}[a-zA-Z0-9_\\\\]*)$/', $className)) {
-            return false;
-        }
-
-        return (bool) preg_match('/^([a-zA-Z_]{1}[a-zA-Z0-9_]*)$/',
-                                 $this->getNonQualifiedClassName($className)
-                      );
-    }
-
-    /**
-     * returns non qualified part of class name
-     *
-     * @param   string  $className
-     * @return  string
-     */
-    private function getNonQualifiedClassName($className)
-    {
-        return substr($className, strrpos($className, '\\') + 1);
     }
 }
