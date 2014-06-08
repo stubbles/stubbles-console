@@ -47,7 +47,7 @@ class BrokeredUserInput
     /**
      * test method without parameter
      *
-     * @Request[Bool](name='v', required=true, group='noparam')
+     * @Request[Bool](name='v', group='noparam')
      */
     public function enableVerboseDifferently()
     {

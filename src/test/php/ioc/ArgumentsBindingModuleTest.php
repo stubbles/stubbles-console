@@ -10,6 +10,7 @@
 namespace stubbles\console\ioc;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
+require_once __DIR__ . '/../input/BrokeredUserInput.php';
 /**
  * Test for stubbles\console\ioc\ArgumentsBindingModule.
  *

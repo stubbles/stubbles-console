@@ -88,9 +88,9 @@ class RequestParser
 
         $this->requestBroker->procure($object, $group, function($paramName, $error)
                                                        {
-                                                           throw new ConsoleAppException(function(OutputStream $err) use($error)
+                                                           throw new ConsoleAppException(function(OutputStream $err) use($paramName, $error)
                                                                                          {
-                                                                                             $err->writeLine($error);
+                                                                                             $err->writeLine($paramName . ': ' . $error);
                                                                                          },
                                                                                          10
                                                            );

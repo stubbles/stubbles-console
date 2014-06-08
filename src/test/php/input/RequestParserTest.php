@@ -192,7 +192,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
      */
     private function createRequestAnnotation($name, $description, $option = null, $type = 'Test')
     {
-        $annotation = new Annotation($type);
+        $annotation = new Annotation($type, 'SomeClass::someMethod()');
         $annotation->name        = $name;
         $annotation->description = $description;
         if (null !== $option) {
