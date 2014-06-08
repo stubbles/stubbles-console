@@ -84,7 +84,7 @@ class ConsoleAppCreator extends ConsoleApp
                                    ->writeLine(' (c) 2012-2014 Stubbles Development Group')
                                    ->writeLine('')
                                    ->prompt('Please enter the full qualified class name for the console app: ')
-                                   ->applyFilter(new ClassNameFilter());
+                                   ->withFilter(new ClassNameFilter());
         if (null === $className) {
             $this->console->writeLine('The entered class name is not a valid class name');
             return -10;
