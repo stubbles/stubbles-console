@@ -10,6 +10,7 @@
 namespace stubbles\console;
 use stubbles\lang\exception\Exception;
 use stubbles\streams\OutputStream;
+use stubbles\streams\memory\MemoryOutputStream;
 /**
  * Exception for signaling errors on app execution.
  *
@@ -34,7 +35,9 @@ class ConsoleAppException extends Exception
     public function __construct($message, $code, \Exception $cause = null)
     {
         if ($message instanceof \Closure) {
-            parent::__construct('', $cause, $code);
+            $out = new MemoryOutputStream();
+            $message($out);
+            parent::__construct($out->getBuffer(), $cause, $code);
             $this->messenger = $message;
         } else {
             parent::__construct($message, $cause, $code);
@@ -44,7 +47,7 @@ class ConsoleAppException extends Exception
     /**
      * returns messenger
      *
-     * @return  Closure
+     * @return  \Closure
      */
     public function getMessenger()
     {
@@ -52,10 +55,9 @@ class ConsoleAppException extends Exception
             return $this->messenger;
         }
 
-        $that = $this;
-        return function(OutputStream $out) use ($that)
+        return function(OutputStream $out)
                {
-                   return $out->writeLine('*** Exception: ' . $that->getMessage());
+                   return $out->writeLine('*** Exception: ' . $this->getMessage());
                };
     }
 }
