@@ -221,7 +221,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         $this->mockOutputStream->expects($this->never())
                                ->method('writeLine');
         $out = $this->getMock('stubbles\streams\OutputStream');
-        $out->expects($this->once())
+        $out->expects($this->any())
             ->method('writeLine')
             ->with($this->equalTo('something happened'));
         TestConsoleApp::$exception = new ConsoleAppException(function() use($out)
