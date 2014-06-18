@@ -41,10 +41,29 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function hasNoOutputStreamByDefault()
+    {
+        $this->assertNull($this->executor->out());
+    }
+
+    /**
+     * @test
+     */
     public function executeWithoutOutputStream()
     {
-        $this->assertNull($this->executor->getOutputStream());
         $this->assertSame($this->executor, $this->executor->execute('echo foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function outReturnsOutputStreamOriginallySet()
+    {
+        $mockOutputStream = $this->getMock('stubbles\streams\OutputStream');
+        $this->assertSame(
+                $mockOutputStream,
+                $this->executor->streamOutputTo($mockOutputStream)->out()
+        );
     }
 
     /**
@@ -56,9 +75,10 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
         $mockOutputStream->expects($this->once())
                          ->method('writeLine')
                          ->with($this->equalTo('foo'));
-        $this->assertSame($this->executor, $this->executor->streamOutputTo($mockOutputStream));
-        $this->assertSame($mockOutputStream, $this->executor->getOutputStream());
-        $this->assertSame($this->executor, $this->executor->execute('echo foo'));
+        $this->assertSame(
+                $this->executor,
+                $this->executor->streamOutputTo($mockOutputStream)->execute('echo foo')
+        );
     }
 
     /**
@@ -133,5 +153,4 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     {
         $this->executor->executeDirect('php -r "throw new Exception();"');
     }
-
 }

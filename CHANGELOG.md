@@ -4,6 +4,7 @@
 ### BC breaks
 
   * removed namespace prefix `net`, base namespace is now `stubbles\console` only
+  * deprecated `stubbles\console\Executor::getOutputStream()`, use `stubbles\console\Executor::out()` instead, will be removed with 4.0.0
 
 ### Other changes
 
