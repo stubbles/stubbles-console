@@ -20,13 +20,13 @@ class ConsoleExecutor implements Executor
      *
      * @type  OutputStream
      */
-    protected $out;
+    private $out;
     /**
      * redirect direction
      *
      * @type  string
      */
-    protected $redirect = '2>&1';
+    private $redirect = '2>&1';
 
     /**
      * sets the output stream to write data outputted by executed command to
@@ -45,9 +45,20 @@ class ConsoleExecutor implements Executor
      *
      * @return  OutputStream
      */
-    public function getOutputStream()
+    public function out()
     {
         return $this->out;
+    }
+
+    /**
+     * returns the output stream to write data outputted by executed command to
+     *
+     * @return  OutputStream
+     * @deprecated  since 3.0.0, use out() instead, will be removed with 4.0.0
+     */
+    public function getOutputStream()
+    {
+        return $this->out();
     }
 
     /**
@@ -76,10 +87,11 @@ class ConsoleExecutor implements Executor
             throw new RuntimeException('Can not execute ' . $command);
         }
 
+        // must read all output even if we don't need it, otherwise we don't
+        // receive a correct return code when closing the process file pointer
         while (!feof($pd) && false !== ($line = fgets($pd, 4096))) {
-            $line = chop($line);
             if (null !== $this->out) {
-                $this->out->writeLine($line);
+                $this->out->writeLine(rtrim($line));
             }
         }
 
@@ -127,7 +139,7 @@ class ConsoleExecutor implements Executor
 
         $result = [];
         while (!feof($pd) && false !== ($line = fgets($pd, 4096))) {
-            $result[] = chop($line);
+            $result[] = rtrim($line);
         }
 
         $returnCode = pclose($pd);
