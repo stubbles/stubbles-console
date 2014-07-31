@@ -19,22 +19,22 @@ interface Executor
     /**
      * sets the output stream to write data outputted by executed command to
      *
-     * @param   OutputStream  $out
-     * @return  Executor
+     * @param   \stubbles\streams\OutputStream  $out
+     * @return  \stubbles\console\Executor
      */
     public function streamOutputTo(OutputStream $out);
 
     /**
      * returns the output stream to write data outputted by executed command to
      *
-     * @return  OutputStream
+     * @return  \stubbles\streams\OutputStream
      */
     public function out();
 
     /**
      * returns the output stream to write data outputted by executed command to
      *
-     * @return  OutputStream
+     * @return  \stubbles\streams\OutputStream
      * @deprecated  since 3.0.0, use out() instead, will be removed with 4.0.0
      */
     public function getOutputStream();
@@ -43,7 +43,7 @@ interface Executor
      * executes given command
      *
      * @param   string  $command
-     * @return  Executor
+     * @return  \stubbles\console\Executor
      */
     public function execute($command);
 
@@ -54,7 +54,7 @@ interface Executor
      * used to read the output of the command at a later point in time.
      *
      * @param   string  $command
-     * @return  InputStream
+     * @return  \stubbles\streams\InputStream
      */
     public function executeAsync($command);
 

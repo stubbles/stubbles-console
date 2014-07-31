@@ -177,8 +177,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
             $this->mockOutputStream->expects($this->at(9))
                                    ->method('writeLine')
                                    ->with($this->equalTo('   -h or --help   Prints this help.'));
-            $messenger = $cae->getMessenger();
-            $messenger();
+            $cae->writeTo($this->mockOutputStream);
         }
     }
 

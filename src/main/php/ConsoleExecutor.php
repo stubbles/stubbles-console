@@ -18,7 +18,7 @@ class ConsoleExecutor implements Executor
     /**
      * output stream to write data outputted by executed command to
      *
-     * @type  OutputStream
+     * @type  \stubbles\streams\OutputStream
      */
     private $out;
     /**
@@ -31,8 +31,8 @@ class ConsoleExecutor implements Executor
     /**
      * sets the output stream to write data outputted by executed command to
      *
-     * @param   OutputStream  $out
-     * @return  Executor
+     * @param   \stubbles\streams\OutputStream  $out
+     * @return  \stubbles\console\Executor
      */
     public function streamOutputTo(OutputStream $out)
     {
@@ -43,7 +43,7 @@ class ConsoleExecutor implements Executor
     /**
      * returns the output stream to write data outputted by executed command to
      *
-     * @return  OutputStream
+     * @return  \stubbles\streams\OutputStream
      */
     public function out()
     {
@@ -53,7 +53,7 @@ class ConsoleExecutor implements Executor
     /**
      * returns the output stream to write data outputted by executed command to
      *
-     * @return  OutputStream
+     * @return  \stubbles\streams\OutputStream
      * @deprecated  since 3.0.0, use out() instead, will be removed with 4.0.0
      */
     public function getOutputStream()
@@ -65,7 +65,7 @@ class ConsoleExecutor implements Executor
      * sets the redirect
      *
      * @param   string  $redirect
-     * @return  Executor
+     * @return  \stubbles\console\Executor
      */
     public function redirectTo($redirect)
     {
@@ -77,8 +77,8 @@ class ConsoleExecutor implements Executor
      * executes given command
      *
      * @param   string  $command
-     * @return  Executor
-     * @throws  RuntimeException
+     * @return  \stubbles\console\Executor
+     * @throws  \stubbles\lang\exception\RuntimeException
      */
     public function execute($command)
     {
@@ -110,8 +110,8 @@ class ConsoleExecutor implements Executor
      * used to read the output of the command at a later point in time.
      *
      * @param   string  $command
-     * @return  InputStream
-     * @throws  RuntimeException
+     * @return  \stubbles\streams\InputStream
+     * @throws  \stubbles\lang\exception\RuntimeException
      */
     public function executeAsync($command)
     {
@@ -128,7 +128,7 @@ class ConsoleExecutor implements Executor
      *
      * @param   string  $command
      * @return  string[]
-     * @throws  RuntimeException
+     * @throws  \stubbles\lang\exception\RuntimeException
      */
     public function executeDirect($command)
     {

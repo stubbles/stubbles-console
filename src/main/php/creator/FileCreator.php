@@ -20,28 +20,28 @@ abstract class FileCreator
     /**
      * stresm to read data from
      *
-     * @type  Console
+     * @type  \stubbles\console\Console
      */
     protected $console;
     /**
      * path to project
      *
-     * @type  Rootpath
+     * @type  \stubbles\lang\Rootpath
      */
     protected $rootpath;
     /**
      * access to resources
      *
-     * @type  ResourceLoader
+     * @type  \stubbles\lang\ResourceLoader
      */
     private $resourceLoader;
 
     /**
      * constructor
      *
-     * @param  Console         $console
-     * @param  Rootpath        $rootpath
-     * @param  ResourceLoader  $resourceLoader
+     * @param  \stubbles\console\Console      $console
+     * @param  \stubbles\lang\Rootpath        $rootpath
+     * @param  \stubbles\lang\ResourceLoader  $resourceLoader
      * @Inject
      */
     public function __construct(Console $console, Rootpath $rootpath, ResourceLoader $resourceLoader)
@@ -106,7 +106,7 @@ abstract class FileCreator
      *
      * @param   string $template
      * @return  string
-     * @throws  FileNotFoundException
+     * @throws  \stubbles\lang\exception\FileNotFoundException
      */
     private function pathForTemplate($template)
     {

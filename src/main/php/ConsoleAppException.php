@@ -21,23 +21,23 @@ class ConsoleAppException extends Exception
     /**
      * closure
      *
-     * @type  Closure
+     * @type  callable
      */
     private $messenger;
 
     /**
      * constructor
      *
-     * @param  string|Closure   $message  failure message
+     * @param  string|callable  $message  failure message or message writer
      * @param  int              $code     return code for application
-     * @param  \Exception       $cause
+     * @param  \Exception       $cause    optional  lower level cause for this exception
      */
     public function __construct($message, $code, \Exception $cause = null)
     {
-        if ($message instanceof \Closure) {
+        if (is_callable($message)) {
             $out = new MemoryOutputStream();
             $message($out);
-            parent::__construct($out->getBuffer(), $cause, $code);
+            parent::__construct($out->buffer(), $cause, $code);
             $this->messenger = $message;
         } else {
             parent::__construct($message, $cause, $code);
@@ -45,19 +45,18 @@ class ConsoleAppException extends Exception
     }
 
     /**
-     * returns messenger
+     * writes error message to given output stream
      *
-     * @return  \Closure
+     * @param   \stubbles\streams\OutputStream  $out  stream to write message to
      */
-    public function getMessenger()
+    public function writeTo(OutputStream $out)
     {
-        if (null !== $this->messenger) {
-            return $this->messenger;
+        if (null === $this->messenger) {
+            $out->writeLine('*** Exception: ' . $this->getMessage());
+            return;
         }
 
-        return function(OutputStream $out)
-               {
-                   return $out->writeLine('*** Exception: ' . $this->getMessage());
-               };
+        $writeMessage = $this->messenger;
+        $writeMessage($out);
     }
 }

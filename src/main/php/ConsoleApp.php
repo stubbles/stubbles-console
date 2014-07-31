@@ -29,9 +29,9 @@ abstract class ConsoleApp extends App
     /**
      * main method for stubcli
      *
-     * @param   string        $projectPath
-     * @param   array         $argv
-     * @param   OutputStream  $err
+     * @param   string                          $projectPath  path of current project
+     * @param   array                           $argv         list of command line arguments
+     * @param   \stubbles\streams\OutputStream  $err          stream to write errors to
      * @return  int  exit code
      */
     public static function stubcli($projectPath, array $argv, OutputStream $err)
@@ -58,8 +58,8 @@ abstract class ConsoleApp extends App
     /**
      * tries to parse command class from input
      *
-     * @param   array         $argv
-     * @param   OutputStream  $err
+     * @param   array                           $argv  list of command line arguments
+     * @param   \stubbles\streams\OutputStream  $err   stream to write errors to
      * @return  int|string
      */
     private static function parseCommandClass(array $argv, OutputStream $err)
@@ -82,8 +82,8 @@ abstract class ConsoleApp extends App
      * main method
      *
      * @api
-     * @param   string        $projectPath
-     * @param   OutputStream  $err
+     * @param   string                          $projectPath  path of current project
+     * @param   \stubbles\streams\OutputStream  $err          stream to write errors to
      * @return  int  exit code
      */
     public static function main($projectPath, OutputStream $err)
@@ -99,15 +99,14 @@ abstract class ConsoleApp extends App
     /**
      * handle exception
      *
-     * @param   \Exception    $e
-     * @param   OutputStream  $err
+     * @param   \Exception                      $e    exception to handle
+     * @param   \stubbles\streams\OutputStream  $err  stream to write exception information to
      * @return  int
      */
     private static function handleException(\Exception $e, OutputStream $err)
     {
         if ($e instanceof ConsoleAppException) {
-            $messenger = $e->getMessenger();
-            $messenger($err);
+            $e->writeTo($err);
             return $e->getCode();
         }
 
@@ -121,7 +120,7 @@ abstract class ConsoleApp extends App
      * creates argument binding module
      *
      * @api
-     * @return  ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\ArgumentsBindingModule
      */
     protected static function createArgumentsBindingModule()
     {
@@ -132,7 +131,7 @@ abstract class ConsoleApp extends App
      * creates console binding module
      *
      * @api
-     * @return  ConsoleBindingModule
+     * @return  \stubbles\console\ioc\ConsoleBindingModule
      */
     protected static function createConsoleBindingModule()
     {

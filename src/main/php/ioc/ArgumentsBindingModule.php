@@ -57,7 +57,7 @@ class ArgumentsBindingModule implements BindingModule
      *
      * @api
      * @param   string  $options
-     * @return  ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\ArgumentsBindingModule
      */
     public function withOptions($options)
     {
@@ -74,7 +74,7 @@ class ArgumentsBindingModule implements BindingModule
      *
      * @api
      * @param   string[]  $options
-     * @return  ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\ArgumentsBindingModule
      */
     public function withLongOptions(array $options)
     {
@@ -90,7 +90,7 @@ class ArgumentsBindingModule implements BindingModule
      * sets class to store user input into
      *
      * @param   string  $className
-     * @return  ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\ArgumentsBindingModule
      */
     public function withUserInput($className)
     {
@@ -101,7 +101,7 @@ class ArgumentsBindingModule implements BindingModule
     /**
      * configure the binder
      *
-     * @param  Binder  $binder
+     * @param  \stubbles\ioc\Binder  $binder
      */
     public function configure(Binder $binder)
     {
@@ -138,7 +138,7 @@ class ArgumentsBindingModule implements BindingModule
      * returns parsed arguments
      *
      * @return  array
-     * @throws  ConfigurationException
+     * @throws  \stubbles\lang\exception\ConfigurationException
      */
     private function parseArgs()
     {
@@ -214,7 +214,7 @@ class ArgumentsBindingModule implements BindingModule
     /**
      * returns option name
      *
-     * @param   Annotation  $annotation
+     * @param   \stubbles\lang\reflect\annotation\Annotation  $annotation
      * @return  string
      */
     private function getOptionName(Annotation $annotation)
