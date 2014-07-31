@@ -26,22 +26,22 @@ class UserInputProvider implements InjectionProvider
     /**
      * request parser to be used
      *
-     * @type  RequestParser
+     * @type  \stubbles\console\input\RequestParser
      */
     private $requestParser;
     /**
      * injector to create input class with
      *
-     * @type  Injector
+     * @type  \stubbles\ioc\Injector
      */
     private $injector;
 
     /**
      * constructor
      *
-     * @param  RequestParser  $requestParser
-     * @param  Injector       $injector
-     * @param  string         $userInputClass
+     * @param  \stubbles\console\input\RequestParser  $requestParser
+     * @param  \stubbles\ioc\Injector                 $injector
+     * @param  string                                 $userInputClass
      * @Inject
      * @Named{userInputClass}('stubbles.console.input.class')
      */
@@ -60,10 +60,12 @@ class UserInputProvider implements InjectionProvider
      */
     public function get($name = null)
     {
-        return $this->requestParser->parseInto($this->injector->getInstance($this->userInputClass,
-                                                                            'stubbles.console.input.instance'
-                                               ),
-                                               $name
+        return $this->requestParser->parseInto(
+                $this->injector->getInstance(
+                        $this->userInputClass,
+                        'stubbles.console.input.instance'
+                ),
+                $name
         );
     }
 }

@@ -10,6 +10,7 @@
 namespace stubbles\console\creator;
 use stubbles\input\Filter;
 use stubbles\input\Param;
+use stubbles\input\filter\ReusableFilter;
 /**
  * Filter for class names entered via user input.
  *
@@ -17,10 +18,12 @@ use stubbles\input\Param;
  */
 class ClassNameFilter implements Filter
 {
+    use ReusableFilter;
+
     /**
      * apply filter on given param
      *
-     * @param   Param  $param
+     * @param   \stubbles\input\Param  $param
      * @return  mixed  filtered value
      */
     public function apply(Param $param)

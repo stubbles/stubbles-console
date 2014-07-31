@@ -18,13 +18,13 @@ class ConsoleOutputStream extends ResourceOutputStream
     /**
      * holds output stream instance if created
      *
-     * @type  OutputStream
+     * @type  \stubbles\streams\OutputStream
      */
     private static $out;
     /**
      * holds error stream instance if created
      *
-     * @type  OutputStream
+     * @type  \stubbles\streams\OutputStream
      */
     private static $err;
 
@@ -41,7 +41,7 @@ class ConsoleOutputStream extends ResourceOutputStream
     /**
      * comfort method for getting a console output stream
      *
-     * @return  OutputStream
+     * @return  \stubbles\streams\OutputStream
      */
     public static function forOut()
     {
@@ -59,7 +59,7 @@ class ConsoleOutputStream extends ResourceOutputStream
     /**
      * comfort method for getting a console error stream
      *
-     * @return  OutputStream
+     * @return  \stubbles\streams\OutputStream
      */
     public static function forError()
     {

@@ -21,28 +21,28 @@ class Console implements InputStream, OutputStream
     /**
      * stresm to read data from
      *
-     * @type  InputStream
+     * @type  \stubbles\streams\InputStream
      */
     private $in;
     /**
      * stream to write default data to
      *
-     * @type  OutputStream
+     * @type  \stubbles\streams\OutputStream
      */
     private $out;
     /**
      * stream to write error data to
      *
-     * @type  OutputStream
+     * @type  \stubbles\streams\OutputStream
      */
     private $err;
 
     /**
      * constructor
      *
-     * @param  InputStream   $in   stresm to read data from
-     * @param  OutputStream  $out  stream to write default data to
-     * @param  OutputStream  $err  stream to write error data to
+     * @param  \stubbles\streams\InputStream   $in   stresm to read data from
+     * @param  \stubbles\streams\OutputStream  $out  stream to write default data to
+     * @param  \stubbles\streams\OutputStream  $err  stream to write error data to
      * @Inject
      * @Named{in}('stdin')
      * @Named{out}('stdout')
@@ -64,9 +64,9 @@ class Console implements InputStream, OutputStream
      * accumulated therein under the param name stdin.
      *
      * @api
-     * @param   string       $message      message to show before requesting user input
-     * @param   ParamErrors  $paramErrors  collection to add any errors to
-     * @return  ValueReader
+     * @param   string                              $message      message to show before requesting user input
+     * @param   \stubbles\input\errors\ParamErrors  $paramErrors  collection to add any errors to
+     * @return  \stubbles\input\ValueReader
      * @since   2.1.0
      */
     public function prompt($message, ParamErrors $paramErrors = null)
@@ -111,8 +111,8 @@ class Console implements InputStream, OutputStream
      * will be accumulated therein under the param name stdin.
      *
      * @api
-     * @param   ParamErrors  $paramErrors  collection to add any errors to
-     * @return  ValueReader
+     * @param   \stubbles\input\errors\ParamErrors  $paramErrors  collection to add any errors to
+     * @return  \stubbles\input\ValueReader
      * @since   2.1.0
      */
     public function readValue(ParamErrors $paramErrors = null)
@@ -175,7 +175,7 @@ class Console implements InputStream, OutputStream
      *
      * @api
      * @param   string  $bytes
-     * @return  Console
+     * @return  \stubbles\console\Console
      */
     public function write($bytes)
     {
@@ -188,7 +188,7 @@ class Console implements InputStream, OutputStream
      *
      * @api
      * @param   string  $bytes
-     * @return  Console
+     * @return  \stubbles\console\Console
      */
     public function writeLine($bytes)
     {
@@ -200,7 +200,7 @@ class Console implements InputStream, OutputStream
      * writes given lines and appends a line break after each line
      *
      * @param   string[]  $lines
-     * @return  Console
+     * @return  \stubbles\console\Console
      * @since   2.4.0
      */
     public function writeLines(array $lines)
@@ -215,7 +215,7 @@ class Console implements InputStream, OutputStream
     /**
      * writes empty line and appends a line break
      *
-     * @return  Console
+     * @return  \stubbles\console\Console
      * @since   2.6.0
      */
     public function writeEmptyLine()
@@ -229,7 +229,7 @@ class Console implements InputStream, OutputStream
      *
      * @api
      * @param   string  $bytes
-     * @return  Console
+     * @return  \stubbles\console\Console
      */
     public function writeError($bytes)
     {
@@ -242,7 +242,7 @@ class Console implements InputStream, OutputStream
      *
      * @api
      * @param   string  $bytes
-     * @return  Console
+     * @return  \stubbles\console\Console
      */
     public function writeErrorLine($bytes)
     {
@@ -254,7 +254,7 @@ class Console implements InputStream, OutputStream
      * writes given lines and appends a line break after each line
      *
      * @param   string[]  $lines
-     * @return  Console
+     * @return  \stubbles\console\Console
      * @since   2.4.0
      */
     public function writeErrorLines(array $lines)
@@ -269,7 +269,7 @@ class Console implements InputStream, OutputStream
     /**
      * writes empty line and appends a line break
      *
-     * @return  Console
+     * @return  \stubbles\console\Console
      * @since   2.6.0
      */
     public function writeEmptyErrorLine()

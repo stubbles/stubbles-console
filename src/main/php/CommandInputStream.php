@@ -32,7 +32,7 @@ class CommandInputStream extends ResourceInputStream
      *
      * @param   resource  $resource
      * @param   string    $command   optional
-     * @throws  IllegalArgumentException
+     * @throws  \stubbles\lang\exception\IllegalArgumentException
      */
     public function __construct($resource, $command = null)
     {
@@ -61,8 +61,8 @@ class CommandInputStream extends ResourceInputStream
      *
      * @param   int  $length  optional  max amount of bytes to read
      * @return  string
-     * @throws  IllegalStateException
-     * @throws  IOException
+     * @throws  \stubbles\lang\exception\IllegalStateException
+     * @throws  \stubbles\lang\exception\IOException
      */
     public function read($length = 8192)
     {
@@ -85,7 +85,7 @@ class CommandInputStream extends ResourceInputStream
     /**
      * closes the stream
      *
-     * @throws  RuntimeException
+     * @throws  \stubbles\lang\exception\RuntimeException
      */
     public function close()
     {

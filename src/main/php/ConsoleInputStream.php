@@ -18,7 +18,7 @@ class ConsoleInputStream extends ResourceInputStream
     /**
      * holds input stream instance if created
      *
-     * @type  InputStream
+     * @type  \stubbles\streams\InputStream
      */
     private static $in;
 
@@ -33,7 +33,7 @@ class ConsoleInputStream extends ResourceInputStream
     /**
      * comfort method for getting a console output stream
      *
-     * @return  InputStream
+     * @return  \stubbles\streams\InputStream
      */
     public static function forIn()
     {

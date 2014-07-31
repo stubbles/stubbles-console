@@ -18,25 +18,25 @@ class ConsoleAppCreator extends ConsoleApp
     /**
      * console to read and write to
      *
-     * @type  Console
+     * @type  \stubbles\console\Console
      */
     private $console;
     /**
      * class file creator
      *
-     * @type  ClassFileCreator
+     * @type  \stubbles\console\creator\ClassFileCreator
      */
     private $classFile;
     /**
      * stub file creator
      *
-     * @type  ScriptFileCreator
+     * @type  \stubbles\console\creator\ScriptFileCreator
      */
     private $scriptFile;
     /**
      * test file creator
      *
-     * @type  TestFileCreator
+     * @type  \stubbles\console\creator\TestFileCreator
      */
     private $testFile;
 
@@ -56,10 +56,10 @@ class ConsoleAppCreator extends ConsoleApp
     /**
      * constructor
      *
-     * @param  Console            $console
-     * @param  ClassFileCreator   $classFile
-     * @param  ScriptFileCreator  $scriptFile
-     * @param  TestFileCreator    $testFile
+     * @param  \stubbles\console\Console                    $console
+     * @param  \stubbles\console\creator\ClassFileCreator   $classFile
+     * @param  \stubbles\console\creator\ScriptFileCreator  $scriptFile
+     * @param  \stubbles\console\creator\TestFileCreator    $testFile
      * @Inject
      */
     public function __construct(Console $console,
@@ -84,7 +84,7 @@ class ConsoleAppCreator extends ConsoleApp
                                    ->writeLine(' (c) 2012-2014 Stubbles Development Group')
                                    ->writeLine('')
                                    ->prompt('Please enter the full qualified class name for the console app: ')
-                                   ->withFilter(new ClassNameFilter());
+                                   ->withFilter(ClassNameFilter::instance());
         if (null === $className) {
             $this->console->writeLine('The entered class name is not a valid class name');
             return -10;

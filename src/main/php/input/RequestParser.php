@@ -24,28 +24,28 @@ class RequestParser
     /**
      * Console
      *
-     * @type  OutputStream
+     * @type  \stubbles\streams\OutputStream
      */
     private $out;
     /**
      * request instance
      *
-     * @type  ConsoleRequest
+     * @type  \stubbles\input\console\ConsoleRequest
      */
     private $request;
     /**
      * request broker
      *
-     * @type  RequestBrokerFacade
+     * @type  \stubbles\input\broker\RequestBrokerFacade
      */
     private $requestBroker;
 
     /**
      * constructor
      *
-     * @param  OutputStream         $out
-     * @param  ConsoleRequest       $request
-     * @param  RequestBrokerFacade  $requestBroker
+     * @param  \stubbles\streams\OutputStream              $out
+     * @param  \stubbles\input\console\ConsoleRequest      $request
+     * @param  \stubbles\input\broker\RequestBrokerFacade  $requestBroker
      * @Inject
      * @Named{out}('stdout')
      */
@@ -78,7 +78,7 @@ class RequestParser
      * @param   object  $object
      * @param   string  $group   restrict parsing to given group
      * @return  object
-     * @throws  ConsoleAppException
+     * @throws  \stubbles\console\ConsoleAppException
      */
     public function parseInto($object, $group = null)
     {
@@ -109,7 +109,7 @@ class RequestParser
      *
      * @param   object  $object
      * @param   string  $group   restrict parsing to given group
-     * @return  Closure
+     * @return  \Closure
      */
     private function createHelp($object, $group)
     {
@@ -153,7 +153,7 @@ class RequestParser
     /**
      * retrieves name of option
      *
-     * @param   Annotation  $requestAnnotation
+     * @param   \stubbles\lang\reflect\annotation\Annotation  $requestAnnotation
      * @return  string
      */
     private function getOptionName(Annotation $requestAnnotation)
@@ -173,12 +173,12 @@ class RequestParser
     /**
      * creates help writing closure
      *
-     * @param   string        $appDescription
-     * @param   OutputStream  $out
-     * @param   string        $scriptName
-     * @param   array         $options
-     * @param   array         $parameters
-     * @return  Closure
+     * @param   string                          $appDescription
+     * @param   \stubbles\streams\OutputStream  $out
+     * @param   string                          $scriptName
+     * @param   array                           $options
+     * @param   array                           $parameters
+     * @return  \Closure
      */
     private function creatHelpWriter($appDescription, OutputStream $out, $scriptName, array $options, array $parameters)
     {
