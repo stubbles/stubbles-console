@@ -31,8 +31,7 @@ class SelfBoundConsoleApp extends ConsoleApp
      */
     public static function __bindings($projectPath)
     {
-        return [self::createModeBindingModule($projectPath),
-                self::createArgumentsBindingModule()
+        return [self::bindArguments()
                     ->withUserInput(__CLASS__)
         ];
     }

@@ -41,18 +41,6 @@ class ConsoleAppCreator extends ConsoleApp
     private $testFile;
 
     /**
-     * returns list of bindings used for this application
-     *
-     * @param   string  $projectPath
-     * @return  \stubbles\ioc\module\BindingModule[]
-     */
-    public static function __bindings($projectPath)
-    {
-        return [self::createModeBindingModule($projectPath)
-        ];
-    }
-
-    /**
      * constructor
      *
      * @param  \stubbles\console\Console                    $console

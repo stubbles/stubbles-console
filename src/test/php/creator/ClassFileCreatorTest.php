@@ -83,10 +83,7 @@ class ExampleConsoleApp extends ConsoleApp
      */
     public static function __bindings($projectPath)
     {
-        return [self::createModeBindingModule($projectPath),
-                self::createArgumentsBindingModule(),
-                self::createConsoleBindingModule()
-        ];
+        return [self::bindArguments()];
     }
 
     /**
