@@ -14,7 +14,6 @@ use stubbles\input\errors\ParamError;
 use stubbles\input\errors\ParamErrors;
 use stubbles\lang;
 use stubbles\streams\memory\MemoryOutputStream;
-require_once __DIR__ . '/BrokeredUserInput.php';
 /**
  * Test for stubbles\console\input\RequestParser.
  *

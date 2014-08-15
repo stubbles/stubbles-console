@@ -18,6 +18,11 @@
             "stubbles\\console\\": "src/main/php"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "org\\stubbles\\console\\test\\": "src/test/helper"
+        }
+    },
     "bin": ["bin/stubcli", "bin/createConsoleApp"],
     "extra": {
         "branch-alias": {
