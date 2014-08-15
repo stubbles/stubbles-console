@@ -50,17 +50,6 @@ class ConsoleExecutor implements Executor
     }
 
     /**
-     * returns the output stream to write data outputted by executed command to
-     *
-     * @return  \stubbles\streams\OutputStream
-     * @deprecated  since 3.0.0, use out() instead, will be removed with 4.0.0
-     */
-    public function getOutputStream()
-    {
-        return $this->out();
-    }
-
-    /**
      * sets the redirect
      *
      * @param   string  $redirect
