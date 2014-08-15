@@ -362,13 +362,26 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @since  4.0.0
+     * @test
+     */
+    public function canCreateArguments()
+    {
+        $this->assertInstanceOf(
+                'stubbles\console\ioc\Arguments',
+                ConsoleAppUsingBindingModule::returnBindArguments()
+        );
+    }
+
+    /**
      * @since  2.0.0
      * @test
+     * @deprecated  since 4.0.0
      */
     public function canCreateArgumentsBindingModule()
     {
         $this->assertInstanceOf(
-                'stubbles\console\ioc\ArgumentsBindingModule',
+                'stubbles\console\ioc\Arguments',
                 ConsoleAppUsingBindingModule::getArgumentsBindingModule()
         );
     }
@@ -376,6 +389,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     /**
      * @since  2.0.0
      * @test
+     * @deprecated  since 4.0.0
      */
     public function canCreateConsoleBindingModule()
     {

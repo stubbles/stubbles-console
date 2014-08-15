@@ -8,7 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use stubbles\console\ioc\ArgumentsBindingModule;
+use stubbles\console\ioc\Arguments;
 use stubbles\console\ioc\ConsoleBindingModule;
 use stubbles\ioc\App;
 use stubbles\streams\OutputStream;
@@ -135,11 +135,23 @@ abstract class ConsoleApp extends App
      * creates argument binding module
      *
      * @api
-     * @return  \stubbles\console\ioc\ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\Arguments
+     */
+    protected static function bindArguments()
+    {
+        return new Arguments(self::$stubcli);
+    }
+
+    /**
+     * creates argument binding module
+     *
+     * @api
+     * @return  \stubbles\console\ioc\Arguments
+     * @deprecated  since 4.0.0, use bindArguments() instead, will be removed with 5.0.0
      */
     protected static function createArgumentsBindingModule()
     {
-        return new ArgumentsBindingModule(self::$stubcli);
+        return self::bindArguments();
     }
 
     /**

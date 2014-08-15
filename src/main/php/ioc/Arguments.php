@@ -9,13 +9,13 @@
  */
 namespace stubbles\console\ioc;
 use stubbles\input\broker\RequestBroker;
+use stubbles\input\console\BaseConsoleRequest;
 use stubbles\ioc\Binder;
 use stubbles\ioc\module\BindingModule;
-use stubbles\lang\exception\ConfigurationException;
 /**
  * Binding module to configure the binder with arguments.
  */
-class ArgumentsBindingModule implements BindingModule
+class Arguments implements BindingModule
 {
     /**
      * switch whether stubcli was used to run the command
@@ -57,15 +57,15 @@ class ArgumentsBindingModule implements BindingModule
      *
      * @api
      * @param   string  $options
-     * @return  \stubbles\console\ioc\ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\Arguments
      */
     public function withOptions($options)
     {
+        $this->options = $options;
         if ($this->stubcliUsed && !strstr($options, 'c')) {
-            $options .= 'c:';
+            $this->options .= 'c:';
         }
 
-        $this->options = $options;
         return $this;
     }
 
@@ -74,7 +74,7 @@ class ArgumentsBindingModule implements BindingModule
      *
      * @api
      * @param   string[]  $options
-     * @return  \stubbles\console\ioc\ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\Arguments
      */
     public function withLongOptions(array $options)
     {
@@ -90,7 +90,7 @@ class ArgumentsBindingModule implements BindingModule
      * sets class to store user input into
      *
      * @param   string  $className
-     * @return  \stubbles\console\ioc\ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\Arguments
      */
     public function withUserInput($className)
     {
@@ -117,7 +117,7 @@ class ArgumentsBindingModule implements BindingModule
                    ->to($value);
         }
 
-        $request = new \stubbles\input\console\BaseConsoleRequest($args, $_SERVER);
+        $request = new BaseConsoleRequest($args, $_SERVER);
         $binder->bind('stubbles\input\Request')
                ->toInstance($request);
         $binder->bind('stubbles\input\console\ConsoleRequest')
@@ -138,7 +138,7 @@ class ArgumentsBindingModule implements BindingModule
      * returns parsed arguments
      *
      * @return  array
-     * @throws  \stubbles\lang\exception\ConfigurationException
+     * @throws  \RuntimeException
      */
     private function parseArgs()
     {
@@ -149,7 +149,7 @@ class ArgumentsBindingModule implements BindingModule
         $this->parseOptions();
         $parsedVars = $this->getopt($this->options, $this->longopts);
         if (false === $parsedVars) {
-            throw new ConfigurationException('Error parsing "' . join(' ', $_SERVER['argv']) . '" with ' . $this->options . ' and ' . join(' ', $this->longopts));
+            throw new \RuntimeException('Error parsing "' . join(' ', $_SERVER['argv']) . '" with ' . $this->options . ' and ' . join(' ', $this->longopts));
         }
 
         return $this->fixArgs($_SERVER['argv'], $parsedVars);

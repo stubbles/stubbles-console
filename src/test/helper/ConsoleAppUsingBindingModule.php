@@ -16,11 +16,21 @@ use stubbles\console\ConsoleApp;
  */
 class ConsoleAppUsingBindingModule extends ConsoleApp
 {
+    /**
+     * creates mode binding module
+     *
+     * @return  ArgumentsBindingModule
+     */
+    public static function returnBindArguments()
+    {
+        return self::bindArguments();
+    }
 
     /**
      * creates mode binding module
      *
      * @return  ArgumentsBindingModule
+     * @deprecated  since 4.0.0
      */
     public static function getArgumentsBindingModule()
     {
@@ -31,6 +41,7 @@ class ConsoleAppUsingBindingModule extends ConsoleApp
      * creates properties binding module
      *
      * @return  ConsoleBindingModule
+     * @deprecated  since 4.0.0
      */
     public static function getConsoleBindingModule()
     {
