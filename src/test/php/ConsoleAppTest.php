@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use stubbles\lang\Rootpath;
 use stubbles\streams\memory\MemoryOutputStream;
 use org\stubbles\console\test\AppWithoutBindingCanGetConsoleClassesInjected;
 use org\stubbles\console\test\ConsoleAppUsingBindingModule;
@@ -37,17 +38,26 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param   string[]  $argv
+     * @return  ConsoleApp
+     */
+    private function createStubCliApp(array $argv)
+    {
+        return ConsoleApp::stubcli(
+                new Rootpath(),
+                $argv,
+                $this->errorOutputStream
+        );
+    }
+
+    /**
      * @test
      */
     public function missingClassnameOptionLeadsToExistCode1()
     {
         $this->assertEquals(
                 1,
-                TestConsoleApp::stubcli(
-                        'projectPath',
-                        [],
-                        $this->errorOutputStream
-                )
+                $this->createStubCliApp([])
         );
     }
 
@@ -56,7 +66,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function missingClassnameOptionWritesErrorMessageToErrorStream()
     {
-        TestConsoleApp::stubcli('projectPath', [], $this->errorOutputStream);
+        $this->createStubCliApp([]);
         $this->assertEquals(
                 '*** Missing classname option -c',
                 trim($this->errorOutputStream->buffer())
@@ -70,11 +80,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
                 2,
-                TestConsoleApp::stubcli(
-                        'projectPath',
-                        ['-c'],
-                        $this->errorOutputStream
-                )
+                $this->createStubCliApp(['-c'])
         );
     }
 
@@ -83,7 +89,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function missingClassnameValueInOptionWritesErrorMessageToErrorStream()
     {
-        TestConsoleApp::stubcli('projectPath', ['-c'],$this->errorOutputStream);
+        $this->createStubCliApp(['-c']);
         $this->assertEquals(
                 '*** No classname specified in -c',
                 trim($this->errorOutputStream->buffer())
@@ -97,11 +103,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
                 3,
-                TestConsoleApp::stubcli(
-                        'projectPath',
-                        ['-c', 'doesNotExist'],
-                        $this->errorOutputStream
-                )
+                $this->createStubCliApp(['-c', 'doesNotExist'])
         );
     }
 
@@ -110,7 +112,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidClassnameWritesErrorMessageToErrorStream()
     {
-        TestConsoleApp::stubcli('projectPath',['-c', 'doesNotExist'], $this->errorOutputStream);
+        $this->createStubCliApp(['-c', 'doesNotExist']);
         $this->assertEquals(
                 '*** Can not find doesNotExist',
                 trim($this->errorOutputStream->buffer())
@@ -125,13 +127,11 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
         $this->assertEquals(
                 10,
-                ConsoleApp::stubcli(
-                        'projectPath',
+                $this->createStubCliApp(
                         ['stubcli',
                          '-c',
                          'org\stubbles\console\test\TestConsoleApp'
-                        ],
-                        $this->errorOutputStream
+                        ]
                 )
         );
     }
@@ -142,13 +142,11 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function messageFromConsoleAppExceptionThrownInStubcliIsWrittenToErrorStream()
     {
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
-        ConsoleApp::stubcli(
-                'projectPath',
+        $this->createStubCliApp(
                 ['stubcli',
                  '-c',
                  'org\stubbles\console\test\TestConsoleApp'
-                ],
-                $this->errorOutputStream
+                ]
         );
         $this->assertEquals(
                 '*** Exception: failure',
@@ -167,13 +165,11 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                                                              },
                                                              10
                                      );
-        ConsoleApp::stubcli(
-                'projectPath',
+        $this->createStubCliApp(
                 ['stubcli',
                  '-c',
                  'org\stubbles\console\test\TestConsoleApp'
-                ],
-                $this->errorOutputStream
+                ]
         );
         $this->assertEquals(
                 'something happened',
@@ -189,13 +185,11 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         TestConsoleApp::$exception = new \Exception('failure');
         $this->assertEquals(
                 20,
-                ConsoleApp::stubcli(
-                        'projectPath',
+                $this->createStubCliApp(
                         ['stubcli',
                          '-c',
                          'org\stubbles\console\test\TestConsoleApp'
-                        ],
-                        $this->errorOutputStream
+                        ]
                 )
         );
     }
@@ -207,13 +201,11 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $e = new \Exception('failure');
         TestConsoleApp::$exception = $e;
-        ConsoleApp::stubcli(
-                'projectPath',
+        $this->createStubCliApp(
                 ['stubcli',
                  '-c',
                  'org\stubbles\console\test\TestConsoleApp'
-                ],
-                $this->errorOutputStream
+                ]
         );
         $this->assertEquals(
                 "*** Exception: failure\nStacktrace:\n" . $e->getTraceAsString(),
@@ -228,13 +220,11 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
                 0,
-                ConsoleApp::stubcli(
-                        'projectPath',
+                $this->createStubCliApp(
                         ['stubcli',
-                          '-c',
-                          'org\stubbles\console\test\TestConsoleApp'
-                         ],
-                        $this->errorOutputStream
+                         '-c',
+                         'org\stubbles\console\test\TestConsoleApp'
+                        ]
                 )
         );
     }
@@ -246,16 +236,14 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
                 0,
-                ConsoleApp::stubcli(
-                        'projectPath',
+                $this->createStubCliApp(
                         ['stubcli',
                          '-v',
                          '-other',
                          'value',
                          '-c',
                          'org\stubbles\console\test\TestConsoleApp'
-                        ],
-                        $this->errorOutputStream
+                        ]
                 )
         );
     }
@@ -283,10 +271,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
         $this->assertEquals(
                 10,
-                TestConsoleApp::main(
-                        'projectPath',
-                        $this->errorOutputStream
-                )
+                TestConsoleApp::main(new Rootpath(), $this->errorOutputStream)
         );
         $this->assertEquals(
                 '*** Exception: failure',
@@ -305,10 +290,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                                                              },
                                                              10
                                      );
-        TestConsoleApp::main(
-                'projectPath',
-                $this->errorOutputStream
-        );
+        TestConsoleApp::main(new Rootpath(), $this->errorOutputStream);
         $this->assertEquals(
                 'something happened',
                 trim($this->errorOutputStream->buffer())
@@ -323,10 +305,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         TestConsoleApp::$exception = new \Exception('failure');
         $this->assertEquals(
                 20,
-                TestConsoleApp::main(
-                        'projectPath',
-                        $this->errorOutputStream
-                )
+                TestConsoleApp::main(new Rootpath(), $this->errorOutputStream)
         );
     }
 
@@ -337,10 +316,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $e = new \Exception('failure');
         TestConsoleApp::$exception = $e;
-        TestConsoleApp::main(
-                'projectPath',
-                $this->errorOutputStream
-        );
+        TestConsoleApp::main(new Rootpath(), $this->errorOutputStream);
         $this->assertEquals(
                 "*** Exception: failure\nStacktrace:\n" . $e->getTraceAsString(),
                 trim($this->errorOutputStream->buffer())
@@ -354,10 +330,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
                 0,
-                TestConsoleApp::main(
-                        'projectPath',
-                        $this->errorOutputStream
-                )
+                TestConsoleApp::main(new Rootpath(), $this->errorOutputStream)
         );
     }
 
@@ -408,14 +381,12 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         $_SERVER['argv'][1] = 'value';
         $this->assertEquals(
                 0,
-                ConsoleApp::stubcli(
-                        'projectPath',
+                $this->createStubCliApp(
                         ['stubcli',
                          'value',
                          '-c',
                          'org\stubbles\console\test\SelfBoundConsoleApp'
-                        ],
-                        $this->errorOutputStream
+                        ]
                 )
          );
         $this->assertEquals('value', SelfBoundConsoleApp::$bar);
@@ -428,14 +399,12 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function successfulInstanceCreationDoesNotWriteToErrorStream()
     {
         $_SERVER['argv'][1] = 'value';
-        ConsoleApp::stubcli(
-                'projectPath',
+        $this->createStubCliApp(
                 ['stubcli',
                  'value',
                  '-c',
                  'org\stubbles\console\test\SelfBoundConsoleApp'
-                ],
-                $this->errorOutputStream
+                ]
          );
         $this->assertEquals('', $this->errorOutputStream->buffer());
     }
