@@ -41,7 +41,7 @@ class SelfBoundConsoleApp extends ConsoleApp
     /**
      * test method
      *
-     * @Request[String](name='argv.0')
+     * @Request[String](paramName='argv.0')
      * @param  string  $bar
      */
     public function setArgument($arg)

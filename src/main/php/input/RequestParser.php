@@ -23,12 +23,6 @@ use stubbles\streams\OutputStream;
 class RequestParser
 {
     /**
-     * Console
-     *
-     * @type  \stubbles\streams\OutputStream
-     */
-    private $out;
-    /**
      * request instance
      *
      * @type  \stubbles\input\console\ConsoleRequest
@@ -50,20 +44,16 @@ class RequestParser
     /**
      * constructor
      *
-     * @param  \stubbles\streams\OutputStream             $out
      * @param  \stubbles\input\console\ConsoleRequest     $request
      * @param  \stubbles\input\broker\RequestBroker       $requestBroker
      * @param  \stubbles\input\errors\ParamErrorMessages  $errorMessages
      * @Inject
-     * @Named{out}('stdout')
      */
     public function __construct(
-            OutputStream $out,
             ConsoleRequest $request,
             RequestBroker $requestBroker,
             ParamErrorMessages $errorMessages)
     {
-        $this->out           = $out;
         $this->request       = $request;
         $this->requestBroker = $requestBroker;
         $this->errorMessages = $errorMessages;
@@ -145,7 +135,6 @@ class RequestParser
 
         $options['-h or --help'] = 'Prints this help.';
         return $this->creatHelpWriter($this->getAppDescription($object),
-                                      $this->out,
                                       $this->request->readEnv('SCRIPT_NAME')->unsecure(),
                                       $options,
                                       $parameters
@@ -176,9 +165,9 @@ class RequestParser
      */
     private function getOptionName(TargetMethod $targetMethod)
     {
-        if ($targetMethod->hasOptionDescription()) {
-            return $targetMethod->optionDescription();
-        }
+    #    if ($targetMethod->hasOptionDescription()) {
+    #        return $targetMethod->optionDescription();
+    #    }
 
         $name = $targetMethod->paramName();
         if (strlen($name) === 1) {
@@ -191,16 +180,15 @@ class RequestParser
     /**
      * creates help writing closure
      *
-     * @param   string                          $appDescription
-     * @param   \stubbles\streams\OutputStream  $out
-     * @param   string                          $scriptName
-     * @param   array                           $options
-     * @param   array                           $parameters
+     * @param   string  $appDescription
+     * @param   string  $scriptName
+     * @param   array   $options
+     * @param   array   $parameters
      * @return  \Closure
      */
-    private function creatHelpWriter($appDescription, OutputStream $out, $scriptName, array $options, array $parameters)
+    private function creatHelpWriter($appDescription, $scriptName, array $options, array $parameters)
     {
-        return function() use ($appDescription, $out, $scriptName, $options, $parameters)
+        return function(OutputStream $out) use ($appDescription, $scriptName, $options, $parameters)
                {
                    if (!empty($appDescription)) {
                        $out->writeLine($appDescription);
@@ -215,7 +203,7 @@ class RequestParser
                    $longestName = max(array_map('strlen', array_keys($options)));
                    $out->writeLine('Options:');
                    foreach ($options as $name => $description) {
-                       $out->writeLine('   ' . str_pad($name, $longestName) . '   ' . $description);
+                       $out->writeLine('   ' . trim(str_pad($name, $longestName) . '   ' . $description));
                    }
 
                    $out->writeLine('');

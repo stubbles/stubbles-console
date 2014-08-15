@@ -8,7 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use stubbles\lang\exception\Exception;
+use stubbles\streams\memory\MemoryOutputStream;
 require_once __DIR__ . '/ConsoleAppUsingBindingModule.php';
 require_once __DIR__ . '/SelfBoundConsoleApp.php';
 require_once __DIR__ . '/TestConsoleApp.php';
@@ -23,141 +23,203 @@ use org\stubbles\console\test\TestConsoleApp;
 class ConsoleAppTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * mocked output stream
+     * output stream
      *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
+     * @type  \stubbles\streams\memory\MemoryOutputStream
      */
-    protected $mockOutputStream;
+    private $errorOutputStream;
 
     /**
      * set up test environment
      */
     public function setUp()
     {
-        $this->mockOutputStream    = $this->getMock('stubbles\streams\OutputStream');
+        $this->errorOutputStream   = new MemoryOutputStream();
         TestConsoleApp::$exception = null;
     }
 
     /**
      * @test
      */
-    public function missingClassnameOptionGivesErrorMessageAndReturns()
+    public function missingClassnameOptionLeadsToExistCode1()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('writeLine');
-        $this->assertEquals(1, TestConsoleApp::stubcli('projectPath',
-                                                       [],
-                                                       $this->mockOutputStream)
+        $this->assertEquals(
+                1,
+                TestConsoleApp::stubcli(
+                        'projectPath',
+                        [],
+                        $this->errorOutputStream
+                )
         );
     }
 
     /**
      * @test
      */
-    public function missingClassnameInOptionGivesErrorMessageAndReturns()
+    public function missingClassnameOptionWritesErrorMessageToErrorStream()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('writeLine');
-        $this->assertEquals(2, TestConsoleApp::stubcli('projectPath',
-                                                       ['-c'],
-                                                       $this->mockOutputStream)
+        TestConsoleApp::stubcli('projectPath', [], $this->errorOutputStream);
+        $this->assertEquals(
+                '*** Missing classname option -c',
+                trim($this->errorOutputStream->buffer())
         );
     }
 
     /**
      * @test
      */
-    public function invalidClassnameGivesErrorMessageAndReturns()
+    public function missingClassnameValueInOptionLeadsToExistCode2()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('writeLine');
-        $this->assertEquals(3, TestConsoleApp::stubcli('projectPath',
-                                                       ['-c', 'doesNotExist'],
-                                                       $this->mockOutputStream)
+        $this->assertEquals(
+                2,
+                TestConsoleApp::stubcli(
+                        'projectPath',
+                        ['-c'],
+                        $this->errorOutputStream
+                )
         );
     }
 
     /**
      * @test
      */
-    public function thrownConsoleAppExceptionWithMessageIsCatchedInStubcli()
+    public function missingClassnameValueInOptionWritesErrorMessageToErrorStream()
+    {
+        TestConsoleApp::stubcli('projectPath', ['-c'],$this->errorOutputStream);
+        $this->assertEquals(
+                '*** No classname specified in -c',
+                trim($this->errorOutputStream->buffer())
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function invalidClassnameLeadsToExistCode3()
+    {
+        $this->assertEquals(
+                3,
+                TestConsoleApp::stubcli(
+                        'projectPath',
+                        ['-c', 'doesNotExist'],
+                        $this->errorOutputStream
+                )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function invalidClassnameWritesErrorMessageToErrorStream()
+    {
+        TestConsoleApp::stubcli('projectPath',['-c', 'doesNotExist'], $this->errorOutputStream);
+        $this->assertEquals(
+                '*** Can not find doesNotExist',
+                trim($this->errorOutputStream->buffer())
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function thrownConsoleAppExceptionInStubCliLeadsToExitCodeOfException()
     {
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
-        $this->mockOutputStream->expects($this->at(0))
-                               ->method('writeLine')
-                               ->with($this->equalTo('*** Exception: failure'));
-        $this->assertEquals(10, ConsoleApp::stubcli('projectPath',
-                                                    ['stubcli',
-                                                     '-c',
-                                                     'org\stubbles\console\test\TestConsoleApp'
-                                                    ],
-                                                    $this->mockOutputStream
-                                )
+        $this->assertEquals(
+                10,
+                ConsoleApp::stubcli(
+                        'projectPath',
+                        ['stubcli',
+                         '-c',
+                         'org\stubbles\console\test\TestConsoleApp'
+                        ],
+                        $this->errorOutputStream
+                )
         );
     }
 
     /**
      * @test
      */
-    public function thrownConsoleAppExceptionWithClosureIsCatchedInStubcli()
+    public function messageFromConsoleAppExceptionThrownInStubcliIsWrittenToErrorStream()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('writeLine');
-        $out = $this->getMock('stubbles\streams\OutputStream');
-        $out->expects($this->at(0))
-            ->method('writeLine')
-            ->with($this->equalTo('something happened'));
-        TestConsoleApp::$exception = new ConsoleAppException(function() use($out)
+        TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
+        ConsoleApp::stubcli(
+                'projectPath',
+                ['stubcli',
+                 '-c',
+                 'org\stubbles\console\test\TestConsoleApp'
+                ],
+                $this->errorOutputStream
+        );
+        $this->assertEquals(
+                '*** Exception: failure',
+                trim($this->errorOutputStream->buffer())
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function thrownConsoleAppExceptionWithMessageClosureIsWrittenToErrorStream()
+    {
+        TestConsoleApp::$exception = new ConsoleAppException(function(MemoryOutputStream $out)
                                                              {
                                                                  $out->writeLine('something happened');
                                                              },
                                                              10
                                      );
-        $this->assertEquals(10, ConsoleApp::stubcli('projectPath',
-                                                    ['stubcli',
-                                                     '-c',
-                                                     'org\stubbles\console\test\TestConsoleApp'
-                                                    ],
-                                                    $this->mockOutputStream
-                                )
+        ConsoleApp::stubcli(
+                'projectPath',
+                ['stubcli',
+                 '-c',
+                 'org\stubbles\console\test\TestConsoleApp'
+                ],
+                $this->errorOutputStream
+        );
+        $this->assertEquals(
+                'something happened',
+                trim($this->errorOutputStream->buffer())
         );
     }
 
     /**
      * @test
      */
-    public function thrownApplicationExceptionIsCatchedInStubcli()
+    public function applicationExceptionThrownInStubCliLeadsToExitCode20()
     {
         TestConsoleApp::$exception = new \Exception('failure');
-        $this->mockOutputStream->expects($this->at(0))
-                               ->method('writeLine')
-                               ->with($this->equalTo('*** Exception: failure'));
-        $this->assertEquals(20, ConsoleApp::stubcli('projectPath',
-                                                    ['stubcli',
-                                                     '-c',
-                                                     'org\stubbles\console\test\TestConsoleApp'
-                                                    ],
-                                                    $this->mockOutputStream
-                                )
+        $this->assertEquals(
+                20,
+                ConsoleApp::stubcli(
+                        'projectPath',
+                        ['stubcli',
+                         '-c',
+                         'org\stubbles\console\test\TestConsoleApp'
+                        ],
+                        $this->errorOutputStream
+                )
         );
     }
 
     /**
      * @test
      */
-    public function thrownApplicationStubExceptionIsCatchedInStubcli()
+    public function messageFromApplicationExceptionThrownInStubCliIsWrittenToErrorStream()
     {
-        TestConsoleApp::$exception = new Exception('failure');
-        $this->mockOutputStream->expects($this->at(0))
-                               ->method('writeLine')
-                               ->with($this->equalTo('*** stubbles\lang\exception\Exception: failure'));
-        $this->assertEquals(20, ConsoleApp::stubcli('projectPath',
-                                                    ['stubcli',
-                                                     '-c',
-                                                     'org\stubbles\console\test\TestConsoleApp'
-                                                    ],
-                                                     $this->mockOutputStream
-                                )
+        $e = new \Exception('failure');
+        TestConsoleApp::$exception = $e;
+        ConsoleApp::stubcli(
+                'projectPath',
+                ['stubcli',
+                 '-c',
+                 'org\stubbles\console\test\TestConsoleApp'
+                ],
+                $this->errorOutputStream
+        );
+        $this->assertEquals(
+                "*** Exception: failure\nStacktrace:\n" . $e->getTraceAsString(),
+                trim($this->errorOutputStream->buffer())
         );
     }
 
@@ -166,15 +228,16 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function commandReturnCodeIsReturnedInStubcli()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('writeLine');
-        $this->assertEquals(0, ConsoleApp::stubcli('projectPath',
-                                                   ['stubcli',
-                                                     '-c',
-                                                     'org\stubbles\console\test\TestConsoleApp'
-                                                    ],
-                                                   $this->mockOutputStream
-                               )
+        $this->assertEquals(
+                0,
+                ConsoleApp::stubcli(
+                        'projectPath',
+                        ['stubcli',
+                          '-c',
+                          'org\stubbles\console\test\TestConsoleApp'
+                         ],
+                        $this->errorOutputStream
+                )
         );
     }
 
@@ -183,86 +246,106 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function detectsClassNameIfOnOtherPosition()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('writeLine');
-        $this->assertEquals(0, ConsoleApp::stubcli('projectPath',
-                                                   ['stubcli',
-                                                    '-v',
-                                                    '-other',
-                                                    'value',
-                                                    '-c',
-                                                    'org\stubbles\console\test\TestConsoleApp'
-                                                   ],
-                                                   $this->mockOutputStream
-                               )
+        $this->assertEquals(
+                0,
+                ConsoleApp::stubcli(
+                        'projectPath',
+                        ['stubcli',
+                         '-v',
+                         '-other',
+                         'value',
+                         '-c',
+                         'org\stubbles\console\test\TestConsoleApp'
+                        ],
+                        $this->errorOutputStream
+                )
         );
     }
 
     /**
      * @test
      */
-    public function thrownConsoleAppExceptionWithMessageIsCatched()
+    public function thrownConsoleAppExceptionLeadsToExitCodeOfException()
     {
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
-        $this->mockOutputStream->expects($this->once())
-                               ->method('writeLine')
-                               ->with($this->equalTo('*** Exception: failure'));
-        $this->assertEquals(10, TestConsoleApp::main('projectPath',
-                                                     $this->mockOutputStream
-                                )
+        $this->assertEquals(
+                10,
+                TestConsoleApp::main(
+                        'projectPath',
+                        $this->errorOutputStream
+                )
         );
     }
 
     /**
      * @test
      */
-    public function thrownConsoleAppExceptionWithClosureIsCatched()
+    public function messageFromConsoleAppExceptionThrownInMainIsWrittenToErrorStream()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('writeLine');
-        $out = $this->getMock('stubbles\streams\OutputStream');
-        $out->expects($this->any())
-            ->method('writeLine')
-            ->with($this->equalTo('something happened'));
-        TestConsoleApp::$exception = new ConsoleAppException(function() use($out)
+        TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
+        $this->assertEquals(
+                10,
+                TestConsoleApp::main(
+                        'projectPath',
+                        $this->errorOutputStream
+                )
+        );
+        $this->assertEquals(
+                '*** Exception: failure',
+                trim($this->errorOutputStream->buffer())
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function messageClosureFromConsoleAppExceptionThrownInMainIsWrittenToErrorStream()
+    {
+        TestConsoleApp::$exception = new ConsoleAppException(function(MemoryOutputStream $out)
                                                              {
                                                                  $out->writeLine('something happened');
                                                              },
                                                              10
                                      );
-        $this->assertEquals(10, TestConsoleApp::main('projectPath',
-                                                     $this->mockOutputStream
-                                )
+        TestConsoleApp::main(
+                'projectPath',
+                $this->errorOutputStream
+        );
+        $this->assertEquals(
+                'something happened',
+                trim($this->errorOutputStream->buffer())
         );
     }
 
     /**
      * @test
      */
-    public function thrownApplicationExceptionIsCatched()
+    public function applicationExceptionThrownInMainLeadsToExitCode20()
     {
         TestConsoleApp::$exception = new \Exception('failure');
-        $this->mockOutputStream->expects($this->at(0))
-                               ->method('writeLine')
-                               ->with($this->equalTo('*** Exception: failure'));
-        $this->assertEquals(20, TestConsoleApp::main('projectPath',
-                                                     $this->mockOutputStream
-                                )
+        $this->assertEquals(
+                20,
+                TestConsoleApp::main(
+                        'projectPath',
+                        $this->errorOutputStream
+                )
         );
     }
 
     /**
      * @test
      */
-    public function thrownApplicationStubExceptionIsCatched()
+    public function messageFromApplicationExceptionThrownInMainIsWrittenToErrorStream()
     {
-        TestConsoleApp::$exception = new Exception('failure');
-        $this->mockOutputStream->expects($this->at(0))
-                               ->method('writeLine')
-                               ->with($this->equalTo('*** stubbles\lang\exception\Exception: failure'));
-        $this->assertEquals(20, TestConsoleApp::main('projectPath',
-                                                     $this->mockOutputStream
-                                )
+        $e = new \Exception('failure');
+        TestConsoleApp::$exception = $e;
+        TestConsoleApp::main(
+                'projectPath',
+                $this->errorOutputStream
+        );
+        $this->assertEquals(
+                "*** Exception: failure\nStacktrace:\n" . $e->getTraceAsString(),
+                trim($this->errorOutputStream->buffer())
         );
     }
 
@@ -271,11 +354,12 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function commandReturnCodeIsReturned()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('writeLine');
-        $this->assertEquals(0, TestConsoleApp::main('projectPath',
-                                                    $this->mockOutputStream
-                               )
+        $this->assertEquals(
+                0,
+                TestConsoleApp::main(
+                        'projectPath',
+                        $this->errorOutputStream
+                )
         );
     }
 
@@ -285,8 +369,9 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateArgumentsBindingModule()
     {
-        $this->assertInstanceOf('stubbles\console\ioc\ArgumentsBindingModule',
-                                ConsoleAppUsingBindingModule::getArgumentsBindingModule()
+        $this->assertInstanceOf(
+                'stubbles\console\ioc\ArgumentsBindingModule',
+                ConsoleAppUsingBindingModule::getArgumentsBindingModule()
         );
     }
 
@@ -296,8 +381,9 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateConsoleBindingModule()
     {
-        $this->assertInstanceOf('stubbles\console\ioc\ConsoleBindingModule',
-                                ConsoleAppUsingBindingModule::getConsoleBindingModule()
+        $this->assertInstanceOf(
+                'stubbles\console\ioc\ConsoleBindingModule',
+                ConsoleAppUsingBindingModule::getConsoleBindingModule()
         );
     }
 
@@ -307,17 +393,38 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstanceWithSelfBoundApp()
     {
-        $this->markTestIncomplete();
         $_SERVER['argv'][1] = 'value';
-        $this->assertEquals(0, ConsoleApp::stubcli('projectPath',
-                                                   ['stubcli',
-                                                    'value',
-                                                    '-c',
-                                                    'org\stubbles\console\test\SelfBoundConsoleApp'
-                                                   ],
-                                                   $this->mockOutputStream
-                               )
+        $this->assertEquals(
+                0,
+                ConsoleApp::stubcli(
+                        'projectPath',
+                        ['stubcli',
+                         'value',
+                         '-c',
+                         'org\stubbles\console\test\SelfBoundConsoleApp'
+                        ],
+                        $this->errorOutputStream
+                )
          );
         $this->assertEquals('value', SelfBoundConsoleApp::$bar);
+    }
+
+    /**
+     * @since  4.0.0
+     * @test
+     */
+    public function successfulInstanceCreationDoesNotWriteToErrorStream()
+    {
+        $_SERVER['argv'][1] = 'value';
+        ConsoleApp::stubcli(
+                'projectPath',
+                ['stubcli',
+                 'value',
+                 '-c',
+                 'org\stubbles\console\test\SelfBoundConsoleApp'
+                ],
+                $this->errorOutputStream
+         );
+        $this->assertEquals('', $this->errorOutputStream->buffer());
     }
 }

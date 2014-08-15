@@ -1,3 +1,16 @@
+4.0.0 (2014-08-??)
+------------------
+
+### BC breaks
+
+  * change of annotation value names in request broker for user input classes: `name` must now be `paramName`, group must now be `paramGroup`
+
+
+### Other changes
+
+  * upgraded to stubbles/core 5.0.0 and stubbles/input 4.0.0
+
+
 3.0.0 (2014-07-31)
 ------------------
 
@@ -8,7 +21,7 @@
 
 ### Other changes
 
-  * upgraded to stubbles/core 4.x
+  * upgraded to stubbles/core 4.0.0
 
 
 2.6.0 (2013-10-28)

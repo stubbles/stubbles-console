@@ -81,7 +81,7 @@ class BrokeredUserInput
      * @Request[String](paramName='bar1', paramGroup='other', description='Set the bar option.')
      * @param  string  $bar
      */
-    public function setOtherBar($bar)
+    public function setBar($bar)
     {
         $this->bar = $bar;
     }
@@ -89,10 +89,10 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[String](paramName='bar2', required=true, paramGroup='main', description='Set the bar option.')
+     * @Request[String](paramName='bar2', required=true, paramGroup='main', description='Set the other bar option.')
      * @param  string  $bar
      */
-    public function setBar($bar)
+    public function setOtherBar($bar)
     {
         $this->bar = $bar;
     }
@@ -110,7 +110,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[Mock](paramName='o', required=true, paramGroup='main', description='Set another option.', option='Set the foo option.')
+     * @Request[Mock](paramName='o', required=true, paramGroup='main', description='For the wow.')
      * @param  string  $baz
      */
     public function setMainBaz($baz)

@@ -15,7 +15,6 @@ use stubbles\input\errors\ParamErrors;
 use stubbles\lang;
 use stubbles\streams\memory\MemoryOutputStream;
 require_once __DIR__ . '/BrokeredUserInput.php';
-use org\stubbles\console\test\BrokeredUserInput;
 /**
  * Test for stubbles\console\input\RequestParser.
  *
@@ -30,12 +29,6 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
      * @type  RequestParser
      */
     private $requestParser;
-    /**
-     * Console
-     *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockOutputStream;
     /**
      * console request instance
      *
@@ -60,12 +53,10 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->mockOutputStream       = $this->getMock('stubbles\streams\OutputStream');
         $this->mockConsoleRequest     = $this->getMock('stubbles\input\console\ConsoleRequest');
         $this->mockRequestBroker      = $this->getMock('stubbles\input\broker\RequestBroker');
         $this->mockParamErrorMessages = $this->getMock('stubbles\input\errors\messages\ParamErrorMessages');
         $this->requestParser          = new RequestParser(
-                $this->mockOutputStream,
                 $this->mockConsoleRequest,
                 $this->mockRequestBroker,
                 $this->mockParamErrorMessages
@@ -77,13 +68,8 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $constructor = lang\reflectConstructor($this->requestParser);
-        $this->assertTrue($constructor->hasAnnotation('Inject'));
-
-        $parameters = $constructor->getParameters();
-        $this->assertTrue($parameters[0]->hasAnnotation('Named'));
-        $this->assertEquals('stdout',
-                            $parameters[0]->getAnnotation('Named')->getName()
+        $this->assertTrue(
+                lang\reflectConstructor($this->requestParser)->hasAnnotation('Inject')
         );
     }
 
@@ -128,7 +114,6 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
      */
     public function helpClosureRendersHelpToOutputStream()
     {
-        $this->markTestIncomplete();
         $this->mockConsoleRequest->expects($this->once())
                                  ->method('hasParam')
                                  ->will($this->returnValue(true));
@@ -141,7 +126,21 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
         } catch (ConsoleAppException $cae) {
             $memoryOutputStream = new MemoryOutputStream();
             $cae->writeTo($memoryOutputStream);
-            var_dump($memoryOutputStream->buffer());
+            $this->assertEquals(
+                    "Real awesome command line app (c) 2012 Stubbles Development Team
+Usage: bin/http [options] [application-id]
+Options:
+   --verbose
+   -v
+   --bar1         Set the bar option.
+   --bar2         Set the other bar option.
+   -o             For the wow.
+   -u             Set another option.
+   -h or --help   Prints this help.
+
+",
+                    (string) $memoryOutputStream
+            );
         }
     }
 
@@ -166,8 +165,8 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException         stubbles\console\ConsoleAppException
-     * @expectedExceptionCode     10
+     * @expectedException      stubbles\console\ConsoleAppException
+     * @expectedExceptionCode  10
      */
     public function failureWhileParsingThrowsConsoleAppException()
     {
@@ -184,5 +183,35 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                                      ->with($this->equalTo(new ParamError('error_id')))
                                      ->will($this->returnValue('Error, dude!'));
         $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
+    }
+
+    /**
+     * @test
+     */
+    public function errorClosureRendersErrorToOutputStream()
+    {
+        $this->mockConsoleRequest->expects($this->any())
+                                 ->method('hasParam')
+                                 ->will($this->returnValue(false));
+        $errors = new ParamErrors();
+        $errors->append('bar', 'error_id');
+        $this->mockConsoleRequest->expects($this->any())
+                                 ->method('paramErrors')
+                                 ->will($this->returnValue($errors));
+        $this->mockParamErrorMessages->expects($this->any())
+                                     ->method('messageFor')
+                                     ->with($this->equalTo(new ParamError('error_id')))
+                                     ->will($this->returnValue('Error, dude!'));
+        try {
+            $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
+            $this->fail('Excpected stubbles\console\ConsoleAppException');
+        } catch (ConsoleAppException $cae) {
+            $memoryOutputStream = new MemoryOutputStream();
+            $cae->writeTo($memoryOutputStream);
+            $this->assertEquals(
+                    "bar: Error, dude!\n",
+                    (string) $memoryOutputStream
+            );
+        }
     }
 }
