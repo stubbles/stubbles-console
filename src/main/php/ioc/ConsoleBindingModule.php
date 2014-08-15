@@ -14,6 +14,8 @@ use stubbles\ioc\Binder;
 use stubbles\ioc\module\BindingModule;
 /**
  * Binding module for console classes.
+ *
+ * @deprecated  since 4.0.0, console bindings will be added by default, will be removed with 5.0.0
  */
 class ConsoleBindingModule implements BindingModule
 {

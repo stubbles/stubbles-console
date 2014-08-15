@@ -9,6 +9,7 @@
  */
 namespace stubbles\console;
 use stubbles\streams\memory\MemoryOutputStream;
+use org\stubbles\console\test\AppWithoutBindingCanGetConsoleClassesInjected;
 use org\stubbles\console\test\ConsoleAppUsingBindingModule;
 use org\stubbles\console\test\SelfBoundConsoleApp;
 use org\stubbles\console\test\TestConsoleApp;
@@ -407,8 +408,8 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @since  4.0.0
      * @test
+     * @since  4.0.0
      */
     public function successfulInstanceCreationDoesNotWriteToErrorStream()
     {
@@ -423,5 +424,57 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                 $this->errorOutputStream
          );
         $this->assertEquals('', $this->errorOutputStream->buffer());
+    }
+
+    /**
+     * @test
+     * @since  4.0.0
+     */
+    public function stdInputStreamIsBoundAutomatically()
+    {
+        $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
+        $this->assertSame(
+                ConsoleInputStream::forIn(),
+                $app->in
+        );
+    }
+
+    /**
+     * @test
+     * @since  4.0.0
+     */
+    public function stdOutputStreamIsBoundAutomatically()
+    {
+        $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
+        $this->assertSame(
+                ConsoleOutputStream::forOut(),
+                $app->out
+        );
+    }
+
+    /**
+     * @test
+     * @since  4.0.0
+     */
+    public function stdErrOutputStreamIsBoundAutomatically()
+    {
+        $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
+        $this->assertSame(
+                ConsoleOutputStream::forError(),
+                $app->err
+        );
+    }
+
+    /**
+     * @test
+     * @since  4.0.0
+     */
+    public function executorIsBoundAutomatically()
+    {
+        $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
+        $this->assertInstanceOf(
+                'stubbles\console\ConsoleExecutor',
+                $app->executor
+        );
     }
 }

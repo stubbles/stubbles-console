@@ -119,6 +119,7 @@ abstract class ConsoleApp extends App
     /**
      * creates list of bindings from given class
      *
+     * @internal
      * @param   string  $className    full qualified class name of class to create an instance of
      * @param   string  $projectPath  path to project
      * @return  \stubbles\ioc\module\BindingModule[]
@@ -146,7 +147,7 @@ abstract class ConsoleApp extends App
      *
      * @api
      * @return  \stubbles\console\ioc\ConsoleBindingModule
-     * @deprecated  since 4.0.0, console binding module will be added by default, will be removed with 5.0.0
+     * @deprecated  since 4.0.0, console bindings will be added by default, will be removed with 5.0.0
      */
     protected static function createConsoleBindingModule()
     {
