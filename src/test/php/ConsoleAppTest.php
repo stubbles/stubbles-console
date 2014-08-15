@@ -338,11 +338,11 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      * @since  4.0.0
      * @test
      */
-    public function canCreateArguments()
+    public function parseArgumentsReturnsBindingModuleForArguments()
     {
         $this->assertInstanceOf(
                 'stubbles\console\ioc\Arguments',
-                ConsoleAppUsingBindingModule::returnBindArguments()
+                ConsoleAppUsingBindingModule::returnParseArguments()
         );
     }
 

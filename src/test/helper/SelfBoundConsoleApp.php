@@ -31,7 +31,7 @@ class SelfBoundConsoleApp extends ConsoleApp
      */
     public static function __bindings($projectPath)
     {
-        return [self::bindArguments()
+        return [self::parseArguments()
                     ->withUserInput(__CLASS__)
         ];
     }

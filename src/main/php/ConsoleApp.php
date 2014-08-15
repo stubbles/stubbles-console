@@ -150,7 +150,7 @@ abstract class ConsoleApp extends App
      * @api
      * @return  \stubbles\console\ioc\Arguments
      */
-    protected static function bindArguments()
+    protected static function parseArguments()
     {
         return new Arguments(self::$stubcli);
     }
@@ -164,6 +164,6 @@ abstract class ConsoleApp extends App
      */
     protected static function createArgumentsBindingModule()
     {
-        return self::bindArguments();
+        return self::parseArguments();
     }
 }

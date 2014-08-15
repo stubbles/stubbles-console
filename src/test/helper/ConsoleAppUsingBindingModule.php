@@ -21,9 +21,9 @@ class ConsoleAppUsingBindingModule extends ConsoleApp
      *
      * @return  ArgumentsBindingModule
      */
-    public static function returnBindArguments()
+    public static function returnParseArguments()
     {
-        return self::bindArguments();
+        return self::parseArguments();
     }
 
     /**
