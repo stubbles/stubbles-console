@@ -48,8 +48,7 @@ class ConsoleAppCreator extends ConsoleApp
      */
     public static function __bindings($projectPath)
     {
-        return [self::createModeBindingModule($projectPath),
-                self::createConsoleBindingModule()
+        return [self::createModeBindingModule($projectPath)
         ];
     }
 

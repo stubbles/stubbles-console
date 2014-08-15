@@ -360,19 +360,6 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @since  2.0.0
-     * @test
-     * @deprecated  since 4.0.0
-     */
-    public function canCreateConsoleBindingModule()
-    {
-        $this->assertInstanceOf(
-                'stubbles\console\ioc\ConsoleBindingModule',
-                ConsoleAppUsingBindingModule::getConsoleBindingModule()
-        );
-    }
-
-    /**
      * @since  2.1.0
      * @test
      */

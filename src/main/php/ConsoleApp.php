@@ -9,8 +9,8 @@
  */
 namespace stubbles\console;
 use stubbles\console\ioc\Arguments;
-use stubbles\console\ioc\ConsoleBindingModule;
 use stubbles\ioc\App;
+use stubbles\ioc\Binder;
 use stubbles\streams\OutputStream;
 /**
  * Base class for console applications.
@@ -127,7 +127,20 @@ abstract class ConsoleApp extends App
     protected static function getBindingsForApp($className, $projectPath)
     {
         $bindings   = parent::getBindingsForApp($className, $projectPath);
-        $bindings[] = new ConsoleBindingModule();
+        $bindings[] = function(Binder $binder)
+        {
+            $binder->bind('stubbles\streams\InputStream')
+                   ->named('stdin')
+                   ->toInstance(ConsoleInputStream::forIn());
+            $binder->bind('stubbles\streams\OutputStream')
+                   ->named('stdout')
+                   ->toInstance(ConsoleOutputStream::forOut());
+            $binder->bind('stubbles\streams\OutputStream')
+                   ->named('stderr')
+                   ->toInstance(ConsoleOutputStream::forError());
+            $binder->bind('stubbles\console\Executor')
+                   ->to('stubbles\console\ConsoleExecutor');
+        };
         return $bindings;
     }
 
@@ -152,17 +165,5 @@ abstract class ConsoleApp extends App
     protected static function createArgumentsBindingModule()
     {
         return self::bindArguments();
-    }
-
-    /**
-     * creates console binding module
-     *
-     * @api
-     * @return  \stubbles\console\ioc\ConsoleBindingModule
-     * @deprecated  since 4.0.0, console bindings will be added by default, will be removed with 5.0.0
-     */
-    protected static function createConsoleBindingModule()
-    {
-        return new ConsoleBindingModule();
     }
 }

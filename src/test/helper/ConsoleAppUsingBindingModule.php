@@ -38,17 +38,6 @@ class ConsoleAppUsingBindingModule extends ConsoleApp
     }
 
     /**
-     * creates properties binding module
-     *
-     * @return  ConsoleBindingModule
-     * @deprecated  since 4.0.0
-     */
-    public static function getConsoleBindingModule()
-    {
-        return self::createConsoleBindingModule();
-    }
-
-    /**
      * runs the command
      */
     public function run() { }
