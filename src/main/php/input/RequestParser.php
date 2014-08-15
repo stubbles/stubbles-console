@@ -10,9 +10,10 @@
 namespace stubbles\console\input;
 use stubbles\console\ConsoleAppException;
 use stubbles\input\console\ConsoleRequest;
-use stubbles\input\broker\RequestBrokerFacade;
+use stubbles\input\broker\RequestBroker;
+use stubbles\input\broker\TargetMethod;
+use stubbles\input\errors\messages\ParamErrorMessages;
 use stubbles\lang;
-use stubbles\lang\reflect\annotation\Annotation;
 use stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
@@ -39,21 +40,33 @@ class RequestParser
      * @type  \stubbles\input\broker\RequestBrokerFacade
      */
     private $requestBroker;
+    /**
+     * access to error messages
+     *
+     * @type  \stubbles\input\errors\ParamErrorMessages
+     */
+    private $errorMessages;
 
     /**
      * constructor
      *
-     * @param  \stubbles\streams\OutputStream              $out
-     * @param  \stubbles\input\console\ConsoleRequest      $request
-     * @param  \stubbles\input\broker\RequestBrokerFacade  $requestBroker
+     * @param  \stubbles\streams\OutputStream             $out
+     * @param  \stubbles\input\console\ConsoleRequest     $request
+     * @param  \stubbles\input\broker\RequestBroker       $requestBroker
+     * @param  \stubbles\input\errors\ParamErrorMessages  $errorMessages
      * @Inject
      * @Named{out}('stdout')
      */
-    public function __construct(OutputStream $out, ConsoleRequest $request, RequestBrokerFacade $requestBroker)
+    public function __construct(
+            OutputStream $out,
+            ConsoleRequest $request,
+            RequestBroker $requestBroker,
+            ParamErrorMessages $errorMessages)
     {
         $this->out           = $out;
         $this->request       = $request;
         $this->requestBroker = $requestBroker;
+        $this->errorMessages = $errorMessages;
     }
 
     /**
@@ -86,16 +99,21 @@ class RequestParser
             throw new ConsoleAppException($this->createHelp($object, $group), 0);
         }
 
-        $this->requestBroker->procure($object, $group, function($paramName, $error)
-                                                       {
-                                                           throw new ConsoleAppException(function(OutputStream $err) use($paramName, $error)
-                                                                                         {
-                                                                                             $err->writeLine($paramName . ': ' . $error);
-                                                                                         },
-                                                                                         10
-                                                           );
-                                                       }
-        );
+        $this->requestBroker->procure($this->request, $object, $group);
+        if ($this->request->paramErrors()->exist()) {
+            throw new ConsoleAppException(
+                    function(OutputStream $err)
+                    {
+                        foreach ($this->request->paramErrors() as $paramName => $errors) {
+                            foreach ($errors as $error) {
+                                $err->writeLine($paramName . ': ' . $this->errorMessages->messageFor($error));
+                            }
+                        }
+
+                    },
+                    10
+            );
+        }
 
         if (method_exists($object, 'finalizeInput')) {
             $object->finalizeInput();
@@ -115,13 +133,13 @@ class RequestParser
     {
         $options    = [];
         $parameters = [];
-        foreach ($this->requestBroker->getAnnotations($object, $group) as $requestAnnotation) {
-            if (substr($requestAnnotation->getName(), 0, 5) !== 'argv.') {
-                $options[$this->getOptionName($requestAnnotation)] = $requestAnnotation->getDescription();
-            } elseif (!$requestAnnotation->isRequired()) {
-                $parameters[] = '[' . $requestAnnotation->getDescription() . ']';
+        foreach (RequestBroker::targetMethodsOf($object, $group) as $targetMethod) {
+            if (substr($targetMethod->paramName(), 0, 5) !== 'argv.') {
+                $options[$this->getOptionName($targetMethod)] = $targetMethod->paramDescription();
+            } elseif (!$targetMethod->isRequired()) {
+                $parameters[] = '[' . $targetMethod->paramDescription() . ']';
             } else {
-                $parameters[] = $requestAnnotation->getDescription();
+                $parameters[] = $targetMethod->paramDescription();
             }
         }
 
@@ -147,22 +165,22 @@ class RequestParser
             return null;
         }
 
-        return $class->getAnnotation('AppDescription')->getValue();
+        return $class->annotation('AppDescription')->getValue();
     }
 
     /**
      * retrieves name of option
      *
-     * @param   \stubbles\lang\reflect\annotation\Annotation  $requestAnnotation
+     * @param   \stubbles\input\broker\TargetMethod  $targetMethod
      * @return  string
      */
-    private function getOptionName(Annotation $requestAnnotation)
+    private function getOptionName(TargetMethod $targetMethod)
     {
-        if ($requestAnnotation->hasOption()) {
-            return $requestAnnotation->getOption();
+        if ($targetMethod->hasOptionDescription()) {
+            return $targetMethod->optionDescription();
         }
 
-        $name = $requestAnnotation->getName();
+        $name = $targetMethod->paramName();
         if (strlen($name) === 1) {
             return '-' . $name;
         }

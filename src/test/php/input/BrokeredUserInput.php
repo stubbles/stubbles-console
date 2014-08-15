@@ -37,7 +37,7 @@ class BrokeredUserInput
     /**
      * test method without parameter
      *
-     * @Request[Bool](name='verbose', group='noparam')
+     * @Request[Bool](paramName='verbose', paramGroup='noparam')
      */
     public function enableVerbose()
     {
@@ -47,7 +47,7 @@ class BrokeredUserInput
     /**
      * test method without parameter
      *
-     * @Request[Bool](name='v', group='noparam')
+     * @Request[Bool](paramName='v', paramGroup='noparam')
      */
     public function enableVerboseDifferently()
     {
@@ -67,7 +67,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[String](name='argv.0', group='arg', description='application-id')
+     * @Request[String](paramName='argv.0', paramGroup='arg', description='application-id')
      * @param  string  $bar
      */
     public function setArgument($arg)
@@ -78,7 +78,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[String](name='bar1', group='other', description='Set the bar option.')
+     * @Request[String](paramName='bar1', paramGroup='other', description='Set the bar option.')
      * @param  string  $bar
      */
     public function setOtherBar($bar)
@@ -89,7 +89,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[String](name='bar2', required=true, group='main', description='Set the bar option.')
+     * @Request[String](paramName='bar2', required=true, paramGroup='main', description='Set the bar option.')
      * @param  string  $bar
      */
     public function setBar($bar)
@@ -110,7 +110,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[Mock](name='o', required=true, group='main', description='Set another option.')
+     * @Request[Mock](paramName='o', required=true, paramGroup='main', description='Set another option.', option='Set the foo option.')
      * @param  string  $baz
      */
     public function setMainBaz($baz)
@@ -121,7 +121,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[Mock](name='u', group='other', description='Set another option.')
+     * @Request[Mock](paramName='u', paramGroup='other', description='Set another option.')
      * @param  string  $baz
      */
     public function setBaz($baz)

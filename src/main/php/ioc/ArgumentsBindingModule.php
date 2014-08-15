@@ -8,10 +8,10 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\ioc;
+use stubbles\input\broker\RequestBroker;
 use stubbles\ioc\Binder;
 use stubbles\ioc\module\BindingModule;
 use stubbles\lang\exception\ConfigurationException;
-use stubbles\lang\reflect\annotation\Annotation;
 /**
  * Binding module to configure the binder with arguments.
  */
@@ -188,17 +188,16 @@ class ArgumentsBindingModule implements BindingModule
             return;
         }
 
-        $requestMethods = new \stubbles\input\broker\RequestBrokerMethods();
-        foreach ($requestMethods->getAnnotations($this->userInput) as $annotation) {
-            $name = $annotation->getName();
+        foreach (RequestBroker::targetMethodsOf($this->userInput) as $targetMethod) {
+            $name = $targetMethod->paramName();
             if (substr($name, 0, 5) === 'argv.') {
                 continue;
             }
 
             if (strlen($name) === 1) {
-                $this->options .= $this->getOptionName($annotation);
+                $this->options .= $name . ($targetMethod->requiresParameter() ? ':' : '');
             } else {
-                $this->longopts[] = $this->getOptionName($annotation);
+                $this->longopts[] = $name . ($targetMethod->requiresParameter() ? ':' : '');
             }
         }
 
@@ -209,22 +208,6 @@ class ArgumentsBindingModule implements BindingModule
         if (!in_array('help', $this->longopts)) {
             $this->longopts[] = 'help';
         }
-    }
-
-    /**
-     * returns option name
-     *
-     * @param   \stubbles\lang\reflect\annotation\Annotation  $annotation
-     * @return  string
-     */
-    private function getOptionName(Annotation $annotation)
-    {
-        $name = $annotation->getName();
-        if (!$annotation->requiresValue()) {
-            return $name;
-        }
-
-        return $name . ':';
     }
 
     /**
