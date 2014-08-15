@@ -8,10 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use stubbles\lang\exception\IllegalArgumentException;
-use stubbles\lang\exception\IllegalStateException;
 use stubbles\lang\exception\IOException;
-use stubbles\lang\exception\RuntimeException;
 use stubbles\streams\ResourceInputStream;
 /**
  * Input stream to read output of an executed command.
@@ -32,12 +29,12 @@ class CommandInputStream extends ResourceInputStream
      *
      * @param   resource  $resource
      * @param   string    $command   optional
-     * @throws  \stubbles\lang\exception\IllegalArgumentException
+     * @throws  \InvalidArgumentException
      */
     public function __construct($resource, $command = null)
     {
         if (!is_resource($resource) || get_resource_type($resource) !== 'stream') {
-            throw new IllegalArgumentException('Resource must be an already opened process resource.');
+            throw new \InvalidArgumentException('Resource must be an already opened process resource.');
         }
 
         $this->setHandle($resource);
@@ -61,13 +58,13 @@ class CommandInputStream extends ResourceInputStream
      *
      * @param   int  $length  optional  max amount of bytes to read
      * @return  string
-     * @throws  \stubbles\lang\exception\IllegalStateException
+     * @throws  \LogicException
      * @throws  \stubbles\lang\exception\IOException
      */
     public function read($length = 8192)
     {
         if (null === $this->handle) {
-            throw new IllegalStateException('Can not read from closed input stream.');
+            throw new \LogicException('Can not read from closed input stream.');
         }
 
         $data = @fgets($this->handle, $length);
@@ -85,7 +82,7 @@ class CommandInputStream extends ResourceInputStream
     /**
      * closes the stream
      *
-     * @throws  \stubbles\lang\exception\RuntimeException
+     * @throws  \RuntimeException
      */
     public function close()
     {
@@ -96,7 +93,7 @@ class CommandInputStream extends ResourceInputStream
         $returnCode   = pclose($this->handle);
         $this->handle = null;
         if (0 != $returnCode) {
-            throw new RuntimeException('Executing command ' . $this->command . ' failed: #' . $returnCode);
+            throw new \RuntimeException('Executing command ' . $this->command . ' failed: #' . $returnCode);
         }
     }
 }

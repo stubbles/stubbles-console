@@ -8,7 +8,6 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use stubbles\lang\exception\RuntimeException;
 use stubbles\streams\OutputStream;
 /**
  * Class to execute commands on the command line.
@@ -78,13 +77,13 @@ class ConsoleExecutor implements Executor
      *
      * @param   string  $command
      * @return  \stubbles\console\Executor
-     * @throws  \stubbles\lang\exception\RuntimeException
+     * @throws  \RuntimeException
      */
     public function execute($command)
     {
         $pd = popen($command . ' ' . $this->redirect, 'r');
         if (false === $pd) {
-            throw new RuntimeException('Can not execute ' . $command);
+            throw new \RuntimeException('Can not execute ' . $command);
         }
 
         // must read all output even if we don't need it, otherwise we don't
@@ -97,7 +96,7 @@ class ConsoleExecutor implements Executor
 
         $returnCode = pclose($pd);
         if (0 != $returnCode) {
-            throw new RuntimeException('Executing command ' . $command . ' failed: #' . $returnCode);
+            throw new \RuntimeException('Executing command ' . $command . ' failed: #' . $returnCode);
         }
 
         return $this;
@@ -111,13 +110,13 @@ class ConsoleExecutor implements Executor
      *
      * @param   string  $command
      * @return  \stubbles\streams\InputStream
-     * @throws  \stubbles\lang\exception\RuntimeException
+     * @throws  \RuntimeException
      */
     public function executeAsync($command)
     {
         $pd = popen($command . ' ' . $this->redirect, 'r');
         if (false === $pd) {
-            throw new RuntimeException('Can not execute ' . $command);
+            throw new \RuntimeException('Can not execute ' . $command);
         }
 
         return new CommandInputStream($pd, $command);
@@ -128,13 +127,13 @@ class ConsoleExecutor implements Executor
      *
      * @param   string  $command
      * @return  string[]
-     * @throws  \stubbles\lang\exception\RuntimeException
+     * @throws  \RuntimeException
      */
     public function executeDirect($command)
     {
         $pd = popen($command . ' ' . $this->redirect, 'r');
         if (false === $pd) {
-            throw new RuntimeException('Can not execute ' . $command);
+            throw new \RuntimeException('Can not execute ' . $command);
         }
 
         $result = [];
@@ -144,7 +143,7 @@ class ConsoleExecutor implements Executor
 
         $returnCode = pclose($pd);
         if (0 != $returnCode) {
-            throw new RuntimeException('Executing command ' . $command . ' failed: #' . $returnCode);
+            throw new \RuntimeException('Executing command ' . $command . ' failed: #' . $returnCode);
         }
 
         return $result;

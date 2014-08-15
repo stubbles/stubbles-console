@@ -83,7 +83,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\lang\exception\RuntimeException
+     * @expectedException  RuntimeException
      */
     public function executeFailsThrowsRuntimeException()
     {
@@ -102,7 +102,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\lang\exception\RuntimeException
+     * @expectedException  RuntimeException
      */
     public function executeAsyncFailsThrowsRuntimeException()
     {
@@ -117,7 +117,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\lang\exception\IllegalArgumentException
+     * @expectedException  InvalidArgumentException
      */
     public function illegalResourceForCommandInputStreamThrowsIllegalArgumentException()
     {
@@ -126,7 +126,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\lang\exception\IllegalStateException
+     * @expectedException  LogicException
      */
     public function readAfterCloseThrowsIllegalStateException()
     {
@@ -147,7 +147,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\lang\exception\RuntimeException
+     * @expectedException  RuntimeException
      */
     public function executeDirectFailsThrowsRuntimeException()
     {

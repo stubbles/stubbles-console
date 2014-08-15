@@ -4,6 +4,7 @@
 ### BC breaks
 
   * change of annotation value names in request broker for user input classes: `name` must now be `paramName`, group must now be `paramGroup`
+  * changed all thrown stubbles/core exceptions to those recommended with stubbles/core 5.0.0
 
 
 ### Other changes
