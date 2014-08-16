@@ -95,8 +95,9 @@ class RequestParser
                     function(OutputStream $err)
                     {
                         foreach ($this->request->paramErrors() as $paramName => $errors) {
+                            $name = substr($paramName, 0, 5) !== 'argv.' ? ($paramName . ': ') : '';
                             foreach ($errors as $error) {
-                                $err->writeLine($paramName . ': ' . $this->errorMessages->messageFor($error));
+                                $err->writeLine($name . $this->errorMessages->messageFor($error));
                             }
                         }
 
@@ -165,16 +166,10 @@ class RequestParser
      */
     private function getOptionName(TargetMethod $targetMethod)
     {
-    #    if ($targetMethod->hasOptionDescription()) {
-    #        return $targetMethod->optionDescription();
-    #    }
-
-        $name = $targetMethod->paramName();
-        if (strlen($name) === 1) {
-            return '-' . $name;
-        }
-
-        return '--' . $name;
+        $name   = $targetMethod->paramName();
+        $prefix = strlen($name) === 1 ? '-' : '--';
+        $suffix = $targetMethod->requiresParameter() ? ' ' . $targetMethod->valueDescription() : '';
+        return $prefix . $name . $suffix;
     }
 
     /**

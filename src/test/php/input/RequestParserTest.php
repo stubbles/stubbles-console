@@ -133,7 +133,7 @@ Options:
    -v
    --bar1         Set the bar option.
    --bar2         Set the other bar option.
-   -o             For the wow.
+   -o WOW_LEVEL   For the wow.
    -u             Set another option.
    -h or --help   Prints this help.
 

@@ -67,8 +67,8 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[String](paramName='argv.0', paramGroup='arg', description='application-id')
-     * @param  string  $bar
+     * @Request[String](paramName='argv.0', paramGroup='arg', paramDescription='application-id')
+     * @param  string  $arg
      */
     public function setArgument($arg)
     {
@@ -78,7 +78,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[String](paramName='bar1', paramGroup='other', description='Set the bar option.')
+     * @Request[String](paramName='bar1', paramGroup='other', paramDescription='Set the bar option.')
      * @param  string  $bar
      */
     public function setBar($bar)
@@ -89,7 +89,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[String](paramName='bar2', required=true, paramGroup='main', description='Set the other bar option.')
+     * @Request[String](paramName='bar2', required=true, paramGroup='main', paramDescription='Set the other bar option.')
      * @param  string  $bar
      */
     public function setOtherBar($bar)
@@ -110,7 +110,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[Mock](paramName='o', required=true, paramGroup='main', description='For the wow.')
+     * @Request[Mock](paramName='o', valueDescription="WOW_LEVEL" required=true, paramGroup='main', paramDescription='For the wow.')
      * @param  string  $baz
      */
     public function setMainBaz($baz)
@@ -121,7 +121,7 @@ class BrokeredUserInput
     /**
      * test method
      *
-     * @Request[Mock](paramName='u', paramGroup='other', description='Set another option.')
+     * @Request[Mock](paramName='u', paramGroup='other', paramDescription='Set another option.')
      * @param  string  $baz
      */
     public function setBaz($baz)

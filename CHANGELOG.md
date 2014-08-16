@@ -5,7 +5,11 @@
 
   * removed `stubbles\console\ConsoleApp::createConsoleBindingModule()`, console binding module will be added by default
   * deprecated `stubbles\console\ConsoleApp::createArgumentsBindingModule()`, use `stubbles\console\ConsoleApp::argumentParser()` instead, will be removed with 5.0.0
-  * change of annotation value names in request broker for user input classes: `name` must now be `paramName`, group must now be `paramGroup`
+  * change of annotation value names in request broker for user input classes:
+    * `name` must now be `paramName`
+    * `group` must now be `paramGroup`
+    * `description` must now be `paramDescription`
+    * `option` must now be `valueDescription`
   * changed all thrown stubbles/core exceptions to those recommended with stubbles/core 5.0.0
   * removed `stubbles\console\Executor::getOutputStream()`, use `stubbles\console\Executor::out()` instead, was deprecated since 3.0.0
 
