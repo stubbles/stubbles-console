@@ -15,7 +15,7 @@ use stubbles\ioc\module\BindingModule;
 /**
  * Binding module to configure the binder with arguments.
  */
-class Arguments implements BindingModule
+class ArgumentParser implements BindingModule
 {
     /**
      * switch whether stubcli was used to run the command
@@ -57,7 +57,7 @@ class Arguments implements BindingModule
      *
      * @api
      * @param   string  $options
-     * @return  \stubbles\console\ioc\Arguments
+     * @return  \stubbles\console\ioc\ArgumentParser
      */
     public function withOptions($options)
     {
@@ -74,7 +74,7 @@ class Arguments implements BindingModule
      *
      * @api
      * @param   string[]  $options
-     * @return  \stubbles\console\ioc\Arguments
+     * @return  \stubbles\console\ioc\ArgumentParser
      */
     public function withLongOptions(array $options)
     {
@@ -90,7 +90,7 @@ class Arguments implements BindingModule
      * sets class to store user input into
      *
      * @param   string  $className
-     * @return  \stubbles\console\ioc\Arguments
+     * @return  \stubbles\console\ioc\ArgumentParser
      */
     public function withUserInput($className)
     {

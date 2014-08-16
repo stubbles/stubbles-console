@@ -19,11 +19,11 @@ class ConsoleAppUsingBindingModule extends ConsoleApp
     /**
      * creates mode binding module
      *
-     * @return  ArgumentsBindingModule
+     * @return  \stubbles\console\ioc\ArgumentParser
      */
-    public static function returnParseArguments()
+    public static function returnArgumentParser()
     {
-        return self::parseArguments();
+        return self::argumentParser();
     }
 
     /**

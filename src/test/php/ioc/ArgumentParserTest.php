@@ -11,19 +11,19 @@ namespace stubbles\console\ioc;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
 /**
- * Test for stubbles\console\ioc\Arguments.
+ * Test for stubbles\console\ioc\ArgumentParser.
  *
  * @group  console
  * @group  console_ioc
  */
-class ArgumentsTest extends \PHPUnit_Framework_TestCase
+class ArgumentParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test
      *
-     * @type  \stubbles\console\ioc\Arguments
+     * @type  \stubbles\console\ioc\ArgumentParser
      */
-    protected $arguments;
+    protected $argumentParser;
     /**
      * backup of $_SERVER['argv']
      *
@@ -36,8 +36,8 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->arguments  = $this->getMock(
-                'stubbles\console\ioc\Arguments',
+        $this->argumentParser = $this->getMock(
+                'stubbles\console\ioc\ArgumentParser',
                 ['getopt']
         );
         $this->argvBackup = $_SERVER['argv'];
@@ -96,12 +96,12 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
     public function argumentsAreBoundAfterParsingWhenOptionsDefined($expected, $constantName)
     {
         $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'install'];
-        $this->arguments->expects($this->once())
-                        ->method('getopt')
-                        ->with($this->equalTo('n:f::'), $this->equalTo(['verbose']))
-                        ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
-        $this->arguments->withOptions('n:f::')
-                        ->withLongOptions(['verbose']);
+        $this->argumentParser->expects($this->once())
+                             ->method('getopt')
+                             ->with($this->equalTo('n:f::'), $this->equalTo(['verbose']))
+                             ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
+        $this->argumentParser->withOptions('n:f::')
+                             ->withLongOptions(['verbose']);
         $this->assertEquals(
                 $expected,
                 $this->bindArguments()->getConstant($constantName)
@@ -193,7 +193,7 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
     protected function bindArguments()
     {
         $binder = new Binder();
-        $this->arguments->configure($binder);
+        $this->argumentParser->configure($binder);
         return $binder->getInjector();
     }
 
@@ -250,12 +250,12 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
     public function argumentsAvailableViaRequestAfterParsingWhenOptionsDefined($expected, $paramName)
     {
         $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'bar'];
-        $this->arguments->expects($this->once())
-                        ->method('getopt')
-                        ->with($this->equalTo('n:f::'), $this->equalTo(['verbose']))
-                        ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
-        $this->arguments->withOptions('n:f::')
-                        ->withLongOptions(['verbose']);
+        $this->argumentParser->expects($this->once())
+                             ->method('getopt')
+                             ->with($this->equalTo('n:f::'), $this->equalTo(['verbose']))
+                             ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
+        $this->argumentParser->withOptions('n:f::')
+                             ->withLongOptions(['verbose']);
         $this->assertEquals(
                 $expected,
                 $this->bindRequest()->readParam($paramName)->unsecure()
@@ -268,11 +268,11 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidOptionsThrowConfigurationException()
     {
-        $this->arguments->expects($this->once())
-                        ->method('getopt')
-                        ->with($this->equalTo('//'), $this->equalTo([]))
-                        ->will($this->returnValue(false));
-        $this->arguments->withOptions('//');
+        $this->argumentParser->expects($this->once())
+                             ->method('getopt')
+                             ->with($this->equalTo('//'), $this->equalTo([]))
+                             ->will($this->returnValue(false));
+        $this->argumentParser->withOptions('//');
         $this->bindArguments();
     }
 
@@ -281,17 +281,17 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabled()
     {
-        $this->arguments = $this->getMock(
-                'stubbles\console\ioc\Arguments',
+        $this->argumentParser = $this->getMock(
+                'stubbles\console\ioc\ArgumentParser',
                 ['getopt'],
                 [true]
         );
-        $this->arguments->expects($this->once())
-                        ->method('getopt')
-                        ->with($this->equalTo('n:f::c:'), $this->equalTo(['verbose']))
-                        ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
-        $this->arguments->withOptions('n:f::')
-                        ->withLongOptions(['verbose']);
+        $this->argumentParser->expects($this->once())
+                             ->method('getopt')
+                             ->with($this->equalTo('n:f::c:'), $this->equalTo(['verbose']))
+                             ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
+        $this->argumentParser->withOptions('n:f::')
+                             ->withLongOptions(['verbose']);
         $this->bindArguments();
     }
 
@@ -300,16 +300,16 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabledAndOnlyLongOptionsSet()
     {
-        $this->arguments = $this->getMock(
-                'stubbles\console\ioc\Arguments',
+        $this->argumentParser = $this->getMock(
+                'stubbles\console\ioc\ArgumentParser',
                 ['getopt'],
                 [true]
         );
-        $this->arguments->expects($this->once())
-                        ->method('getopt')
-                        ->with($this->equalTo('c:'), $this->equalTo(['verbose']))
-                        ->will($this->returnValue(['verbose' => false]));
-        $this->arguments->withLongOptions(['verbose']);
+        $this->argumentParser->expects($this->once())
+                             ->method('getopt')
+                             ->with($this->equalTo('c:'), $this->equalTo(['verbose']))
+                             ->will($this->returnValue(['verbose' => false]));
+        $this->argumentParser->withLongOptions(['verbose']);
         $this->bindArguments();
     }
 
@@ -318,17 +318,17 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
      */
     public function optionsContainCIfStubCliEnabledAndLongOptionsSetFirst()
     {
-        $this->arguments = $this->getMock(
-                'stubbles\console\ioc\Arguments',
+        $this->argumentParser = $this->getMock(
+                'stubbles\console\ioc\ArgumentParser',
                 ['getopt'],
                 [true]
         );
-        $this->arguments->expects($this->once())
-                        ->method('getopt')
-                        ->with($this->equalTo('n:f::c:'), $this->equalTo(['verbose']))
-                        ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
-        $this->arguments->withLongOptions(['verbose'])
-                        ->withOptions('n:f::');
+        $this->argumentParser->expects($this->once())
+                             ->method('getopt')
+                             ->with($this->equalTo('n:f::c:'), $this->equalTo(['verbose']))
+                             ->will($this->returnValue(['n' => 'example', 'verbose' => false]));
+        $this->argumentParser->withLongOptions(['verbose'])
+                             ->withOptions('n:f::');
         $this->bindArguments();
     }
 
@@ -347,11 +347,11 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsUserInputIfSet()
     {
-        $this->arguments->withUserInput('org\stubbles\console\test\BrokeredUserInput');
-        $this->arguments->expects($this->once())
-                        ->method('getopt')
-                        ->with($this->equalTo('vo:u:h'), $this->equalTo(['verbose', 'bar1:', 'bar2:', 'help']))
-                        ->will($this->returnValue([]));
+        $this->argumentParser->withUserInput('org\stubbles\console\test\BrokeredUserInput');
+        $this->argumentParser->expects($this->once())
+                             ->method('getopt')
+                             ->with($this->equalTo('vo:u:h'), $this->equalTo(['verbose', 'bar1:', 'bar2:', 'help']))
+                             ->will($this->returnValue([]));
         $injector = $this->bindArguments();
         $this->assertTrue($injector->hasConstant('stubbles.console.input.class'));
         $this->assertTrue($injector->hasBinding('org\stubbles\console\test\BrokeredUserInput'));
@@ -363,13 +363,13 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsUserInputAsSingleton()
     {
-        $this->arguments->withUserInput('org\stubbles\console\test\BrokeredUserInput');
-        $this->arguments->expects($this->once())
-                        ->method('getopt')
-                        ->with($this->equalTo('vo:u:h'), $this->equalTo(['verbose', 'bar1:', 'bar2:', 'help']))
-                        ->will($this->returnValue(['bar2' => 'foo', 'o' => 'baz']));
+        $this->argumentParser->withUserInput('org\stubbles\console\test\BrokeredUserInput');
+        $this->argumentParser->expects($this->once())
+                             ->method('getopt')
+                             ->with($this->equalTo('vo:u:h'), $this->equalTo(['verbose', 'bar1:', 'bar2:', 'help']))
+                             ->will($this->returnValue(['bar2' => 'foo', 'o' => 'baz']));
         $binder = new Binder();
-        $this->arguments->configure($binder);
+        $this->argumentParser->configure($binder);
         $binder->bind('stubbles\streams\OutputStream')
                ->named('stdout')
                ->toInstance($this->getMock('stubbles\streams\OutputStream'));
