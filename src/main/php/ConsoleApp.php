@@ -121,12 +121,11 @@ abstract class ConsoleApp extends App
      *
      * @internal
      * @param   string  $className    full qualified class name of class to create an instance of
-     * @param   string  $projectPath  path to project
      * @return  \stubbles\ioc\module\BindingModule[]
      */
-    protected static function getBindingsForApp($className, $projectPath)
+    protected static function getBindingsForApp($className)
     {
-        $bindings   = parent::getBindingsForApp($className, $projectPath);
+        $bindings   = parent::getBindingsForApp($className);
         $bindings[] = function(Binder $binder)
         {
             $binder->bind('stubbles\streams\InputStream')

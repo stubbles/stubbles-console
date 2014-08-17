@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "stubbles/core",
-            "version": "dev-master",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-core.git",
-                "reference": "1638c3a24dc0a8f2e71f9255549b208a8297a157"
+                "reference": "e2d8274fabddcb662ae031f71f7748270445fd78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-core/zipball/1638c3a24dc0a8f2e71f9255549b208a8297a157",
-                "reference": "1638c3a24dc0a8f2e71f9255549b208a8297a157",
+                "url": "https://api.github.com/repos/stubbles/stubbles-core/zipball/e2d8274fabddcb662ae031f71f7748270445fd78",
+                "reference": "e2d8274fabddcb662ae031f71f7748270445fd78",
                 "shasum": ""
             },
             "require": {
@@ -48,20 +48,20 @@
             ],
             "description": "Provides base classes for Stubbles packages.",
             "homepage": "http://stubbles.net/",
-            "time": "2014-08-16 10:21:22"
+            "time": "2014-08-17 20:18:24"
         },
         {
             "name": "stubbles/input",
-            "version": "dev-master",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-input.git",
-                "reference": "dffffbb462e6ef7628743dd1844e9582641c0fe5"
+                "reference": "afab08f749f0f78385c72f693d57c87c97752526"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/dffffbb462e6ef7628743dd1844e9582641c0fe5",
-                "reference": "dffffbb462e6ef7628743dd1844e9582641c0fe5",
+                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/afab08f749f0f78385c72f693d57c87c97752526",
+                "reference": "afab08f749f0f78385c72f693d57c87c97752526",
                 "shasum": ""
             },
             "require": {
@@ -93,7 +93,7 @@
             ],
             "description": "Stubbles Input enables to handle input data via validation and filtering.",
             "homepage": "http://stubbles.net/",
-            "time": "2014-08-16 11:21:41"
+            "time": "2014-08-17 20:36:17"
         }
     ],
     "packages-dev": [
@@ -498,16 +498,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.2.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "58db726aa45fe26bca93f692cb3d77e9a46b7830"
+                "reference": "e08a5b64400b9ca9124d38db30448d4b10b9f047"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/58db726aa45fe26bca93f692cb3d77e9a46b7830",
-                "reference": "58db726aa45fe26bca93f692cb3d77e9a46b7830",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e08a5b64400b9ca9124d38db30448d4b10b9f047",
+                "reference": "e08a5b64400b9ca9124d38db30448d4b10b9f047",
                 "shasum": ""
             },
             "require": {
@@ -568,7 +568,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-08-08 05:13:30"
+            "time": "2014-08-17 08:08:26"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
