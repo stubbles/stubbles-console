@@ -78,12 +78,11 @@ class ExampleConsoleApp extends ConsoleApp
     /**
      * returns list of bindings used for this application
      *
-     * @param   string  $projectPath
      * @return  \stubbles\ioc\module\BindingModule[]
      */
-    public static function __bindings($projectPath)
+    public static function __bindings()
     {
-        return [self::bindArguments()];
+        return [self::argumentParser()];
     }
 
     /**

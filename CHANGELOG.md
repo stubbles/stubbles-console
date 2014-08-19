@@ -1,3 +1,9 @@
+4.0.1 (2014-08-19)
+------------------
+
+  * fixed bug #50 Create console app does not use argumentParser() but removed method instead
+
+
 4.0.0 (2014-08-17)
 ------------------
 
