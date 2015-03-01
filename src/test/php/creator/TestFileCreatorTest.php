@@ -67,7 +67,8 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
-use stubbles\lang;
+use stubbles\lang\Rootpath;
+use stubbles\lang\reflect;
 /**
  * Test for example\console\ExampleConsoleApp.
  */
@@ -94,7 +95,8 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                lang\reflectConstructor($this->instance)->hasAnnotation(\'Inject\')
+                reflect\constructorAnnotationsOf($this->instance)
+                        ->contain(\'Inject\')
         );
     }
 
@@ -111,8 +113,9 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstance()
     {
-        $this->assertInstanceOf(\'example\console\ExampleConsoleApp\',
-                                ExampleConsoleApp::create(new lang\Rootpath())
+        $this->assertInstanceOf(
+                \'example\console\ExampleConsoleApp\',
+                ExampleConsoleApp::create(new Rootpath())
         );
     }
 }

@@ -13,7 +13,7 @@ use stubbles\input\console\ConsoleRequest;
 use stubbles\input\broker\RequestBroker;
 use stubbles\input\broker\TargetMethod;
 use stubbles\input\errors\messages\ParamErrorMessages;
-use stubbles\lang;
+use stubbles\lang\reflect;
 use stubbles\streams\OutputStream;
 /**
  * Interface for command executors.
@@ -135,10 +135,11 @@ class RequestParser
         }
 
         $options['-h or --help'] = 'Prints this help.';
-        return $this->creatHelpWriter($this->getAppDescription($object),
-                                      $this->request->readEnv('SCRIPT_NAME')->unsecure(),
-                                      $options,
-                                      $parameters
+        return $this->creatHelpWriter(
+                $this->readAppDescription($object),
+                $this->request->readEnv('SCRIPT_NAME')->unsecure(),
+                $options,
+                $parameters
         );
     }
 
@@ -148,14 +149,14 @@ class RequestParser
      * @param   object  $object
      * @return  string
      */
-    private function getAppDescription($object)
+    private function readAppDescription($object)
     {
-        $class = lang\reflect($object);
-        if (!$class->hasAnnotation('AppDescription')) {
+        $annotations = reflect\annotationsOf($object);
+        if (!$annotations->contain('AppDescription')) {
             return null;
         }
 
-        return $class->annotation('AppDescription')->getValue();
+        return $annotations->firstNamed('AppDescription')->getValue();
     }
 
     /**

@@ -12,7 +12,7 @@ use stubbles\console\ConsoleAppException;
 use stubbles\input\ValueReader;
 use stubbles\input\errors\ParamError;
 use stubbles\input\errors\ParamErrors;
-use stubbles\lang;
+use stubbles\lang\reflect;
 use stubbles\streams\memory\MemoryOutputStream;
 /**
  * Test for stubbles\console\input\RequestParser.
@@ -68,7 +68,8 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                lang\reflectConstructor($this->requestParser)->hasAnnotation('Inject')
+                reflect\constructorAnnotationsOf($this->requestParser)
+                        ->contain('Inject')
         );
     }
 

@@ -8,7 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\input;
-use stubbles\lang;
+use stubbles\lang\reflect;
 use org\stubbles\console\test\BrokeredUserInput;
 /**
  * Test for stubbles\console\input\UserInputProvider.
@@ -44,10 +44,11 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
         $this->mockInjector      = $this->getMockBuilder('stubbles\ioc\Injector')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->userInputProvider = new UserInputProvider($this->mockRequestParser,
-                                                         $this->mockInjector,
-                                                         'org\stubbles\console\test\BrokeredUserInput'
-                                   );
+        $this->userInputProvider = new UserInputProvider(
+                $this->mockRequestParser,
+                $this->mockInjector,
+                'org\stubbles\console\test\BrokeredUserInput'
+        );
     }
 
     /**
@@ -55,13 +56,19 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $constructor = lang\reflectConstructor($this->userInputProvider);
-        $this->assertTrue($constructor->hasAnnotation('Inject'));
+        $this->assertTrue(
+                reflect\constructorAnnotationsOf($this->userInputProvider)
+                        ->contain('Inject')
+        );
 
-        $parameters = $constructor->getParameters();
-        $this->assertTrue($parameters[2]->hasAnnotation('Named'));
-        $this->assertEquals('stubbles.console.input.class',
-                            $parameters[2]->getAnnotation('Named')->getName()
+        $annotations = reflect\annotationsOfConstructorParameter(
+                'userInputClass',
+                $this->userInputProvider
+        );
+        $this->assertTrue($annotations->contain('Named'));
+        $this->assertEquals(
+                'stubbles.console.input.class',
+                $annotations->firstNamed('Named')->getName()
         );
     }
 
@@ -83,8 +90,9 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
                                        $this->equalTo('main')
                                   )
                                 ->will($this->returnValue($brokeredUserInput));
-        $this->assertSame($brokeredUserInput,
-                          $this->userInputProvider->get('main')
+        $this->assertSame(
+                $brokeredUserInput,
+                $this->userInputProvider->get('main')
         );
     }
 }

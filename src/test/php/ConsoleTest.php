@@ -9,7 +9,7 @@
  */
 namespace stubbles\console;
 use stubbles\input\errors\ParamErrors;
-use stubbles\lang;
+use stubbles\lang\reflect;
 /**
  * Test for stubbles\console\Console.
  *
@@ -50,10 +50,11 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->mockInputStream  = $this->getMock('stubbles\streams\InputStream');
         $this->mockOutputStream = $this->getMock('stubbles\streams\OutputStream');
         $this->mockErrorStream  = $this->getMock('stubbles\streams\OutputStream');
-        $this->console          = new Console($this->mockInputStream,
-                                              $this->mockOutputStream,
-                                              $this->mockErrorStream
-                                  );
+        $this->console          = new Console(
+                $this->mockInputStream,
+                $this->mockOutputStream,
+                $this->mockErrorStream
+        );
     }
 
     /**
@@ -61,21 +62,30 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $constructor = lang\reflectConstructor($this->console);
-        $this->assertTrue($constructor->hasAnnotation('Inject'));
+        $this->assertTrue(
+                reflect\constructorAnnotationsOf($this->console)
+                        ->contain('Inject')
+        );
 
-        $parameters = $constructor->getParameters();
-        $this->assertTrue($parameters[0]->hasAnnotation('Named'));
-        $this->assertEquals('stdin',
-                            $parameters[0]->getAnnotation('Named')->getName()
+        $inParamAnnotations = reflect\annotationsOfConstructorParameter('in', $this->console);
+        $this->assertTrue($inParamAnnotations->contain('Named'));
+        $this->assertEquals(
+                'stdin',
+                $inParamAnnotations->firstNamed('Named')->getName()
         );
-        $this->assertTrue($parameters[1]->hasAnnotation('Named'));
-        $this->assertEquals('stdout',
-                            $parameters[1]->getAnnotation('Named')->getName()
+
+        $outParamAnnotations = reflect\annotationsOfConstructorParameter('out', $this->console);
+        $this->assertTrue($outParamAnnotations->contain('Named'));
+        $this->assertEquals(
+                'stdout',
+                $outParamAnnotations->firstNamed('Named')->getName()
         );
-        $this->assertTrue($parameters[2]->hasAnnotation('Named'));
-        $this->assertEquals('stderr',
-                            $parameters[2]->getAnnotation('Named')->getName()
+
+        $errParamAnnotations = reflect\annotationsOfConstructorParameter('err', $this->console);
+        $this->assertTrue($errParamAnnotations->contain('Named'));
+        $this->assertEquals(
+                'stderr',
+                $errParamAnnotations->firstNamed('Named')->getName()
         );
     }
 
@@ -230,7 +240,10 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->mockErrorStream->expects($this->at(2))
                               ->method('writeLine')
                               ->with($this->equalTo('baz'));
-        $this->assertSame($this->console, $this->console->writeErrorLines(['foo', 'bar', 'baz']));
+        $this->assertSame(
+                $this->console,
+                $this->console->writeErrorLines(['foo', 'bar', 'baz'])
+        );
     }
 
     /**
@@ -260,9 +273,10 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->mockInputStream->expects($this->once())
                               ->method('readLine')
                               ->will($this->returnValue('303'));
-        $this->assertEquals(303,
-                            $this->console->prompt('Please enter a number: ')
-                                          ->asInt()
+        $this->assertEquals(
+                303,
+                $this->console->prompt('Please enter a number: ')
+                              ->asInt()
         );
     }
 
@@ -293,9 +307,10 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->mockInputStream->expects($this->once())
                               ->method('readLine')
                               ->will($this->returnValue('303'));
-        $this->assertEquals(303,
-                            $this->console->readValue()
-                                          ->asInt()
+        $this->assertEquals(
+                303,
+                $this->console->readValue()
+                              ->asInt()
         );
     }
 

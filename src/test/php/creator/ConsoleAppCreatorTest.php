@@ -6,7 +6,8 @@
  */
 namespace stubbles\console\creator;
 use stubbles\input\ValueReader;
-use stubbles\lang;
+use stubbles\lang\Rootpath;
+use stubbles\lang\reflect;
 /**
  * Test for stubbles\console\creator\ConsoleAppCreator.
  */
@@ -60,11 +61,12 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
         $this->mockTestFile      = $this->getMockBuilder('stubbles\console\creator\TestFileCreator')
                                         ->disableOriginalConstructor()
                                         ->getMock();
-        $this->consoleAppCreator = new ConsoleAppCreator($this->mockConsole,
-                                                         $this->mockClassFile,
-                                                         $this->mockScriptFile,
-                                                         $this->mockTestFile
-                                   );
+        $this->consoleAppCreator = new ConsoleAppCreator(
+                $this->mockConsole,
+                $this->mockClassFile,
+                $this->mockScriptFile,
+                $this->mockTestFile
+        );
         $this->mockConsole->expects(($this->any()))
                           ->method('writeLine')
                           ->will($this->returnValue($this->mockConsole));
@@ -76,7 +78,8 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                lang\reflectConstructor($this->consoleAppCreator)->hasAnnotation('Inject')
+                reflect\constructorAnnotationsOf($this->consoleAppCreator)
+                        ->contain('Inject')
         );
     }
 
@@ -122,8 +125,9 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstance()
     {
-        $this->assertInstanceOf('stubbles\console\creator\ConsoleAppCreator',
-                                ConsoleAppCreator::create(new lang\Rootpath())
+        $this->assertInstanceOf(
+                'stubbles\console\creator\ConsoleAppCreator',
+                ConsoleAppCreator::create(new Rootpath())
         );
     }
 }

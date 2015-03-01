@@ -5,7 +5,8 @@
  * @package  {NAMESPACE}
  */
 namespace {NAMESPACE};
-use stubbles\lang;
+use stubbles\lang\Rootpath;
+use stubbles\lang\reflect;
 /**
  * Test for {NAMESPACE}\{CLASS}.
  */
@@ -32,7 +33,8 @@ class {CLASS}Test extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                lang\reflectConstructor($this->instance)->hasAnnotation('Inject')
+                reflect\constructorAnnotationsOf($this->instance)
+                        ->contain('Inject')
         );
     }
 
@@ -49,8 +51,9 @@ class {CLASS}Test extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstance()
     {
-        $this->assertInstanceOf('{NAMESPACE}\{CLASS}',
-                                {CLASS}::create(new lang\Rootpath())
+        $this->assertInstanceOf(
+                '{NAMESPACE}\{CLASS}',
+                {CLASS}::create(new Rootpath())
         );
     }
 }
