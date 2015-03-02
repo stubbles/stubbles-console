@@ -95,7 +95,7 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                reflect\constructorAnnotationsOf($this->instance)
+                reflect\annotationsOfConstructor($this->instance)
                         ->contain(\'Inject\')
         );
     }

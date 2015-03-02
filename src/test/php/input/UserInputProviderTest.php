@@ -57,7 +57,7 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                reflect\constructorAnnotationsOf($this->userInputProvider)
+                reflect\annotationsOfConstructor($this->userInputProvider)
                         ->contain('Inject')
         );
 

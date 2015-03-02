@@ -68,7 +68,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                reflect\constructorAnnotationsOf($this->requestParser)
+                reflect\annotationsOfConstructor($this->requestParser)
                         ->contain('Inject')
         );
     }
