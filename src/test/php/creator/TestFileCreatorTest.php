@@ -36,13 +36,18 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
      * @type  Rootpath
      */
     private $rootpath;
+    /**
+     * @type  \org\bovigo\vfs\vfsDirectory
+     */
+    private $root;
 
     /**
      * set up test environment
      */
     public function setUp()
     {
-        $this->rootpath        = new Rootpath(vfsStream::setup()->url());
+        $this->root            = vfsStream::setup();
+        $this->rootpath        = new Rootpath($this->root->url());
         $this->mockConsole     = $this->getMockBuilder('stubbles\console\Console')
                                       ->disableOriginalConstructor()
                                       ->getMock();
@@ -141,5 +146,99 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
                         $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')
                  )
          );
+    }
+
+    /**
+     * @test
+     * @expectedException  stubbles\lang\exception\ConfigurationException
+     * @since  4.1.0
+     * @group  issue_49
+     */
+    public function throwsConfigurationExceptionWhenNoPsr4PathDefinedForNamespace()
+    {
+        vfsStream::newFile('composer.json')
+                 ->withContent('{"autoload": { "psr-4": { "stubbles\\\foo\\\": "src/main/php" } }}')
+                 ->at($this->root);;
+        $this->testFileCreator->create('example\console\ExampleConsoleApp');
+    }
+
+    /**
+     * @test
+     * @since  4.1.0
+     * @group  issue_49
+     */
+    public function createsTestInPsr4PathIfDoesNotExist()
+    {
+        vfsStream::newFile('composer.json')
+                 ->withContent('{"autoload": { "psr-4": { "example\\\console\\\": "src/main/php" } }}')
+                 ->at($this->root);;
+        $this->mockConsole->expects($this->once())
+                          ->method('writeLine')
+                          ->with($this->equalTo('Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/ExampleConsoleAppTest.php')));
+        $this->testFileCreator->create('example\console\ExampleConsoleApp');
+        $this->assertTrue(file_exists($this->rootpath->to('src/test/php/ExampleConsoleAppTest.php')));
+        $this->assertEquals(
+                '<?php
+/**
+ * Your license or something other here.
+ *
+ * @package  example\console
+ */
+namespace example\console;
+use stubbles\lang\Rootpath;
+use stubbles\lang\reflect;
+/**
+ * Test for example\console\ExampleConsoleApp.
+ */
+class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * instance to test
+     *
+     * @type  ExampleConsoleApp
+     */
+    private $instance;
+
+    /**
+     * set up test environment
+     */
+    public function setUp()
+    {
+        $this->instance = new ExampleConsoleApp();
+    }
+
+    /**
+     * @test
+     */
+    public function annotationsPresentOnConstructor()
+    {
+        $this->assertTrue(
+                reflect\annotationsOfConstructor($this->instance)
+                        ->contain(\'Inject\')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function returnsExitCode0()
+    {
+        $this->assertEquals(0, $this->instance->run());
+    }
+
+    /**
+     * @test
+     */
+    public function canCreateInstance()
+    {
+        $this->assertInstanceOf(
+                \'example\console\ExampleConsoleApp\',
+                ExampleConsoleApp::create(new Rootpath())
+        );
+    }
+}
+',
+                file_get_contents($this->rootpath->to('src/test/php/ExampleConsoleAppTest.php'))
+        );
     }
 }

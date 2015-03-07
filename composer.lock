@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6de52be37fe1b080e65d4f050d6be7d4",
+    "hash": "9bba4ee134bc48f2cea83e618d0657fd",
     "packages": [
         {
             "name": "stubbles/core",
-            "version": "dev-master",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-core.git",
-                "reference": "2f1419754ba3b708e9c50e54d2444e3d58349a3b"
+                "reference": "5467e1bcfc61400eb73fc470e285930f6246b2bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-core/zipball/2f1419754ba3b708e9c50e54d2444e3d58349a3b",
-                "reference": "2f1419754ba3b708e9c50e54d2444e3d58349a3b",
+                "url": "https://api.github.com/repos/stubbles/stubbles-core/zipball/5467e1bcfc61400eb73fc470e285930f6246b2bc",
+                "reference": "5467e1bcfc61400eb73fc470e285930f6246b2bc",
                 "shasum": ""
             },
             "require": {
@@ -50,20 +50,20 @@
             ],
             "description": "Provides base classes for Stubbles packages.",
             "homepage": "http://stubbles.net/",
-            "time": "2015-03-02 12:18:40"
+            "time": "2015-03-05 12:58:35"
         },
         {
             "name": "stubbles/input",
-            "version": "dev-master",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-input.git",
-                "reference": "c98d9b7e947504e37feb75c4bca530a523f9e2a7"
+                "reference": "938572ba525d08a7499f7057f845f5615e3731a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/c98d9b7e947504e37feb75c4bca530a523f9e2a7",
-                "reference": "c98d9b7e947504e37feb75c4bca530a523f9e2a7",
+                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/938572ba525d08a7499f7057f845f5615e3731a8",
+                "reference": "938572ba525d08a7499f7057f845f5615e3731a8",
                 "shasum": ""
             },
             "require": {
@@ -73,10 +73,10 @@
             "require-dev": {
                 "mikey179/vfsstream": "~1.4",
                 "phpunit/phpunit": "~4.5",
-                "stubbles/date": "~5.0"
+                "stubbles/date": "~5.2"
             },
             "suggest": {
-                "stubbles/date": "~5.0"
+                "stubbles/date": "~5.2"
             },
             "type": "library",
             "extra": {
@@ -95,7 +95,7 @@
             ],
             "description": "Stubbles Input enables to handle input data via validation and filtering.",
             "homepage": "http://stubbles.net/",
-            "time": "2015-03-02 12:37:18"
+            "time": "2015-03-06 16:23:36"
         }
     ],
     "packages-dev": [

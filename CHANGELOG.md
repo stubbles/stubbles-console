@@ -1,3 +1,9 @@
+4.1.0 (2015-??-??)
+------------------
+
+  * implemented issue #49: Create console app should respect PSR-4
+
+
 4.0.1 (2014-08-19)
 ------------------
 

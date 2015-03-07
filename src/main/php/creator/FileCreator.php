@@ -11,6 +11,7 @@ namespace stubbles\console\creator;
 use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
+use stubbles\lang\exception\ConfigurationException;
 use stubbles\lang\exception\FileNotFoundException;
 /**
  * Base class for file creation.
@@ -67,11 +68,52 @@ abstract class FileCreator
      */
     protected function fileNameforClass($className, $type = 'main')
     {
+        if (file_exists($this->rootpath->to('composer.json'))) {
+            $composer = json_decode(file_get_contents($this->rootpath->to('composer.json')), true);
+            if (isset($composer['autoload']['psr-4'])) {
+                return $this->fileNameForPsr4(
+                        $composer['autoload']['psr-4'],
+                        $className,
+                        $type
+                );
+            }
+        }
+
+        // assume psr-0 with standard stubbles pathes
         return $this->rootpath->to(
                 'src',
                 $type,
                 'php',
                 str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php'
+        );
+    }
+
+    /**
+     * retrieve psr-4 compatible file name
+     *
+     * @param   array   $psr4Pathes  map of psr-4 pathes from composer.json
+     * @param   string  $className   name of class to retrieve file name for
+     * @param   string  $type        whether it a normal class or a test class
+     * @return  string
+     * @throws  \stubbles\lang\exception\ConfigurationException
+     */
+    private function fileNameForPsr4(array $psr4Pathes, $className, $type)
+    {
+        foreach ($psr4Pathes as $prefix => $path) {
+            if (substr($className, 0, strlen($prefix)) === $prefix) {
+                return $this->rootpath->to(
+                        str_replace('main', $type, $path),
+                        str_replace(
+                                '\\',
+                                DIRECTORY_SEPARATOR,
+                                str_replace($prefix, '', $className)
+                        ) . '.php'
+                );
+            }
+        }
+
+        throw new ConfigurationException(
+                'No PSR-4 path for class ' . $className . ' found in composer.json'
         );
     }
 
@@ -89,15 +131,17 @@ abstract class FileCreator
             mkdir($directory, 0755, true);
         }
 
-        file_put_contents($fileName,
-                          str_replace(['{NAMESPACE}',
-                                       '{CLASS}'
-                                      ],
-                                      [$this->namespaceOf($className),
-                                       $this->nonQualifiedClassNameOf($className)
-                                      ],
-                                      $this->resourceLoader->load($this->pathForTemplate($template))
-                          )
+        file_put_contents(
+                $fileName,
+                str_replace(
+                        ['{NAMESPACE}',
+                         '{CLASS}'
+                        ],
+                        [$this->namespaceOf($className),
+                         $this->nonQualifiedClassNameOf($className)
+                        ],
+                        $this->resourceLoader->load($this->pathForTemplate($template))
+                )
         );
     }
 
