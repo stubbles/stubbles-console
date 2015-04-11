@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\input;
+use bovigo\callmap\NewInstance;
 use stubbles\lang\reflect;
 use org\stubbles\console\test\BrokeredUserInput;
 /**
@@ -27,26 +28,22 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockRequestParser;
+    private $requestParser;
     /**
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockInjector;
+    private $injector;
 
     /**
      * set up test environment
      */
     public function setUp()
     {
-        $this->mockRequestParser = $this->getMockBuilder('stubbles\console\input\RequestParser')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $this->mockInjector      = $this->getMockBuilder('stubbles\ioc\Injector')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
+        $this->requestParser = NewInstance::stub('stubbles\console\input\RequestParser');
+        $this->injector      = NewInstance::stub('stubbles\ioc\Injector');
         $this->userInputProvider = new UserInputProvider(
-                $this->mockRequestParser,
-                $this->mockInjector,
+                $this->requestParser,
+                $this->injector,
                 'org\stubbles\console\test\BrokeredUserInput'
         );
     }
@@ -56,17 +53,12 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue(
-                reflect\annotationsOfConstructor($this->userInputProvider)
-                        ->contain('Inject')
-        );
-
         $annotations = reflect\annotationsOfConstructorParameter(
                 'userInputClass',
                 $this->userInputProvider
         );
-        $this->assertTrue($annotations->contain('Named'));
-        $this->assertEquals(
+        assertTrue($annotations->contain('Named'));
+        assertEquals(
                 'stubbles.console.input.class',
                 $annotations->firstNamed('Named')->getName()
         );
@@ -78,19 +70,9 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
     public function createsUserInputInstance()
     {
         $brokeredUserInput = new BrokeredUserInput();
-        $this->mockInjector->expects($this->once())
-                           ->method('getInstance')
-                           ->with($this->equalTo('org\stubbles\console\test\BrokeredUserInput'),
-                                  $this->equalTo('stubbles.console.input.instance')
-                             )
-                           ->will($this->returnValue($brokeredUserInput));
-        $this->mockRequestParser->expects($this->once())
-                                ->method('parseInto')
-                                ->with($this->equalTo($brokeredUserInput),
-                                       $this->equalTo('main')
-                                  )
-                                ->will($this->returnValue($brokeredUserInput));
-        $this->assertSame(
+        $this->injector->mapCalls(['getInstance' => $brokeredUserInput]);
+        $this->requestParser->mapCalls(['parseInto' => $brokeredUserInput]);
+        assertSame(
                 $brokeredUserInput,
                 $this->userInputProvider->get('main')
         );

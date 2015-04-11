@@ -47,7 +47,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsNullWhenParamValueIsEmpty($value)
     {
-        $this->assertNull(
+        assertNull(
                 $this->classNameFilter->apply(new Param('stdin', $value))
         );
     }
@@ -61,7 +61,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
     {
         $param = new Param('stdin', $value);
         $this->classNameFilter->apply($param);
-        $this->assertTrue($param->hasError('CLASSNAME_EMPTY'));
+        assertTrue($param->hasError('CLASSNAME_EMPTY'));
     }
 
     /**
@@ -79,7 +79,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsNullWhenParamValueHasInvalidSyntax($value)
     {
-        $this->assertNull(
+        assertNull(
                 $this->classNameFilter->apply(new Param('stdin', $value))
         );
     }
@@ -93,7 +93,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
     {
         $param = new Param('stdin', $value);
         $this->classNameFilter->apply($param);
-        $this->assertTrue($param->hasError('CLASSNAME_INVALID'));
+        assertTrue($param->hasError('CLASSNAME_INVALID'));
     }
 
     /**
@@ -101,7 +101,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function trimsInputValue()
     {
-        $this->assertEquals(
+        assertEquals(
                 'foo\bar\Baz',
                 $this->classNameFilter->apply(new Param('stdin', '  foo\bar\Baz  '))
         );
@@ -112,7 +112,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function fixesQuotedNamespaceSeparator()
     {
-        $this->assertEquals(
+        assertEquals(
                 'foo\bar\Baz',
                 $this->classNameFilter->apply(new Param('stdin', 'foo\\\\bar\\\\Baz'))
         );

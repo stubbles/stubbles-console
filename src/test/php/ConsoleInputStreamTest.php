@@ -20,8 +20,9 @@ class ConsoleInputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfInputStream()
     {
-        $this->assertInstanceOf('stubbles\streams\InputStream',
-                                ConsoleInputStream::forIn()
+        assertInstanceOf(
+                'stubbles\streams\InputStream',
+                ConsoleInputStream::forIn()
         );
     }
 
@@ -30,8 +31,6 @@ class ConsoleInputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function alwaysReturnsSameInstance()
     {
-        $this->assertSame(ConsoleInputStream::forIn(),
-                          ConsoleInputStream::forIn()
-        );
+        assertSame(ConsoleInputStream::forIn(), ConsoleInputStream::forIn());
     }
 }

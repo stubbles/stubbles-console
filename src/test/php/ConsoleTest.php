@@ -8,6 +8,8 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use bovigo\callmap;
+use bovigo\callmap\NewInstance;
 use stubbles\input\errors\ParamErrors;
 use stubbles\lang\reflect;
 /**
@@ -28,32 +30,32 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockInputStream;
+    private $inputStream;
     /**
      * mocked output stream
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockOutputStream;
+    private $outputStream;
     /**
      * mocked error stream
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockErrorStream;
+    private $errorStream;
 
     /**
      * set up test environment
      */
     public function setUp()
     {
-        $this->mockInputStream  = $this->getMock('stubbles\streams\InputStream');
-        $this->mockOutputStream = $this->getMock('stubbles\streams\OutputStream');
-        $this->mockErrorStream  = $this->getMock('stubbles\streams\OutputStream');
+        $this->inputStream  = NewInstance::of('stubbles\streams\InputStream');
+        $this->outputStream = NewInstance::of('stubbles\streams\OutputStream');
+        $this->errorStream  = NewInstance::of('stubbles\streams\OutputStream');
         $this->console          = new Console(
-                $this->mockInputStream,
-                $this->mockOutputStream,
-                $this->mockErrorStream
+                $this->inputStream,
+                $this->outputStream,
+                $this->errorStream
         );
     }
 
@@ -62,28 +64,23 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $this->assertTrue(
-                reflect\annotationsOfConstructor($this->console)
-                        ->contain('Inject')
-        );
-
         $inParamAnnotations = reflect\annotationsOfConstructorParameter('in', $this->console);
-        $this->assertTrue($inParamAnnotations->contain('Named'));
-        $this->assertEquals(
+        assertTrue($inParamAnnotations->contain('Named'));
+        assertEquals(
                 'stdin',
                 $inParamAnnotations->firstNamed('Named')->getName()
         );
 
         $outParamAnnotations = reflect\annotationsOfConstructorParameter('out', $this->console);
-        $this->assertTrue($outParamAnnotations->contain('Named'));
-        $this->assertEquals(
+        assertTrue($outParamAnnotations->contain('Named'));
+        assertEquals(
                 'stdout',
                 $outParamAnnotations->firstNamed('Named')->getName()
         );
 
         $errParamAnnotations = reflect\annotationsOfConstructorParameter('err', $this->console);
-        $this->assertTrue($errParamAnnotations->contain('Named'));
-        $this->assertEquals(
+        assertTrue($errParamAnnotations->contain('Named'));
+        assertEquals(
                 'stderr',
                 $errParamAnnotations->firstNamed('Named')->getName()
         );
@@ -94,10 +91,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesInputStreamForRead()
     {
-        $this->mockInputStream->expects($this->once())
-                              ->method('read')
-                              ->will($this->returnValue('foo'));
-        $this->assertEquals('foo', $this->console->read());
+        $this->inputStream->mapCalls(['read' => 'foo']);
+        assertEquals('foo', $this->console->read());
     }
 
     /**
@@ -105,10 +100,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesInputStreamForReadLine()
     {
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('foo'));
-        $this->assertEquals('foo', $this->console->readLine());
+        $this->inputStream->mapCalls(['readLine' => 'foo']);
+        assertEquals('foo', $this->console->readLine());
     }
 
     /**
@@ -117,10 +110,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesInputStreamForBytesLeft()
     {
-        $this->mockInputStream->expects($this->once())
-                              ->method('bytesLeft')
-                              ->will($this->returnValue(20));
-        $this->assertEquals(20, $this->console->bytesLeft());
+        $this->inputStream->mapCalls(['bytesLeft' => 20]);
+        assertEquals(20, $this->console->bytesLeft());
     }
 
     /**
@@ -129,10 +120,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesInputStreamForEof()
     {
-        $this->mockInputStream->expects($this->once())
-                              ->method('eof')
-                              ->will($this->returnValue(true));
-        $this->assertTrue($this->console->eof());
+        $this->inputStream->mapCalls(['eof' => true]);
+        assertTrue($this->console->eof());
     }
 
     /**
@@ -140,12 +129,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWrite()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('write')
-                               ->with($this->equalTo('foo'));
-        $this->mockErrorStream->expects($this->never())
-                              ->method('write');
-        $this->assertSame($this->console, $this->console->write('foo'));
+        assertSame($this->console, $this->console->write('foo'));
+        assertEquals(
+                ['foo'],
+                $this->outputStream->argumentsReceivedFor('write')
+        );
+        assertEquals(0, $this->errorStream->callsReceivedFor('write'));
     }
 
     /**
@@ -153,12 +142,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteLine()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('writeLine')
-                               ->with($this->equalTo('foo'));
-        $this->mockErrorStream->expects($this->never())
-                              ->method('writeLine');
-        $this->assertSame($this->console, $this->console->writeLine('foo'));
+        assertSame($this->console, $this->console->writeLine('foo'));
+        assertEquals(
+                ['foo'],
+                $this->outputStream->argumentsReceivedFor('writeLine')
+        );
+        assertEquals(0, $this->errorStream->callsReceivedFor('writeLine'));
     }
 
     /**
@@ -167,20 +156,15 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteLines()
     {
-        $this->mockOutputStream->expects($this->at(0))
-                               ->method('writeLine')
-                               ->with($this->equalTo('foo'));
-        $this->mockOutputStream->expects($this->at(1))
-                               ->method('writeLine')
-                               ->with($this->equalTo('bar'));
-        $this->mockOutputStream->expects($this->at(2))
-                               ->method('writeLine')
-                               ->with($this->equalTo('baz'));
-        $this->mockErrorStream->expects($this->never())
-                              ->method('writeLine');
-        $this->assertSame($this->console,
-                          $this->console->writeLines(['foo', 'bar', 'baz'])
+        assertSame(
+                $this->console,
+                $this->console->writeLines(['foo', 'bar', 'baz'])
         );
+        assertEquals(
+                [['foo', 'bar', 'baz']],
+                $this->outputStream->argumentsReceivedFor('writeLines')
+        );
+        assertEquals(0, $this->errorStream->callsReceivedFor('writeLine'));
     }
 
     /**
@@ -189,12 +173,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteEmptyLine()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('writeLine')
-                               ->with($this->equalTo(''));
-        $this->mockErrorStream->expects($this->never())
-                              ->method('writeLine');
-        $this->assertSame($this->console, $this->console->writeEmptyLine());
+        assertSame($this->console, $this->console->writeEmptyLine());
+        assertEquals(
+                [''],
+                $this->outputStream->argumentsReceivedFor('writeLine')
+        );
+        assertEquals(0, $this->errorStream->callsReceivedFor('writeLine'));
     }
 
     /**
@@ -202,12 +186,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteError()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('write');
-        $this->mockErrorStream->expects($this->once())
-                              ->method('write')
-                              ->with($this->equalTo('foo'));
-        $this->assertSame($this->console, $this->console->writeError('foo'));
+        assertSame($this->console, $this->console->writeError('foo'));
+        assertEquals(
+                ['foo'],
+                $this->errorStream->argumentsReceivedFor('write')
+        );
+        assertEquals(0, $this->outputStream->callsReceivedFor('write'));
     }
 
     /**
@@ -215,12 +199,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteErrorLine()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('writeLine');
-        $this->mockErrorStream->expects($this->once())
-                              ->method('writeLine')
-                              ->with($this->equalTo('foo'));
-        $this->assertSame($this->console, $this->console->writeErrorLine('foo'));
+        assertSame($this->console, $this->console->writeErrorLine('foo'));
+        assertEquals(
+                ['foo'],
+                $this->errorStream->argumentsReceivedFor('writeLine')
+        );
+        assertEquals(0, $this->outputStream->callsReceivedFor('writeLine'));
     }
 
     /**
@@ -229,21 +213,15 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteErrorLines()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('writeLine');
-        $this->mockErrorStream->expects($this->at(0))
-                              ->method('writeLine')
-                              ->with($this->equalTo('foo'));
-        $this->mockErrorStream->expects($this->at(1))
-                              ->method('writeLine')
-                              ->with($this->equalTo('bar'));
-        $this->mockErrorStream->expects($this->at(2))
-                              ->method('writeLine')
-                              ->with($this->equalTo('baz'));
-        $this->assertSame(
+        assertSame(
                 $this->console,
                 $this->console->writeErrorLines(['foo', 'bar', 'baz'])
         );
+        assertEquals(
+                [['foo', 'bar', 'baz']],
+                $this->errorStream->argumentsReceivedFor('writeLines')
+        );
+        assertEquals(0, $this->outputStream->callsReceivedFor('writeLines'));
     }
 
     /**
@@ -252,12 +230,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteEmptyErrorLine()
     {
-        $this->mockOutputStream->expects($this->never())
-                               ->method('writeLine');
-        $this->mockErrorStream->expects($this->once())
-                              ->method('writeLine')
-                              ->with($this->equalTo(''));
-        $this->assertSame($this->console, $this->console->writeEmptyErrorLine(''));
+        assertSame($this->console, $this->console->writeEmptyErrorLine(''));
+        assertEquals(
+                [''],
+                $this->errorStream->argumentsReceivedFor('writeLine')
+        );
+        assertEquals(0, $this->outputStream->callsReceivedFor('writeLine'));
     }
 
     /**
@@ -267,16 +245,15 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function promptWritesMessageToOutputStreamAndReturnsValueFromInputStream()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('write')
-                               ->with($this->equalTo('Please enter a number: '));
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('303'));
-        $this->assertEquals(
+        $this->inputStream->mapCalls(['readLine' => '303']);
+        assertEquals(
                 303,
                 $this->console->prompt('Please enter a number: ')
                               ->asInt()
+        );
+        assertEquals(
+                ['Please enter a number: '],
+                $this->outputStream->argumentsReceivedFor('write')
         );
     }
 
@@ -288,13 +265,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function promptEnrichesParamErrors()
     {
         $paramErrors = new ParamErrors();
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('no date here'));
-        $this->assertNull($this->console->prompt('Please enter a number: ', $paramErrors)
-                                        ->asHttpUri()
+        $this->inputStream->mapCalls(['readLine' => 'no date here']);
+        assertNull(
+                $this->console->prompt('Please enter a number: ', $paramErrors)
+                        ->asHttpUri()
         );
-        $this->assertTrue($paramErrors->existFor('stdin'));
+        assertTrue($paramErrors->existFor('stdin'));
     }
 
     /**
@@ -304,14 +280,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function readValueReturnsValueFromInputStream()
     {
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('303'));
-        $this->assertEquals(
-                303,
-                $this->console->readValue()
-                              ->asInt()
-        );
+        $this->inputStream->mapCalls(['readLine' => '303']);
+        assertEquals(303, $this->console->readValue()->asInt());
     }
 
     /**
@@ -322,13 +292,9 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function readValueEnrichesParamErrors()
     {
         $paramErrors = new ParamErrors();
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('no date here'));
-        $this->assertNull($this->console->readValue($paramErrors)
-                                        ->asHttpUri()
-        );
-        $this->assertTrue($paramErrors->existFor('stdin'));
+        $this->inputStream->mapCalls(['readLine' => 'no date here']);
+        assertNull($this->console->readValue($paramErrors)->asHttpUri());
+        assertTrue($paramErrors->existFor('stdin'));
     }
 
     /**
@@ -338,13 +304,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function confirmReturnsTrueWhenInputValueIsLowercaseY()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('write')
-                               ->with($this->equalTo('Do you want to continue: '));
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('y'));
-        $this->assertTrue($this->console->confirm('Do you want to continue: '));
+        $this->inputStream->mapCalls(['readLine' => 'y']);
+        assertTrue($this->console->confirm('Do you want to continue: '));
+        assertEquals(
+                ['Do you want to continue: '],
+                $this->outputStream->argumentsReceivedFor('write')
+        );
     }
 
     /**
@@ -354,13 +319,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function confirmReturnsTrueWhenInputValueIsUppercaseY()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('write')
-                               ->with($this->equalTo('Do you want to continue: '));
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('Y'));
-        $this->assertTrue($this->console->confirm('Do you want to continue: '));
+        $this->inputStream->mapCalls(['readLine' => 'Y']);
+        assertTrue($this->console->confirm('Do you want to continue: '));
+        assertEquals(
+                ['Do you want to continue: '],
+                $this->outputStream->argumentsReceivedFor('write')
+        );
     }
 
     /**
@@ -370,13 +334,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function confirmReturnsFalseWhenInputValueIsLowercaseN()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('write')
-                               ->with($this->equalTo('Do you want to continue: '));
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('n'));
-        $this->assertFalse($this->console->confirm('Do you want to continue: '));
+        $this->inputStream->mapCalls(['readLine' => 'n']);
+        assertFalse($this->console->confirm('Do you want to continue: '));
     }
 
     /**
@@ -386,13 +345,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function confirmReturnsFalseWhenInputValueIsUppercaseN()
     {
-        $this->mockOutputStream->expects($this->once())
-                               ->method('write')
-                               ->with($this->equalTo('Do you want to continue: '));
-        $this->mockInputStream->expects($this->once())
-                              ->method('readLine')
-                              ->will($this->returnValue('N'));
-        $this->assertFalse($this->console->confirm('Do you want to continue: '));
+        $this->inputStream->mapCalls(['readLine' => 'N']);
+        assertFalse($this->console->confirm('Do you want to continue: '));
     }
 
     /**
@@ -402,13 +356,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function confirmRepeatsQuestionUntilValidInput()
     {
-        $this->mockOutputStream->expects($this->exactly(3))
-                               ->method('write')
-                               ->with($this->equalTo('Do you want to continue: '));
-        $this->mockInputStream->expects($this->exactly(3))
-                              ->method('readLine')
-                              ->will($this->onConsecutiveCalls('foo', '', 'n'));
-        $this->assertFalse($this->console->confirm('Do you want to continue: '));
+        $this->inputStream->mapCalls(['readLine' => callmap\onConsecutiveCalls('foo', '', 'n')]);
+        assertFalse($this->console->confirm('Do you want to continue: '));
     }
 
     /**
@@ -418,13 +367,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function confirmUsesDefaultWhenInputIsEmpty()
     {
-        $this->mockOutputStream->expects($this->exactly(2))
-                               ->method('write')
-                               ->with($this->equalTo('Do you want to continue: '));
-        $this->mockInputStream->expects($this->exactly(2))
-                              ->method('readLine')
-                              ->will($this->onConsecutiveCalls('foo', ''));
-        $this->assertFalse($this->console->confirm('Do you want to continue: ', 'n'));
+        $this->inputStream->mapCalls(['readLine' => callmap\onConsecutiveCalls('foo', '')]);
+        assertFalse($this->console->confirm('Do you want to continue: ', 'n'));
     }
 
     /**
@@ -433,12 +377,9 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function closeClosesAllStreams()
     {
-        $this->mockInputStream->expects($this->once())
-                               ->method('close');
-        $this->mockOutputStream->expects($this->once())
-                               ->method('close');
-        $this->mockErrorStream->expects($this->once())
-                              ->method('close');
         $this->console->close();
+        assertEquals(1, $this->inputStream->callsReceivedFor('close'));
+        assertEquals(1, $this->outputStream->callsReceivedFor('close'));
+        assertEquals(1, $this->errorStream->callsReceivedFor('close'));
     }
 }

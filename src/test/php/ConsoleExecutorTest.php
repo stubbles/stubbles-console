@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use bovigo\callmap\NewInstance;
 /**
  * Test for stubbles\console\ConsoleExecutor.
  *
@@ -18,9 +19,9 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     /**
      * instance to test
      *
-     * @type  ConsoleExecutor
+     * @type  \stubbles\console\ConsoleExecutor
      */
-    protected $executor;
+    private $executor;
 
     /**
      * set up test environment
@@ -35,7 +36,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function redirectToReturnsItself()
     {
-        $this->assertSame($this->executor, $this->executor->redirectTo('2>&1'));
+        assertSame($this->executor, $this->executor->redirectTo('2>&1'));
     }
 
     /**
@@ -43,7 +44,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function hasNoOutputStreamByDefault()
     {
-        $this->assertNull($this->executor->out());
+        assertNull($this->executor->out());
     }
 
     /**
@@ -51,7 +52,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeWithoutOutputStream()
     {
-        $this->assertSame($this->executor, $this->executor->execute('echo foo'));
+        assertSame($this->executor, $this->executor->execute('echo foo'));
     }
 
     /**
@@ -59,10 +60,10 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function outReturnsOutputStreamOriginallySet()
     {
-        $mockOutputStream = $this->getMock('stubbles\streams\OutputStream');
-        $this->assertSame(
-                $mockOutputStream,
-                $this->executor->streamOutputTo($mockOutputStream)->out()
+        $outputStream = NewInstance::of('stubbles\streams\OutputStream');
+        assertSame(
+                $outputStream,
+                $this->executor->streamOutputTo($outputStream)->out()
         );
     }
 
@@ -71,14 +72,9 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeWithOutputStreamWritesResponseDataToOutputStream()
     {
-        $mockOutputStream = $this->getMock('stubbles\streams\OutputStream');
-        $mockOutputStream->expects($this->once())
-                         ->method('writeLine')
-                         ->with($this->equalTo('foo'));
-        $this->assertSame(
-                $this->executor,
-                $this->executor->streamOutputTo($mockOutputStream)->execute('echo foo')
-        );
+        $outputStream = NewInstance::of('stubbles\streams\OutputStream');
+        $this->executor->streamOutputTo($outputStream)->execute('echo foo');
+        assertEquals(['foo'], $outputStream->argumentsReceivedFor('writeLine'));
     }
 
     /**
@@ -96,8 +92,8 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     public function executeAsyncReturnsStreamToReadResultFrom()
     {
         $commandInputStream = $this->executor->executeAsync('echo foo');
-        $this->assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
-        $this->assertEquals('foo', chop($commandInputStream->read()));
+        assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
+        assertEquals('foo', chop($commandInputStream->read()));
     }
 
     /**
@@ -107,7 +103,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     public function executeAsyncFailsThrowsRuntimeException()
     {
         $commandInputStream = $this->executor->executeAsync('php -r "throw new Exception();"');
-        $this->assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
+        assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
         while (!$commandInputStream->eof()) {
             $commandInputStream->readLine();
         }
@@ -131,8 +127,8 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     public function readAfterCloseThrowsIllegalStateException()
     {
         $commandInputStream = $this->executor->executeAsync('echo foo');
-        $this->assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
-        $this->assertEquals('foo', chop($commandInputStream->read()));
+        assertInstanceOf('stubbles\console\CommandInputStream', $commandInputStream);
+        assertEquals('foo', chop($commandInputStream->read()));
         $commandInputStream->close();
         $commandInputStream->read();
     }
@@ -142,7 +138,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeDirectReturnsOutputAsArray()
     {
-        $this->assertEquals(['foo'], $this->executor->executeDirect('echo foo'));
+        assertEquals(['foo'], $this->executor->executeDirect('echo foo'));
     }
 
     /**

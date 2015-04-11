@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
+use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
@@ -29,7 +30,7 @@ class ClassFileCreatorTest extends \PHPUnit_Framework_TestCase
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockConsole;
+    private $console;
     /**
      * root directory
      *
@@ -48,10 +49,12 @@ class ClassFileCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->root             = vfsStream::setup();
         $this->rootpath         = new Rootpath($this->root->url());
-        $this->mockConsole      = $this->getMockBuilder('stubbles\console\Console')
-                                       ->disableOriginalConstructor()
-                                       ->getMock();
-        $this->classFileCreator = new ClassFileCreator($this->mockConsole, $this->rootpath, new ResourceLoader());
+        $this->console          = NewInstance::stub('stubbles\console\Console');
+        $this->classFileCreator = new ClassFileCreator(
+                $this->console,
+                $this->rootpath,
+                new ResourceLoader()
+        );
     }
 
     /**
@@ -59,12 +62,11 @@ class ClassFileCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function createsClassIfDoesNotExist()
     {
-        $this->mockConsole->expects($this->once())
-                          ->method('writeLine')
-                          ->with($this->equalTo('Class example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php')));
         $this->classFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertTrue(file_exists($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php')));
-        $this->assertEquals(
+        assertTrue(
+                file_exists($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php'))
+        );
+        assertEquals(
                 '<?php
 /**
  * Your license or something other here.
@@ -114,6 +116,10 @@ class ExampleConsoleApp extends ConsoleApp
 ',
                 file_get_contents($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php'))
         );
+        assertEquals(
+                ['Class example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php')],
+                $this->console->argumentsReceivedFor('writeLine')
+        );
     }
 
     /**
@@ -121,11 +127,14 @@ class ExampleConsoleApp extends ConsoleApp
      */
     public function skipsClassCreationIfClassAlreadyExists()
     {
-        $this->mockConsole->expects($this->once())
-                          ->method('writeLine')
-                          ->with($this->equalTo('Class stubbles\console\creator\ClassFileCreator already exists, skipped creating the class'));
         $this->classFileCreator->create('stubbles\console\creator\ClassFileCreator');
-        $this->assertFalse(file_exists($this->rootpath->to('src/main/php/stubbles/console/creator/ClassFileCreator.php')));
+        assertFalse(
+                file_exists($this->rootpath->to('src/main/php/stubbles/console/creator/ClassFileCreator.php'))
+        );
+        assertEquals(
+                ['Class stubbles\console\creator\ClassFileCreator already exists, skipped creating the class'],
+                $this->console->argumentsReceivedFor('writeLine')
+        );
     }
 
     /**
@@ -152,12 +161,11 @@ class ExampleConsoleApp extends ConsoleApp
         vfsStream::newFile('composer.json')
                  ->withContent('{"autoload": { "psr-4": { "example\\\console\\\": "src/main/php" } }}')
                  ->at($this->root);
-        $this->mockConsole->expects($this->once())
-                          ->method('writeLine')
-                          ->with($this->equalTo('Class example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/main/php/ExampleConsoleApp.php')));
         $this->classFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertTrue(file_exists($this->rootpath->to('src/main/php/ExampleConsoleApp.php')));
-        $this->assertEquals(
+        assertTrue(
+                file_exists($this->rootpath->to('src/main/php/ExampleConsoleApp.php'))
+        );
+        assertEquals(
                 '<?php
 /**
  * Your license or something other here.

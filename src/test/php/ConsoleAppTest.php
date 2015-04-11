@@ -55,7 +55,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function missingClassnameOptionLeadsToExistCode1()
     {
-        $this->assertEquals(
+        assertEquals(
                 1,
                 $this->createStubCliApp([])
         );
@@ -67,7 +67,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function missingClassnameOptionWritesErrorMessageToErrorStream()
     {
         $this->createStubCliApp([]);
-        $this->assertEquals(
+        assertEquals(
                 '*** Missing classname option -c',
                 trim($this->errorOutputStream->buffer())
         );
@@ -78,7 +78,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function missingClassnameValueInOptionLeadsToExistCode2()
     {
-        $this->assertEquals(
+        assertEquals(
                 2,
                 $this->createStubCliApp(['-c'])
         );
@@ -90,7 +90,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function missingClassnameValueInOptionWritesErrorMessageToErrorStream()
     {
         $this->createStubCliApp(['-c']);
-        $this->assertEquals(
+        assertEquals(
                 '*** No classname specified in -c',
                 trim($this->errorOutputStream->buffer())
         );
@@ -101,7 +101,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidClassnameLeadsToExistCode3()
     {
-        $this->assertEquals(
+        assertEquals(
                 3,
                 $this->createStubCliApp(['-c', 'doesNotExist'])
         );
@@ -113,7 +113,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function invalidClassnameWritesErrorMessageToErrorStream()
     {
         $this->createStubCliApp(['-c', 'doesNotExist']);
-        $this->assertEquals(
+        assertEquals(
                 '*** Can not find doesNotExist',
                 trim($this->errorOutputStream->buffer())
         );
@@ -125,7 +125,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function thrownConsoleAppExceptionInStubCliLeadsToExitCodeOfException()
     {
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
-        $this->assertEquals(
+        assertEquals(
                 10,
                 $this->createStubCliApp(
                         ['stubcli',
@@ -148,7 +148,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                  'org\stubbles\console\test\TestConsoleApp'
                 ]
         );
-        $this->assertEquals(
+        assertEquals(
                 '*** Exception: failure',
                 trim($this->errorOutputStream->buffer())
         );
@@ -171,7 +171,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                  'org\stubbles\console\test\TestConsoleApp'
                 ]
         );
-        $this->assertEquals(
+        assertEquals(
                 'something happened',
                 trim($this->errorOutputStream->buffer())
         );
@@ -183,7 +183,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function applicationExceptionThrownInStubCliLeadsToExitCode20()
     {
         TestConsoleApp::$exception = new \Exception('failure');
-        $this->assertEquals(
+        assertEquals(
                 20,
                 $this->createStubCliApp(
                         ['stubcli',
@@ -207,7 +207,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                  'org\stubbles\console\test\TestConsoleApp'
                 ]
         );
-        $this->assertEquals(
+        assertEquals(
                 "*** Exception: failure\nStacktrace:\n" . $e->getTraceAsString(),
                 trim($this->errorOutputStream->buffer())
         );
@@ -218,7 +218,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function commandReturnCodeIsReturnedInStubcli()
     {
-        $this->assertEquals(
+        assertEquals(
                 0,
                 $this->createStubCliApp(
                         ['stubcli',
@@ -234,7 +234,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function detectsClassNameIfOnOtherPosition()
     {
-        $this->assertEquals(
+        assertEquals(
                 0,
                 $this->createStubCliApp(
                         ['stubcli',
@@ -254,7 +254,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function thrownConsoleAppExceptionLeadsToExitCodeOfException()
     {
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
-        $this->assertEquals(
+        assertEquals(
                 10,
                 TestConsoleApp::main(
                         'projectPath',
@@ -269,11 +269,11 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function messageFromConsoleAppExceptionThrownInMainIsWrittenToErrorStream()
     {
         TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
-        $this->assertEquals(
+        assertEquals(
                 10,
                 TestConsoleApp::main(new Rootpath(), $this->errorOutputStream)
         );
-        $this->assertEquals(
+        assertEquals(
                 '*** Exception: failure',
                 trim($this->errorOutputStream->buffer())
         );
@@ -291,7 +291,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                                                              10
                                      );
         TestConsoleApp::main(new Rootpath(), $this->errorOutputStream);
-        $this->assertEquals(
+        assertEquals(
                 'something happened',
                 trim($this->errorOutputStream->buffer())
         );
@@ -303,7 +303,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function applicationExceptionThrownInMainLeadsToExitCode20()
     {
         TestConsoleApp::$exception = new \Exception('failure');
-        $this->assertEquals(
+        assertEquals(
                 20,
                 TestConsoleApp::main(new Rootpath(), $this->errorOutputStream)
         );
@@ -317,7 +317,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         $e = new \Exception('failure');
         TestConsoleApp::$exception = $e;
         TestConsoleApp::main(new Rootpath(), $this->errorOutputStream);
-        $this->assertEquals(
+        assertEquals(
                 "*** Exception: failure\nStacktrace:\n" . $e->getTraceAsString(),
                 trim($this->errorOutputStream->buffer())
         );
@@ -328,7 +328,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function commandReturnCodeIsReturned()
     {
-        $this->assertEquals(
+        assertEquals(
                 0,
                 TestConsoleApp::main(new Rootpath(), $this->errorOutputStream)
         );
@@ -340,7 +340,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function parseArgumentsReturnsBindingModuleForArguments()
     {
-        $this->assertInstanceOf(
+        assertInstanceOf(
                 'stubbles\console\ioc\ArgumentParser',
                 ConsoleAppUsingBindingModule::returnArgumentParser()
         );
@@ -353,7 +353,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateArgumentsBindingModule()
     {
-        $this->assertInstanceOf(
+        assertInstanceOf(
                 'stubbles\console\ioc\ArgumentParser',
                 ConsoleAppUsingBindingModule::getArgumentsBindingModule()
         );
@@ -366,7 +366,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function canCreateInstanceWithSelfBoundApp()
     {
         $_SERVER['argv'][1] = 'value';
-        $this->assertEquals(
+        assertEquals(
                 0,
                 $this->createStubCliApp(
                         ['stubcli',
@@ -376,7 +376,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                         ]
                 )
          );
-        $this->assertEquals('value', SelfBoundConsoleApp::$bar);
+        assertEquals('value', SelfBoundConsoleApp::$bar);
     }
 
     /**
@@ -393,7 +393,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                  'org\stubbles\console\test\SelfBoundConsoleApp'
                 ]
          );
-        $this->assertEquals('', $this->errorOutputStream->buffer());
+        assertEquals('', $this->errorOutputStream->buffer());
     }
 
     /**
@@ -403,7 +403,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function stdInputStreamIsBoundAutomatically()
     {
         $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
-        $this->assertSame(
+        assertSame(
                 ConsoleInputStream::forIn(),
                 $app->in
         );
@@ -416,7 +416,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function stdOutputStreamIsBoundAutomatically()
     {
         $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
-        $this->assertSame(
+        assertSame(
                 ConsoleOutputStream::forOut(),
                 $app->out
         );
@@ -429,7 +429,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function stdErrOutputStreamIsBoundAutomatically()
     {
         $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
-        $this->assertSame(
+        assertSame(
                 ConsoleOutputStream::forError(),
                 $app->err
         );
@@ -442,7 +442,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function executorIsBoundAutomatically()
     {
         $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
-        $this->assertInstanceOf(
+        assertInstanceOf(
                 'stubbles\console\ConsoleExecutor',
                 $app->executor
         );

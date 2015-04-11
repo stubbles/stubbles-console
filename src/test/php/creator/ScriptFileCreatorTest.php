@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
+use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
@@ -29,7 +30,7 @@ class ScriptFileCreatorTest extends \PHPUnit_Framework_TestCase
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockConsole;
+    private $console;
     /**
      * root directory
      *
@@ -43,10 +44,12 @@ class ScriptFileCreatorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->rootpath          = new Rootpath(vfsStream::setup()->url());
-        $this->mockConsole       = $this->getMockBuilder('stubbles\console\Console')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $this->scriptFileCreator = new ScriptFileCreator($this->mockConsole, $this->rootpath, new ResourceLoader());
+        $this->console           = NewInstance::stub('stubbles\console\Console');
+        $this->scriptFileCreator = new ScriptFileCreator(
+                $this->console,
+                $this->rootpath,
+                new ResourceLoader()
+        );
     }
 
     /**
@@ -54,15 +57,10 @@ class ScriptFileCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function createsScriptIfDoesNotExist()
     {
-        $this->mockConsole->expects($this->at(1))
-                          ->method('readLine')
-                          ->will($this->returnValue('example'));
-        $this->mockConsole->expects($this->at(2))
-                          ->method('writeLine')
-                          ->with($this->equalTo('Script for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('bin/example')));
+        $this->console->mapCalls(['readLine'  => 'example']);
         $this->scriptFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertTrue(file_exists($this->rootpath->to('bin/example')));
-        $this->assertEquals(
+        assertTrue(file_exists($this->rootpath->to('bin/example')));
+        assertEquals(
                 '#!/usr/bin/php
 <?php
 /**
@@ -87,6 +85,10 @@ exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOu
 ',
                 file_get_contents($this->rootpath->to('bin/example'))
         );
+        assertEquals(
+                ['Script for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('bin/example')],
+                $this->console->argumentsReceivedFor('writeLine', 2)
+        );
     }
 
     /**
@@ -96,13 +98,12 @@ exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOu
     {
         mkdir($this->rootpath->to('bin'));
         file_put_contents($this->rootpath->to('bin/example'), 'foo');
-        $this->mockConsole->expects($this->at(1))
-                          ->method('readLine')
-                          ->will($this->returnValue('example'));
-        $this->mockConsole->expects($this->at(2))
-                          ->method('writeLine')
-                          ->with($this->equalTo('Script for example\console\ExampleConsoleApp already exists, skipped creating the script'));
+        $this->console->mapCalls(['readLine'  => 'example']);
         $this->scriptFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertEquals('foo', file_get_contents($this->rootpath->to('bin/example')));
+        assertEquals('foo', file_get_contents($this->rootpath->to('bin/example')));
+        assertEquals(
+                ['Script for example\console\ExampleConsoleApp already exists, skipped creating the script'],
+                $this->console->argumentsReceivedFor('writeLine', 2)
+        );
     }
 }

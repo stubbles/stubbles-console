@@ -205,10 +205,7 @@ class Console implements InputStream, OutputStream
      */
     public function writeLines(array $lines)
     {
-        foreach ($lines as $line) {
-            $this->out->writeLine($line);
-        }
-
+        $this->out->writeLines($lines);
         return $this;
     }
 
@@ -259,10 +256,7 @@ class Console implements InputStream, OutputStream
      */
     public function writeErrorLines(array $lines)
     {
-        foreach ($lines as $line) {
-            $this->err->writeLine($line);
-        }
-
+        $this->err->writeLines($lines);
         return $this;
     }
 

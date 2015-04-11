@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
+use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
@@ -29,7 +30,7 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockConsole;
+    private $console;
     /**
      * root directory
      *
@@ -48,10 +49,12 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->root            = vfsStream::setup();
         $this->rootpath        = new Rootpath($this->root->url());
-        $this->mockConsole     = $this->getMockBuilder('stubbles\console\Console')
-                                      ->disableOriginalConstructor()
-                                      ->getMock();
-        $this->testFileCreator = new TestFileCreator($this->mockConsole, $this->rootpath, new ResourceLoader());
+        $this->console         = NewInstance::stub('stubbles\console\Console');
+        $this->testFileCreator = new TestFileCreator(
+                $this->console,
+                $this->rootpath,
+                new ResourceLoader()
+        );
     }
 
     /**
@@ -59,12 +62,9 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function createsTestIfDoesNotExist()
     {
-        $this->mockConsole->expects($this->once())
-                          ->method('writeLine')
-                          ->with($this->equalTo('Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')));
         $this->testFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertTrue(file_exists($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')));
-        $this->assertEquals(
+        assertTrue(file_exists($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')));
+        assertEquals(
                 '<?php
 /**
  * Your license or something other here.
@@ -127,6 +127,10 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
 ',
                 file_get_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'))
         );
+        assertEquals(
+                ['Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')],
+                $this->console->argumentsReceivedFor('writeLine')
+        );
     }
 
     /**
@@ -136,16 +140,17 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         mkdir($this->rootpath->to('src/test/php/example/console'), 0755, true);
         file_put_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'), 'foo');
-        $this->mockConsole->expects($this->once())
-                          ->method('writeLine')
-                          ->with($this->equalTo('Test for example\console\ExampleConsoleApp already exists, skipped creating the test'));
         $this->testFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertEquals(
+        assertEquals(
                 'foo',
                 file_get_contents(
                         $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')
                  )
          );
+        assertEquals(
+                ['Test for example\console\ExampleConsoleApp already exists, skipped creating the test'],
+                $this->console->argumentsReceivedFor('writeLine')
+        );
     }
 
     /**
@@ -172,12 +177,9 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
         vfsStream::newFile('composer.json')
                  ->withContent('{"autoload": { "psr-4": { "example\\\console\\\": "src/main/php" } }}')
                  ->at($this->root);;
-        $this->mockConsole->expects($this->once())
-                          ->method('writeLine')
-                          ->with($this->equalTo('Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/ExampleConsoleAppTest.php')));
         $this->testFileCreator->create('example\console\ExampleConsoleApp');
-        $this->assertTrue(file_exists($this->rootpath->to('src/test/php/ExampleConsoleAppTest.php')));
-        $this->assertEquals(
+        assertTrue(file_exists($this->rootpath->to('src/test/php/ExampleConsoleAppTest.php')));
+        assertEquals(
                 '<?php
 /**
  * Your license or something other here.

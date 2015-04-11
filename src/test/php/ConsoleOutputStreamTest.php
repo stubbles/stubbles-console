@@ -20,8 +20,9 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfOutputStreamForOut()
     {
-        $this->assertInstanceOf('stubbles\streams\OutputStream',
-                                ConsoleOutputStream::forOut()
+        assertInstanceOf(
+                'stubbles\streams\OutputStream',
+                ConsoleOutputStream::forOut()
         );
     }
 
@@ -32,9 +33,7 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function alwaysReturnsSameInstanceForOut()
     {
-        $this->assertSame(ConsoleOutputStream::forOut(),
-                          ConsoleOutputStream::forOut()
-        );
+        assertSame(ConsoleOutputStream::forOut(), ConsoleOutputStream::forOut());
     }
 
     /**
@@ -42,8 +41,9 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfOutputStreamForError()
     {
-        $this->assertInstanceOf('stubbles\streams\OutputStream',
-                                ConsoleOutputStream::forError()
+        assertInstanceOf(
+                'stubbles\streams\OutputStream',
+                ConsoleOutputStream::forError()
         );
     }
 
@@ -52,8 +52,9 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function alwaysReturnsSameInstanceForError()
     {
-        $this->assertSame(ConsoleOutputStream::forError(),
-                          ConsoleOutputStream::forError()
+        assertSame(
+                ConsoleOutputStream::forError(),
+                ConsoleOutputStream::forError()
         );
     }
 }

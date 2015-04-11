@@ -5,9 +5,9 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
+use bovigo\callmap\NewInstance;
 use stubbles\input\ValueReader;
 use stubbles\lang\Rootpath;
-use stubbles\lang\reflect;
 /**
  * Test for stubbles\console\creator\ConsoleAppCreator.
  */
@@ -24,62 +24,40 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockConsole;
+    private $console;
     /**
      * mocked class file creator
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockClassFile;
+    private $classFile;
     /**
      * mocked script file creator
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockScriptFile;
+    private $scriptFile;
     /**
      * mocked test file creator
      *
      * @type  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockTestFile;
+    private $testFile;
 
     /**
      * set up test environment
      */
     public function setUp()
     {
-        $this->mockConsole       = $this->getMockBuilder('stubbles\console\Console')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $this->mockClassFile     = $this->getMockBuilder('stubbles\console\creator\ClassFileCreator')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $this->mockScriptFile    = $this->getMockBuilder('stubbles\console\creator\ScriptFileCreator')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $this->mockTestFile      = $this->getMockBuilder('stubbles\console\creator\TestFileCreator')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
+        $this->console    = NewInstance::stub('stubbles\console\Console');
+        $this->classFile  = NewInstance::stub('stubbles\console\creator\ClassFileCreator');
+        $this->scriptFile = NewInstance::stub('stubbles\console\creator\ScriptFileCreator');
+        $this->testFile   = NewInstance::stub('stubbles\console\creator\TestFileCreator');
         $this->consoleAppCreator = new ConsoleAppCreator(
-                $this->mockConsole,
-                $this->mockClassFile,
-                $this->mockScriptFile,
-                $this->mockTestFile
-        );
-        $this->mockConsole->expects(($this->any()))
-                          ->method('writeLine')
-                          ->will($this->returnValue($this->mockConsole));
-    }
-
-    /**
-     * @test
-     */
-    public function annotationsPresentOnConstructor()
-    {
-        $this->assertTrue(
-                reflect\annotationsOfConstructor($this->consoleAppCreator)
-                        ->contain('Inject')
+                $this->console,
+                $this->classFile,
+                $this->scriptFile,
+                $this->testFile
         );
     }
 
@@ -88,16 +66,11 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function doesNotCreateClassWhenClassNameIsInvalid()
     {
-        $this->mockConsole->expects(($this->once()))
-                          ->method('prompt')
-                          ->will($this->returnValue(ValueReader::forValue(null)));
-        $this->mockClassFile->expects($this->never())
-                            ->method('create');
-        $this->mockScriptFile->expects($this->never())
-                           ->method('create');
-        $this->mockTestFile->expects($this->never())
-                           ->method('create');
-        $this->assertEquals(-10, $this->consoleAppCreator->run());
+        $this->console->mapCalls(['prompt' => ValueReader::forValue(null)]);
+        assertEquals(-10, $this->consoleAppCreator->run());
+        assertEquals(0, $this->classFile->callsReceivedFor('create'));
+        assertEquals(0, $this->scriptFile->callsReceivedFor('create'));
+        assertEquals(0, $this->testFile->callsReceivedFor('create'));
     }
 
     /**
@@ -105,19 +78,20 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsExitCodeZeroOnSuccess()
     {
-        $this->mockConsole->expects(($this->once()))
-                          ->method('prompt')
-                          ->will($this->returnValue(ValueReader::forValue('foo\\bar\\Example')));
-        $this->mockClassFile->expects($this->once())
-                            ->method('create')
-                            ->with($this->equalTo('foo\bar\Example'));
-        $this->mockScriptFile->expects($this->once())
-                           ->method('create')
-                           ->with($this->equalTo('foo\bar\Example'));
-        $this->mockTestFile->expects($this->once())
-                           ->method('create')
-                           ->with($this->equalTo('foo\bar\Example'));
-        $this->assertEquals(0, $this->consoleAppCreator->run());
+        $this->console->mapCalls(['prompt' => ValueReader::forValue('foo\\bar\\Example')]);
+        assertEquals(0, $this->consoleAppCreator->run());
+        assertEquals(
+                ['foo\bar\Example'],
+                $this->classFile->argumentsReceivedFor('create')
+        );
+        assertEquals(
+                ['foo\bar\Example'],
+                $this->scriptFile->argumentsReceivedFor('create')
+        );
+        assertEquals(
+                ['foo\bar\Example'],
+                $this->testFile->argumentsReceivedFor('create')
+        );
     }
 
     /**
@@ -125,7 +99,7 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstance()
     {
-        $this->assertInstanceOf(
+        assertInstanceOf(
                 'stubbles\console\creator\ConsoleAppCreator',
                 ConsoleAppCreator::create(new Rootpath())
         );
