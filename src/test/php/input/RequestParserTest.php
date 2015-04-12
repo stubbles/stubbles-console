@@ -75,7 +75,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                 ]
         );
         $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
-        assertEquals(0, $this->requestBroker->callsReceivedFor('procure'));
+        callmap\verify($this->requestBroker, 'procure')->wasNeverCalled();
     }
 
     /**
@@ -91,7 +91,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                 ]
         );
         $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
-        assertEquals(0, $this->requestBroker->callsReceivedFor('procure'));
+        callmap\verify($this->requestBroker, 'procure')->wasNeverCalled();
     }
 
     /**
@@ -142,7 +142,7 @@ Options:
                 'org\stubbles\console\test\BrokeredUserInput',
                 $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput')
         );
-        assertEquals(1, $this->requestBroker->callsReceivedFor('procure'));
+        callmap\verify($this->requestBroker, 'procure')->wasCalledOnce();
     }
 
     /**

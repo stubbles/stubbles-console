@@ -130,11 +130,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesOutputStreamForWrite()
     {
         assertSame($this->console, $this->console->write('foo'));
-        assertEquals(
-                ['foo'],
-                $this->outputStream->argumentsReceivedFor('write')
-        );
-        assertEquals(0, $this->errorStream->callsReceivedFor('write'));
+        callmap\verify($this->outputStream, 'write')->received('foo');
+        callmap\verify($this->errorStream, 'write')->wasNeverCalled();
     }
 
     /**
@@ -143,11 +140,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesOutputStreamForWriteLine()
     {
         assertSame($this->console, $this->console->writeLine('foo'));
-        assertEquals(
-                ['foo'],
-                $this->outputStream->argumentsReceivedFor('writeLine')
-        );
-        assertEquals(0, $this->errorStream->callsReceivedFor('writeLine'));
+        callmap\verify($this->outputStream, 'writeLine')->received('foo');
+        callmap\verify($this->errorStream, 'writeLine')->wasNeverCalled();
     }
 
     /**
@@ -160,11 +154,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
                 $this->console,
                 $this->console->writeLines(['foo', 'bar', 'baz'])
         );
-        assertEquals(
-                [['foo', 'bar', 'baz']],
-                $this->outputStream->argumentsReceivedFor('writeLines')
-        );
-        assertEquals(0, $this->errorStream->callsReceivedFor('writeLine'));
+        callmap\verify($this->outputStream, 'writeLines')->received(['foo', 'bar', 'baz']);
+        callmap\verify($this->errorStream, 'writeLines')->wasNeverCalled();
     }
 
     /**
@@ -174,11 +165,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesOutputStreamForWriteEmptyLine()
     {
         assertSame($this->console, $this->console->writeEmptyLine());
-        assertEquals(
-                [''],
-                $this->outputStream->argumentsReceivedFor('writeLine')
-        );
-        assertEquals(0, $this->errorStream->callsReceivedFor('writeLine'));
+        callmap\verify($this->outputStream, 'writeLine')->received('');
+        callmap\verify($this->errorStream, 'writeLine')->wasNeverCalled();
     }
 
     /**
@@ -187,11 +175,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesErrorStreamForWriteError()
     {
         assertSame($this->console, $this->console->writeError('foo'));
-        assertEquals(
-                ['foo'],
-                $this->errorStream->argumentsReceivedFor('write')
-        );
-        assertEquals(0, $this->outputStream->callsReceivedFor('write'));
+        callmap\verify($this->errorStream, 'write')->received('foo');
+        callmap\verify($this->outputStream, 'write')->wasNeverCalled();
     }
 
     /**
@@ -200,11 +185,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesErrorStreamForWriteErrorLine()
     {
         assertSame($this->console, $this->console->writeErrorLine('foo'));
-        assertEquals(
-                ['foo'],
-                $this->errorStream->argumentsReceivedFor('writeLine')
-        );
-        assertEquals(0, $this->outputStream->callsReceivedFor('writeLine'));
+        callmap\verify($this->errorStream, 'writeLine')->received('foo');
+        callmap\verify($this->outputStream, 'writeLine')->wasNeverCalled();
     }
 
     /**
@@ -217,11 +199,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
                 $this->console,
                 $this->console->writeErrorLines(['foo', 'bar', 'baz'])
         );
-        assertEquals(
-                [['foo', 'bar', 'baz']],
-                $this->errorStream->argumentsReceivedFor('writeLines')
-        );
-        assertEquals(0, $this->outputStream->callsReceivedFor('writeLines'));
+        callmap\verify($this->errorStream, 'writeLines')->received(['foo', 'bar', 'baz']);
+        callmap\verify($this->outputStream, 'writeLines')->wasNeverCalled();
     }
 
     /**
@@ -231,11 +210,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesErrorStreamForWriteEmptyErrorLine()
     {
         assertSame($this->console, $this->console->writeEmptyErrorLine(''));
-        assertEquals(
-                [''],
-                $this->errorStream->argumentsReceivedFor('writeLine')
-        );
-        assertEquals(0, $this->outputStream->callsReceivedFor('writeLine'));
+        callmap\verify($this->errorStream, 'writeLine')->received('');
+        callmap\verify($this->outputStream, 'writeLine')->wasNeverCalled();
     }
 
     /**
@@ -251,10 +227,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
                 $this->console->prompt('Please enter a number: ')
                               ->asInt()
         );
-        assertEquals(
-                ['Please enter a number: '],
-                $this->outputStream->argumentsReceivedFor('write')
-        );
+        callmap\verify($this->outputStream, 'write')
+                ->received('Please enter a number: ');
     }
 
     /**
@@ -306,10 +280,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     {
         $this->inputStream->mapCalls(['readLine' => 'y']);
         assertTrue($this->console->confirm('Do you want to continue: '));
-        assertEquals(
-                ['Do you want to continue: '],
-                $this->outputStream->argumentsReceivedFor('write')
-        );
+        callmap\verify($this->outputStream, 'write')
+                ->received('Do you want to continue: ');
     }
 
     /**
@@ -321,10 +293,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     {
         $this->inputStream->mapCalls(['readLine' => 'Y']);
         assertTrue($this->console->confirm('Do you want to continue: '));
-        assertEquals(
-                ['Do you want to continue: '],
-                $this->outputStream->argumentsReceivedFor('write')
-        );
+        callmap\verify($this->outputStream, 'write')
+                ->received('Do you want to continue: ');
     }
 
     /**
@@ -378,8 +348,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function closeClosesAllStreams()
     {
         $this->console->close();
-        assertEquals(1, $this->inputStream->callsReceivedFor('close'));
-        assertEquals(1, $this->outputStream->callsReceivedFor('close'));
-        assertEquals(1, $this->errorStream->callsReceivedFor('close'));
+        callmap\verify($this->inputStream, 'close')->wasCalledOnce();
+        callmap\verify($this->outputStream, 'close')->wasCalledOnce();
+        callmap\verify($this->errorStream, 'close')->wasCalledOnce();
     }
 }

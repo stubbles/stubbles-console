@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
+use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
 use stubbles\lang\ResourceLoader;
@@ -127,10 +128,8 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
 ',
                 file_get_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'))
         );
-        assertEquals(
-                ['Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')],
-                $this->console->argumentsReceivedFor('writeLine')
-        );
+        callmap\verify($this->console, 'writeLine')
+                ->received('Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'));
     }
 
     /**
@@ -147,10 +146,8 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
                         $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')
                  )
          );
-        assertEquals(
-                ['Test for example\console\ExampleConsoleApp already exists, skipped creating the test'],
-                $this->console->argumentsReceivedFor('writeLine')
-        );
+        callmap\verify($this->console, 'writeLine')
+                ->received('Test for example\console\ExampleConsoleApp already exists, skipped creating the test');
     }
 
     /**

@@ -9,6 +9,7 @@
  */
 namespace stubbles\console;
 use bovigo\callmap\NewInstance;
+use stubbles\streams\memory\MemoryOutputStream;
 /**
  * Test for stubbles\console\ConsoleExecutor.
  *
@@ -72,9 +73,9 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeWithOutputStreamWritesResponseDataToOutputStream()
     {
-        $outputStream = NewInstance::of('stubbles\streams\OutputStream');
-        $this->executor->streamOutputTo($outputStream)->execute('echo foo');
-        assertEquals(['foo'], $outputStream->argumentsReceivedFor('writeLine'));
+        $memory = new MemoryOutputStream();
+        $this->executor->streamOutputTo($memory)->execute('echo foo');
+        assertEquals("foo\n", $memory->buffer());
     }
 
     /**

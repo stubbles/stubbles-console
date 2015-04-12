@@ -5,6 +5,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
+use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use stubbles\input\ValueReader;
 use stubbles\lang\Rootpath;
@@ -22,25 +23,25 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     /**
      * mocked console
      *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
+     * @type  \bovigo\callmap\Proxy
      */
     private $console;
     /**
      * mocked class file creator
      *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
+     * @type  \bovigo\callmap\Proxy
      */
     private $classFile;
     /**
      * mocked script file creator
      *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
+     * @type  \bovigo\callmap\Proxy
      */
     private $scriptFile;
     /**
      * mocked test file creator
      *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
+     * @type  \bovigo\callmap\Proxy
      */
     private $testFile;
 
@@ -68,9 +69,9 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->console->mapCalls(['prompt' => ValueReader::forValue(null)]);
         assertEquals(-10, $this->consoleAppCreator->run());
-        assertEquals(0, $this->classFile->callsReceivedFor('create'));
-        assertEquals(0, $this->scriptFile->callsReceivedFor('create'));
-        assertEquals(0, $this->testFile->callsReceivedFor('create'));
+        callmap\verify($this->classFile, 'create')->wasNeverCalled();
+        callmap\verify($this->scriptFile, 'create')->wasNeverCalled();
+        callmap\verify($this->testFile, 'create')->wasNeverCalled();
     }
 
     /**
@@ -80,18 +81,9 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->console->mapCalls(['prompt' => ValueReader::forValue('foo\\bar\\Example')]);
         assertEquals(0, $this->consoleAppCreator->run());
-        assertEquals(
-                ['foo\bar\Example'],
-                $this->classFile->argumentsReceivedFor('create')
-        );
-        assertEquals(
-                ['foo\bar\Example'],
-                $this->scriptFile->argumentsReceivedFor('create')
-        );
-        assertEquals(
-                ['foo\bar\Example'],
-                $this->testFile->argumentsReceivedFor('create')
-        );
+        callmap\verify($this->classFile, 'create')->received('foo\bar\Example');
+        callmap\verify($this->scriptFile, 'create')->received('foo\bar\Example');
+        callmap\verify($this->testFile, 'create')->received('foo\bar\Example');
     }
 
     /**
