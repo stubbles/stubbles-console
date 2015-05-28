@@ -27,17 +27,6 @@ class ConsoleAppUsingBindingModule extends ConsoleApp
     }
 
     /**
-     * creates mode binding module
-     *
-     * @return  ArgumentsBindingModule
-     * @deprecated  since 4.0.0
-     */
-    public static function getArgumentsBindingModule()
-    {
-        return self::createArgumentsBindingModule();
-    }
-
-    /**
      * runs the command
      */
     public function run() { }

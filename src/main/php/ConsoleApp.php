@@ -153,16 +153,4 @@ abstract class ConsoleApp extends App
     {
         return new ArgumentParser(self::$stubcli);
     }
-
-    /**
-     * creates argument binding module
-     *
-     * @api
-     * @return  \stubbles\console\ioc\ArgumentParser
-     * @deprecated  since 4.0.0, use bindArguments() instead, will be removed with 5.0.0
-     */
-    protected static function createArgumentsBindingModule()
-    {
-        return self::argumentParser();
-    }
 }

@@ -347,19 +347,6 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @since  2.0.0
-     * @test
-     * @deprecated  since 4.0.0
-     */
-    public function canCreateArgumentsBindingModule()
-    {
-        assertInstanceOf(
-                'stubbles\console\ioc\ArgumentParser',
-                ConsoleAppUsingBindingModule::getArgumentsBindingModule()
-        );
-    }
-
-    /**
      * @since  2.1.0
      * @test
      */

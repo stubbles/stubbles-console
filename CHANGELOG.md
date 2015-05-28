@@ -1,6 +1,10 @@
 5.0.0 (2015-??-??)
 ------------------
 
+### BC breaks
+
+  * removed `stubbles\console\ConsoleApp::createArgumentsBindingModule()`, use `stubbles\console\ConsoleApp::argumentParser()` instead, was deprecated since 4.0.0
+
 ### Other changes
 
   * upgraded stubbles/core to 6.0.0
