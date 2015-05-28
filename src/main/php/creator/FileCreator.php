@@ -43,7 +43,6 @@ abstract class FileCreator
      * @param  \stubbles\console\Console      $console
      * @param  \stubbles\lang\Rootpath        $rootpath
      * @param  \stubbles\lang\ResourceLoader  $resourceLoader
-     * @Inject
      */
     public function __construct(Console $console, Rootpath $rootpath, ResourceLoader $resourceLoader)
     {

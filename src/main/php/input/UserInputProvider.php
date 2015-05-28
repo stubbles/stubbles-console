@@ -42,7 +42,6 @@ class UserInputProvider implements InjectionProvider
      * @param  \stubbles\console\input\RequestParser  $requestParser
      * @param  \stubbles\ioc\Injector                 $injector
      * @param  string                                 $userInputClass
-     * @Inject
      * @Named{userInputClass}('stubbles.console.input.class')
      */
     public function __construct(RequestParser $requestParser, Injector $injector, $userInputClass)

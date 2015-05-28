@@ -43,7 +43,6 @@ class Console implements InputStream, OutputStream
      * @param  \stubbles\streams\InputStream   $in   stresm to read data from
      * @param  \stubbles\streams\OutputStream  $out  stream to write default data to
      * @param  \stubbles\streams\OutputStream  $err  stream to write error data to
-     * @Inject
      * @Named{in}('stdin')
      * @Named{out}('stdout')
      * @Named{err}('stderr')

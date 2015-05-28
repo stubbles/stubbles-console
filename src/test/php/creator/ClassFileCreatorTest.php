@@ -95,8 +95,6 @@ class ExampleConsoleApp extends ConsoleApp
 
     /**
      * constructor
-     *
-     * @Inject
      */
     public function __construct()
     {
@@ -190,8 +188,6 @@ class ExampleConsoleApp extends ConsoleApp
 
     /**
      * constructor
-     *
-     * @Inject
      */
     public function __construct()
     {

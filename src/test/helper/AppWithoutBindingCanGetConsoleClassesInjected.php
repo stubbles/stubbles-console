@@ -33,7 +33,6 @@ class AppWithoutBindingCanGetConsoleClassesInjected extends ConsoleApp
      * @param  \stubbles\streams\OutputStream  $out
      * @param  \stubbles\streams\OutputStream  $err
      * @param  \stubbles\console\Executor      $executor
-     * @Inject
      * @Named{in}('stdin')
      * @Named{out}('stdout')
      * @Named{err}('stderr')

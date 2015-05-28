@@ -47,12 +47,12 @@ class ConsoleAppCreator extends ConsoleApp
      * @param  \stubbles\console\creator\ClassFileCreator   $classFile
      * @param  \stubbles\console\creator\ScriptFileCreator  $scriptFile
      * @param  \stubbles\console\creator\TestFileCreator    $testFile
-     * @Inject
      */
-    public function __construct(Console $console,
-                                ClassFileCreator $classFile,
-                                ScriptFileCreator $scriptFile,
-                                TestFileCreator $testFile)
+    public function __construct(
+            Console $console,
+            ClassFileCreator $classFile,
+            ScriptFileCreator $scriptFile,
+            TestFileCreator $testFile)
     {
         $this->console    = $console;
         $this->classFile  = $classFile;

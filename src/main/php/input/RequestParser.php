@@ -47,7 +47,6 @@ class RequestParser
      * @param  \stubbles\input\console\ConsoleRequest     $request
      * @param  \stubbles\input\broker\RequestBroker       $requestBroker
      * @param  \stubbles\input\errors\ParamErrorMessages  $errorMessages
-     * @Inject
      */
     public function __construct(
             ConsoleRequest $request,
