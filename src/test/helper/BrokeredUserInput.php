@@ -67,6 +67,17 @@ class BrokeredUserInput
     /**
      * test method
      *
+     * @Request[String](paramName='argv.1', paramGroup='arg', paramDescription='other-id')
+     * @param  string  $arg
+     */
+    public function setOtherArgument($arg)
+    {
+        $this->bar = $arg;
+    }
+
+    /**
+     * test method
+     *
      * @Request[String](paramName='argv.0', paramGroup='arg', paramDescription='application-id')
      * @param  string  $arg
      */

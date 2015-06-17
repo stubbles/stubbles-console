@@ -112,7 +112,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
             $cae->writeTo($memoryOutputStream);
             assertEquals(
                     "Real awesome command line app (c) 2012 Stubbles Development Team
-Usage: bin/http [options] [application-id]
+Usage: bin/http [options] [application-id] [other-id]
 Options:
    --verbose
    -v

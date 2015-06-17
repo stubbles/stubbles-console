@@ -127,13 +127,14 @@ class RequestParser
             if (substr($targetMethod->paramName(), 0, 5) !== 'argv.') {
                 $options[$this->getOptionName($targetMethod)] = $targetMethod->paramDescription();
             } elseif (!$targetMethod->isRequired()) {
-                $parameters[] = '[' . $targetMethod->paramDescription() . ']';
+                $parameters[$targetMethod->paramName()] = '[' . $targetMethod->paramDescription() . ']';
             } else {
-                $parameters[] = $targetMethod->paramDescription();
+                $parameters[$targetMethod->paramName()] = $targetMethod->paramDescription();
             }
         }
 
         $options['-h or --help'] = 'Prints this help.';
+        asort($parameters);
         return $this->creatHelpWriter(
                 $this->readAppDescription($object),
                 $this->request->readEnv('SCRIPT_NAME')->unsecure(),
