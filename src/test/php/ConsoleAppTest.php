@@ -38,6 +38,15 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * clean up test environment
+     */
+    public function tearDown()
+    {
+        restore_error_handler();
+        restore_exception_handler();
+    }
+
+    /**
      * @param   string[]  $argv
      * @return  ConsoleApp
      */
