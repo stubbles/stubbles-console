@@ -30,7 +30,7 @@
     "bin": ["bin/stubcli", "bin/createConsoleApp"],
     "extra": {
         "branch-alias": {
-            "dev-master": "5.0.x-dev"
+            "dev-master": "5.1.x-dev"
         }
     },
     "minimum-stability": "dev",
