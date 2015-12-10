@@ -11,6 +11,7 @@ namespace stubbles\console\creator;
 use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
+use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
 /**
@@ -50,7 +51,7 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->root            = vfsStream::setup();
         $this->rootpath        = new Rootpath($this->root->url());
-        $this->console         = NewInstance::stub('stubbles\console\Console');
+        $this->console         = NewInstance::stub(Console::class);
         $this->testFileCreator = new TestFileCreator(
                 $this->console,
                 $this->rootpath,

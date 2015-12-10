@@ -11,6 +11,7 @@ namespace stubbles\console\creator;
 use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
+use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
 /**
@@ -50,7 +51,7 @@ class ClassFileCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->root             = vfsStream::setup();
         $this->rootpath         = new Rootpath($this->root->url());
-        $this->console          = NewInstance::stub('stubbles\console\Console');
+        $this->console          = NewInstance::stub(Console::class);
         $this->classFileCreator = new ClassFileCreator(
                 $this->console,
                 $this->rootpath,
@@ -124,7 +125,7 @@ class ExampleConsoleApp extends ConsoleApp
      */
     public function skipsClassCreationIfClassAlreadyExists()
     {
-        $this->classFileCreator->create('stubbles\console\creator\ClassFileCreator');
+        $this->classFileCreator->create(ClassFileCreator::class);
         assertFalse(
                 file_exists($this->rootpath->to('src/main/php/stubbles/console/creator/ClassFileCreator.php'))
         );

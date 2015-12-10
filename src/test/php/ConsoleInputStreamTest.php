@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use stubbles\streams\InputStream;
 /**
  * Test for stubbles\console\ConsoleInputStream.
  *
@@ -21,7 +22,7 @@ class ConsoleInputStreamTest extends \PHPUnit_Framework_TestCase
     public function returnsInstanceOfInputStream()
     {
         assertInstanceOf(
-                'stubbles\streams\InputStream',
+                InputStream::class,
                 ConsoleInputStream::forIn()
         );
     }

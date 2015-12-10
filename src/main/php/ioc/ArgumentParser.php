@@ -8,7 +8,10 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\ioc;
+use stubbles\console\input\UserInputProvider;
+use stubbles\input\Request;
 use stubbles\input\broker\RequestBroker;
+use stubbles\input\console\ConsoleRequest;
 use stubbles\input\console\BaseConsoleRequest;
 use stubbles\ioc\Binder;
 use stubbles\ioc\module\BindingModule;
@@ -118,13 +121,13 @@ class ArgumentParser implements BindingModule
         }
 
         $request = new BaseConsoleRequest($args, $_SERVER);
-        $binder->bind('stubbles\input\Request')
+        $binder->bind(Request::class)
                ->toInstance($request);
-        $binder->bind('stubbles\input\console\ConsoleRequest')
+        $binder->bind(ConsoleRequest::class)
                ->toInstance($request);
         if (null !== $this->userInput) {
             $binder->bind($this->userInput)
-                   ->toProviderClass('stubbles\console\input\UserInputProvider')
+                   ->toProviderClass(UserInputProvider::class)
                    ->asSingleton();
             $binder->bind($this->userInput)
                    ->named('stubbles.console.input.instance')

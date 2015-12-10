@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use stubbles\streams\OutputStream;
 /**
  * Test for stubbles\console\ConsoleOutputStream.
  *
@@ -21,7 +22,7 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
     public function returnsInstanceOfOutputStreamForOut()
     {
         assertInstanceOf(
-                'stubbles\streams\OutputStream',
+                OutputStream::class,
                 ConsoleOutputStream::forOut()
         );
     }
@@ -42,7 +43,7 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
     public function returnsInstanceOfOutputStreamForError()
     {
         assertInstanceOf(
-                'stubbles\streams\OutputStream',
+                OutputStream::class,
                 ConsoleOutputStream::forError()
         );
     }

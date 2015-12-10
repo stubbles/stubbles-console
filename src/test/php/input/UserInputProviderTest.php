@@ -9,6 +9,7 @@
  */
 namespace stubbles\console\input;
 use bovigo\callmap\NewInstance;
+use stubbles\ioc\Injector;
 use stubbles\lang\reflect;
 use org\stubbles\console\test\BrokeredUserInput;
 /**
@@ -39,12 +40,12 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->requestParser = NewInstance::stub('stubbles\console\input\RequestParser');
-        $this->injector      = NewInstance::stub('stubbles\ioc\Injector');
+        $this->requestParser = NewInstance::stub(RequestParser::class);
+        $this->injector      = NewInstance::stub(Injector::class);
         $this->userInputProvider = new UserInputProvider(
                 $this->requestParser,
                 $this->injector,
-                'org\stubbles\console\test\BrokeredUserInput'
+                BrokeredUserInput::class
         );
     }
 

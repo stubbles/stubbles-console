@@ -10,8 +10,15 @@
 namespace stubbles\console\ioc;
 use bovigo\callmap;
 use bovigo\callmap\NewInstance;
+use org\stubbles\console\test\BrokeredUserInput;
+use stubbles\input\Request;
+use stubbles\input\broker\param\ParamBroker;
+use stubbles\input\console\BaseConsoleRequest;
+use stubbles\input\console\ConsoleRequest;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
+use stubbles\streams\InputStream;
+use stubbles\streams\OutputStream;
 /**
  * Test for stubbles\console\ioc\ArgumentParser.
  *
@@ -38,7 +45,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->argumentParser = NewInstance::of('stubbles\console\ioc\ArgumentParser');
+        $this->argumentParser = NewInstance::of(ArgumentParser::class);
         $this->argvBackup     = $_SERVER['argv'];
     }
 
@@ -111,7 +118,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsRequest()
     {
         assertTrue(
-                $this->bindArguments()->hasBinding('stubbles\input\Request')
+                $this->bindArguments()->hasBinding(Request::class)
         );
     }
 
@@ -121,7 +128,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsConsoleRequest()
     {
         assertTrue(
-                $this->bindArguments()->hasBinding('stubbles\input\console\ConsoleRequest')
+                $this->bindArguments()->hasBinding(ConsoleRequest::class)
         );
     }
 
@@ -131,8 +138,8 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsRequestToConsoleRequest()
     {
         assertInstanceOf(
-                'stubbles\input\console\ConsoleRequest',
-                 $this->bindArguments()->getInstance('stubbles\input\Request')
+                ConsoleRequest::class,
+                 $this->bindArguments()->getInstance(Request::class)
         );
     }
 
@@ -142,8 +149,8 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsRequestToBaseConsoleRequest()
     {
         assertInstanceOf(
-                'stubbles\input\console\BaseConsoleRequest',
-                $this->bindArguments()->getInstance('stubbles\input\Request')
+                BaseConsoleRequest::class,
+                $this->bindArguments()->getInstance(Request::class)
         );
     }
 
@@ -153,8 +160,8 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsConsoleRequestToBaseConsoleRequest()
     {
         assertInstanceOf(
-                'stubbles\input\console\BaseConsoleRequest',
-                $this->bindArguments()->getInstance('stubbles\input\console\ConsoleRequest')
+                BaseConsoleRequest::class,
+                $this->bindArguments()->getInstance(ConsoleRequest::class)
         );
     }
 
@@ -165,8 +172,8 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     {
         $injector = $this->bindArguments();
         assertSame(
-                $injector->getInstance('stubbles\input\Request'),
-                $injector->getInstance('stubbles\input\Request')
+                $injector->getInstance(Request::class),
+                $injector->getInstance(Request::class)
         );
     }
 
@@ -177,8 +184,8 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     {
         $injector = $this->bindArguments();
         assertSame(
-                $injector->getInstance('stubbles\input\Request'),
-                $injector->getInstance('stubbles\input\console\ConsoleRequest')
+                $injector->getInstance(Request::class),
+                $injector->getInstance(ConsoleRequest::class)
         );
     }
 
@@ -201,7 +208,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     private function bindRequest()
     {
-        return $this->bindArguments()->getInstance('stubbles\input\Request');
+        return $this->bindArguments()->getInstance(Request::class);
     }
 
     /**
@@ -274,7 +281,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function optionsContainCIfStubCliEnabled()
     {
         $this->argumentParser = NewInstance::of(
-                'stubbles\console\ioc\ArgumentParser',
+                ArgumentParser::class,
                 [true]
         );
         $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
@@ -290,7 +297,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function optionsContainCIfStubCliEnabledAndOnlyLongOptionsSet()
     {
         $this->argumentParser = NewInstance::of(
-                'stubbles\console\ioc\ArgumentParser',
+                ArgumentParser::class,
                 [true]
         );
         $this->argumentParser->mapCalls(['getopt' => ['verbose' => false]]);
@@ -306,7 +313,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function optionsContainCIfStubCliEnabledAndLongOptionsSetFirst()
     {
         $this->argumentParser = NewInstance::of(
-                'stubbles\console\ioc\ArgumentParser',
+                ArgumentParser::class,
                 [true]
         );
         $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
@@ -331,11 +338,11 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsUserInputIfSet()
     {
-        $this->argumentParser->withUserInput('org\stubbles\console\test\BrokeredUserInput');
+        $this->argumentParser->withUserInput(BrokeredUserInput::class);
         $this->argumentParser->mapCalls(['getopt' => []]);
         $injector = $this->bindArguments();
         assertTrue($injector->hasConstant('stubbles.console.input.class'));
-        assertTrue($injector->hasBinding('org\stubbles\console\test\BrokeredUserInput'));#
+        assertTrue($injector->hasBinding(BrokeredUserInput::class));#
         callmap\verify($this->argumentParser, 'getopt')
                 ->received('vo:u:h', ['verbose', 'bar1:', 'bar2:', 'help']);
     }
@@ -346,25 +353,25 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsUserInputAsSingleton()
     {
-        $this->argumentParser->withUserInput('org\stubbles\console\test\BrokeredUserInput');
+        $this->argumentParser->withUserInput(BrokeredUserInput::class);
         $this->argumentParser->mapCalls(['getopt' => ['bar2' => 'foo', 'o' => 'baz']]);
         $binder = new Binder();
         $this->argumentParser->configure($binder);
-        $binder->bind('stubbles\streams\OutputStream')
+        $binder->bind(OutputStream::class)
                ->named('stdout')
-               ->toInstance(NewInstance::of('stubbles\streams\OutputStream'));
-        $binder->bind('stubbles\streams\OutputStream')
+               ->toInstance(NewInstance::of(OutputStream::class));
+        $binder->bind(OutputStream::class)
                ->named('stderr')
-               ->toInstance(NewInstance::of('stubbles\streams\OutputStream'));
-        $binder->bind('stubbles\streams\InputStream')
+               ->toInstance(NewInstance::of(OutputStream::class));
+        $binder->bind(InputStream::class)
                ->named('stdin')
-               ->toInstance(NewInstance::of('stubbles\streams\InputStream'));
-        $binder->bindMap('stubbles\input\broker\param\ParamBroker')
-               ->withEntry('Mock', NewInstance::of('stubbles\input\broker\param\ParamBroker'));
+               ->toInstance(NewInstance::of(InputStream::class));
+        $binder->bindMap(ParamBroker::class)
+               ->withEntry('Mock', NewInstance::of(ParamBroker::class));
         $injector = $binder->getInjector();
         assertSame(
-                $injector->getInstance('org\stubbles\console\test\BrokeredUserInput'),
-                $injector->getInstance('org\stubbles\console\test\BrokeredUserInput')
+                $injector->getInstance(BrokeredUserInput::class),
+                $injector->getInstance(BrokeredUserInput::class)
         );
         callmap\verify($this->argumentParser, 'getopt')
                 ->received('vo:u:h', ['verbose', 'bar1:', 'bar2:', 'help']);

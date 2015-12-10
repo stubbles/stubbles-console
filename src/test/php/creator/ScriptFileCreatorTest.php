@@ -11,6 +11,7 @@ namespace stubbles\console\creator;
 use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
+use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
 /**
@@ -45,7 +46,7 @@ class ScriptFileCreatorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->rootpath          = new Rootpath(vfsStream::setup()->url());
-        $this->console           = NewInstance::stub('stubbles\console\Console');
+        $this->console           = NewInstance::stub(Console::class);
         $this->scriptFileCreator = new ScriptFileCreator(
                 $this->console,
                 $this->rootpath,

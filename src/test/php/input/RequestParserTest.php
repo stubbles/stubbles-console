@@ -12,7 +12,10 @@ use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use stubbles\console\ConsoleAppException;
 use stubbles\input\ValueReader;
+use stubbles\input\broker\RequestBroker;
+use stubbles\input\console\ConsoleRequest;
 use stubbles\input\errors\ParamErrors;
+use stubbles\input\errors\messages\ParamErrorMessages;
 use stubbles\streams\memory\MemoryOutputStream;
 /**
  * Test for stubbles\console\input\RequestParser.
@@ -52,9 +55,9 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->consoleRequest     = NewInstance::of('stubbles\input\console\ConsoleRequest');
-        $this->requestBroker      = NewInstance::stub('stubbles\input\broker\RequestBroker');
-        $this->paramErrorMessages = NewInstance::of('stubbles\input\errors\messages\ParamErrorMessages');
+        $this->consoleRequest     = NewInstance::of(ConsoleRequest::class);
+        $this->requestBroker      = NewInstance::stub(RequestBroker::class);
+        $this->paramErrorMessages = NewInstance::of(ParamErrorMessages::class);
         $this->requestParser      = new RequestParser(
                 $this->consoleRequest,
                 $this->requestBroker,

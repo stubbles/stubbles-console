@@ -7,6 +7,7 @@
 namespace stubbles\console\creator;
 use bovigo\callmap;
 use bovigo\callmap\NewInstance;
+use stubbles\console\Console;
 use stubbles\input\ValueReader;
 use stubbles\lang\Rootpath;
 /**
@@ -50,10 +51,10 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->console    = NewInstance::stub('stubbles\console\Console');
-        $this->classFile  = NewInstance::stub('stubbles\console\creator\ClassFileCreator');
-        $this->scriptFile = NewInstance::stub('stubbles\console\creator\ScriptFileCreator');
-        $this->testFile   = NewInstance::stub('stubbles\console\creator\TestFileCreator');
+        $this->console    = NewInstance::stub(Console::class);
+        $this->classFile  = NewInstance::stub(ClassFileCreator::class);
+        $this->scriptFile = NewInstance::stub(ScriptFileCreator::class);
+        $this->testFile   = NewInstance::stub(TestFileCreator::class);
         $this->consoleAppCreator = new ConsoleAppCreator(
                 $this->console,
                 $this->classFile,
@@ -92,7 +93,7 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         assertInstanceOf(
-                'stubbles\console\creator\ConsoleAppCreator',
+                ConsoleAppCreator::class,
                 ConsoleAppCreator::create(new Rootpath())
         );
     }

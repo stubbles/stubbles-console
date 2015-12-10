@@ -8,6 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use stubbles\console\ioc\ArgumentParser;
 use stubbles\lang\Rootpath;
 use stubbles\streams\memory\MemoryOutputStream;
 use org\stubbles\console\test\AppWithoutBindingCanGetConsoleClassesInjected;
@@ -139,7 +140,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                 $this->createStubCliApp(
                         ['stubcli',
                          '-c',
-                         'org\stubbles\console\test\TestConsoleApp'
+                         TestConsoleApp::class
                         ]
                 )
         );
@@ -154,7 +155,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         $this->createStubCliApp(
                 ['stubcli',
                  '-c',
-                 'org\stubbles\console\test\TestConsoleApp'
+                 TestConsoleApp::class
                 ]
         );
         assertEquals(
@@ -177,7 +178,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         $this->createStubCliApp(
                 ['stubcli',
                  '-c',
-                 'org\stubbles\console\test\TestConsoleApp'
+                 TestConsoleApp::class
                 ]
         );
         assertEquals(
@@ -197,7 +198,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                 $this->createStubCliApp(
                         ['stubcli',
                          '-c',
-                         'org\stubbles\console\test\TestConsoleApp'
+                         TestConsoleApp::class
                         ]
                 )
         );
@@ -213,7 +214,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         $this->createStubCliApp(
                 ['stubcli',
                  '-c',
-                 'org\stubbles\console\test\TestConsoleApp'
+                 TestConsoleApp::class
                 ]
         );
         assertEquals(
@@ -232,7 +233,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                 $this->createStubCliApp(
                         ['stubcli',
                          '-c',
-                         'org\stubbles\console\test\TestConsoleApp'
+                         TestConsoleApp::class
                         ]
                 )
         );
@@ -251,7 +252,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                          '-other',
                          'value',
                          '-c',
-                         'org\stubbles\console\test\TestConsoleApp'
+                         TestConsoleApp::class
                         ]
                 )
         );
@@ -350,7 +351,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function parseArgumentsReturnsBindingModuleForArguments()
     {
         assertInstanceOf(
-                'stubbles\console\ioc\ArgumentParser',
+                ArgumentParser::class,
                 ConsoleAppUsingBindingModule::returnArgumentParser()
         );
     }
@@ -368,7 +369,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                         ['stubcli',
                          'value',
                          '-c',
-                         'org\stubbles\console\test\SelfBoundConsoleApp'
+                         SelfBoundConsoleApp::class
                         ]
                 )
          );
@@ -386,7 +387,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
                 ['stubcli',
                  'value',
                  '-c',
-                 'org\stubbles\console\test\SelfBoundConsoleApp'
+                 SelfBoundConsoleApp::class
                 ]
          );
         assertEquals('', $this->errorOutputStream->buffer());
@@ -439,7 +440,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
         assertInstanceOf(
-                'stubbles\console\ConsoleExecutor',
+                ConsoleExecutor::class,
                 $app->executor
         );
     }

@@ -11,6 +11,7 @@ namespace stubbles\console;
 use stubbles\console\ioc\ArgumentParser;
 use stubbles\ioc\App;
 use stubbles\ioc\Binder;
+use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
 /**
  * Base class for console applications.
@@ -128,17 +129,17 @@ abstract class ConsoleApp extends App
         $bindings   = parent::getBindingsForApp($className);
         $bindings[] = function(Binder $binder)
         {
-            $binder->bind('stubbles\streams\InputStream')
+            $binder->bind(InputStream::class)
                    ->named('stdin')
                    ->toInstance(ConsoleInputStream::forIn());
-            $binder->bind('stubbles\streams\OutputStream')
+            $binder->bind(OutputStream::class)
                    ->named('stdout')
                    ->toInstance(ConsoleOutputStream::forOut());
-            $binder->bind('stubbles\streams\OutputStream')
+            $binder->bind(OutputStream::class)
                    ->named('stderr')
                    ->toInstance(ConsoleOutputStream::forError());
-            $binder->bind('stubbles\console\Executor')
-                   ->to('stubbles\console\ConsoleExecutor');
+            $binder->bind(Executor::class)
+                   ->to(ConsoleExecutor::class);
         };
         return $bindings;
     }

@@ -12,6 +12,8 @@ use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use stubbles\input\errors\ParamErrors;
 use stubbles\lang\reflect;
+use stubbles\streams\InputStream;
+use stubbles\streams\OutputStream;
 /**
  * Test for stubbles\console\Console.
  *
@@ -49,9 +51,9 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->inputStream  = NewInstance::of('stubbles\streams\InputStream');
-        $this->outputStream = NewInstance::of('stubbles\streams\OutputStream');
-        $this->errorStream  = NewInstance::of('stubbles\streams\OutputStream');
+        $this->inputStream  = NewInstance::of(InputStream::class);
+        $this->outputStream = NewInstance::of(OutputStream::class);
+        $this->errorStream  = NewInstance::of(OutputStream::class);
         $this->console          = new Console(
                 $this->inputStream,
                 $this->outputStream,
