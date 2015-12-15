@@ -8,12 +8,14 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use stubbles\input\errors\ParamErrors;
-use stubbles\lang\reflect;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
+
+use function bovigo\callmap\onConsecutiveCalls;
+use function bovigo\callmap\verify;
+use function stubbles\lang\reflect\annotationsOfConstructorParameter;
 /**
  * Test for stubbles\console\Console.
  *
@@ -66,21 +68,21 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $inParamAnnotations = reflect\annotationsOfConstructorParameter('in', $this->console);
+        $inParamAnnotations = annotationsOfConstructorParameter('in', $this->console);
         assertTrue($inParamAnnotations->contain('Named'));
         assertEquals(
                 'stdin',
                 $inParamAnnotations->firstNamed('Named')->getName()
         );
 
-        $outParamAnnotations = reflect\annotationsOfConstructorParameter('out', $this->console);
+        $outParamAnnotations = annotationsOfConstructorParameter('out', $this->console);
         assertTrue($outParamAnnotations->contain('Named'));
         assertEquals(
                 'stdout',
                 $outParamAnnotations->firstNamed('Named')->getName()
         );
 
-        $errParamAnnotations = reflect\annotationsOfConstructorParameter('err', $this->console);
+        $errParamAnnotations = annotationsOfConstructorParameter('err', $this->console);
         assertTrue($errParamAnnotations->contain('Named'));
         assertEquals(
                 'stderr',
@@ -132,8 +134,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesOutputStreamForWrite()
     {
         assertSame($this->console, $this->console->write('foo'));
-        callmap\verify($this->outputStream, 'write')->received('foo');
-        callmap\verify($this->errorStream, 'write')->wasNeverCalled();
+        verify($this->outputStream, 'write')->received('foo');
+        verify($this->errorStream, 'write')->wasNeverCalled();
     }
 
     /**
@@ -142,8 +144,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesOutputStreamForWriteLine()
     {
         assertSame($this->console, $this->console->writeLine('foo'));
-        callmap\verify($this->outputStream, 'writeLine')->received('foo');
-        callmap\verify($this->errorStream, 'writeLine')->wasNeverCalled();
+        verify($this->outputStream, 'writeLine')->received('foo');
+        verify($this->errorStream, 'writeLine')->wasNeverCalled();
     }
 
     /**
@@ -156,8 +158,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
                 $this->console,
                 $this->console->writeLines(['foo', 'bar', 'baz'])
         );
-        callmap\verify($this->outputStream, 'writeLines')->received(['foo', 'bar', 'baz']);
-        callmap\verify($this->errorStream, 'writeLines')->wasNeverCalled();
+        verify($this->outputStream, 'writeLines')->received(['foo', 'bar', 'baz']);
+        verify($this->errorStream, 'writeLines')->wasNeverCalled();
     }
 
     /**
@@ -167,8 +169,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesOutputStreamForWriteEmptyLine()
     {
         assertSame($this->console, $this->console->writeEmptyLine());
-        callmap\verify($this->outputStream, 'writeLine')->received('');
-        callmap\verify($this->errorStream, 'writeLine')->wasNeverCalled();
+        verify($this->outputStream, 'writeLine')->received('');
+        verify($this->errorStream, 'writeLine')->wasNeverCalled();
     }
 
     /**
@@ -177,8 +179,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesErrorStreamForWriteError()
     {
         assertSame($this->console, $this->console->writeError('foo'));
-        callmap\verify($this->errorStream, 'write')->received('foo');
-        callmap\verify($this->outputStream, 'write')->wasNeverCalled();
+        verify($this->errorStream, 'write')->received('foo');
+        verify($this->outputStream, 'write')->wasNeverCalled();
     }
 
     /**
@@ -187,8 +189,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesErrorStreamForWriteErrorLine()
     {
         assertSame($this->console, $this->console->writeErrorLine('foo'));
-        callmap\verify($this->errorStream, 'writeLine')->received('foo');
-        callmap\verify($this->outputStream, 'writeLine')->wasNeverCalled();
+        verify($this->errorStream, 'writeLine')->received('foo');
+        verify($this->outputStream, 'writeLine')->wasNeverCalled();
     }
 
     /**
@@ -201,8 +203,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
                 $this->console,
                 $this->console->writeErrorLines(['foo', 'bar', 'baz'])
         );
-        callmap\verify($this->errorStream, 'writeLines')->received(['foo', 'bar', 'baz']);
-        callmap\verify($this->outputStream, 'writeLines')->wasNeverCalled();
+        verify($this->errorStream, 'writeLines')->received(['foo', 'bar', 'baz']);
+        verify($this->outputStream, 'writeLines')->wasNeverCalled();
     }
 
     /**
@@ -212,8 +214,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesErrorStreamForWriteEmptyErrorLine()
     {
         assertSame($this->console, $this->console->writeEmptyErrorLine(''));
-        callmap\verify($this->errorStream, 'writeLine')->received('');
-        callmap\verify($this->outputStream, 'writeLine')->wasNeverCalled();
+        verify($this->errorStream, 'writeLine')->received('');
+        verify($this->outputStream, 'writeLine')->wasNeverCalled();
     }
 
     /**
@@ -229,7 +231,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
                 $this->console->prompt('Please enter a number: ')
                               ->asInt()
         );
-        callmap\verify($this->outputStream, 'write')
+        verify($this->outputStream, 'write')
                 ->received('Please enter a number: ');
     }
 
@@ -282,7 +284,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     {
         $this->inputStream->mapCalls(['readLine' => 'y']);
         assertTrue($this->console->confirm('Do you want to continue: '));
-        callmap\verify($this->outputStream, 'write')
+        verify($this->outputStream, 'write')
                 ->received('Do you want to continue: ');
     }
 
@@ -295,7 +297,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     {
         $this->inputStream->mapCalls(['readLine' => 'Y']);
         assertTrue($this->console->confirm('Do you want to continue: '));
-        callmap\verify($this->outputStream, 'write')
+        verify($this->outputStream, 'write')
                 ->received('Do you want to continue: ');
     }
 
@@ -328,7 +330,9 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function confirmRepeatsQuestionUntilValidInput()
     {
-        $this->inputStream->mapCalls(['readLine' => callmap\onConsecutiveCalls('foo', '', 'n')]);
+        $this->inputStream->mapCalls([
+                'readLine' => onConsecutiveCalls('foo', '', 'n')
+        ]);
         assertFalse($this->console->confirm('Do you want to continue: '));
     }
 
@@ -339,7 +343,9 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function confirmUsesDefaultWhenInputIsEmpty()
     {
-        $this->inputStream->mapCalls(['readLine' => callmap\onConsecutiveCalls('foo', '')]);
+        $this->inputStream->mapCalls([
+                'readLine' => onConsecutiveCalls('foo', '')
+        ]);
         assertFalse($this->console->confirm('Do you want to continue: ', 'n'));
     }
 
@@ -350,8 +356,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function closeClosesAllStreams()
     {
         $this->console->close();
-        callmap\verify($this->inputStream, 'close')->wasCalledOnce();
-        callmap\verify($this->outputStream, 'close')->wasCalledOnce();
-        callmap\verify($this->errorStream, 'close')->wasCalledOnce();
+        verify($this->inputStream, 'close')->wasCalledOnce();
+        verify($this->outputStream, 'close')->wasCalledOnce();
+        verify($this->errorStream, 'close')->wasCalledOnce();
     }
 }

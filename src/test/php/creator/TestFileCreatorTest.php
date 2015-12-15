@@ -8,12 +8,13 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
-use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
 use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
+
+use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\TestFileCreator.
  *
@@ -75,7 +76,8 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
  */
 namespace example\console;
 use stubbles\lang\Rootpath;
-use stubbles\lang\reflect;
+
+use function stubbles\lang\reflect\annotationsOfConstructor;
 /**
  * Test for example\console\ExampleConsoleApp.
  */
@@ -102,8 +104,7 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                reflect\annotationsOfConstructor($this->instance)
-                        ->contain(\'Inject\')
+                annotationsOfConstructor($this->instance)->contain(\'Inject\')
         );
     }
 
@@ -129,7 +130,7 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
 ',
                 file_get_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'))
         );
-        callmap\verify($this->console, 'writeLine')
+        verify($this->console, 'writeLine')
                 ->received('Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'));
     }
 
@@ -147,7 +148,7 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
                         $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')
                  )
          );
-        callmap\verify($this->console, 'writeLine')
+        verify($this->console, 'writeLine')
                 ->received('Test for example\console\ExampleConsoleApp already exists, skipped creating the test');
     }
 
@@ -186,7 +187,8 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
  */
 namespace example\console;
 use stubbles\lang\Rootpath;
-use stubbles\lang\reflect;
+
+use function stubbles\lang\reflect\annotationsOfConstructor;
 /**
  * Test for example\console\ExampleConsoleApp.
  */
@@ -213,8 +215,7 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function annotationsPresentOnConstructor()
     {
         $this->assertTrue(
-                reflect\annotationsOfConstructor($this->instance)
-                        ->contain(\'Inject\')
+                annotationsOfConstructor($this->instance)->contain(\'Inject\')
         );
     }
 

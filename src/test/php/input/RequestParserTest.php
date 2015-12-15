@@ -8,7 +8,6 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\input;
-use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use stubbles\console\ConsoleAppException;
 use stubbles\input\ValueReader;
@@ -17,6 +16,9 @@ use stubbles\input\console\ConsoleRequest;
 use stubbles\input\errors\ParamErrors;
 use stubbles\input\errors\messages\ParamErrorMessages;
 use stubbles\streams\memory\MemoryOutputStream;
+
+use function bovigo\callmap\onConsecutiveCalls;
+use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\input\RequestParser.
  *
@@ -78,7 +80,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                 ]
         );
         $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
-        callmap\verify($this->requestBroker, 'procure')->wasNeverCalled();
+        verify($this->requestBroker, 'procure')->wasNeverCalled();
     }
 
     /**
@@ -89,12 +91,12 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     public function throwsConsoleAppExceptionWhenHelpIsRequestedWithDashDashHelp()
     {
         $this->consoleRequest->mapCalls(
-                ['hasParam' => callmap\onConsecutiveCalls(false, true),
+                ['hasParam' => onConsecutiveCalls(false, true),
                  'readEnv'  => ValueReader::forValue('bin/http')
                 ]
         );
         $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
-        callmap\verify($this->requestBroker, 'procure')->wasNeverCalled();
+        verify($this->requestBroker, 'procure')->wasNeverCalled();
     }
 
     /**
@@ -145,7 +147,7 @@ Options:
                 'org\stubbles\console\test\BrokeredUserInput',
                 $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput')
         );
-        callmap\verify($this->requestBroker, 'procure')->wasCalledOnce();
+        verify($this->requestBroker, 'procure')->wasCalledOnce();
     }
 
     /**

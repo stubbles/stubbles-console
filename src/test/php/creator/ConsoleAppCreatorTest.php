@@ -5,11 +5,12 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
-use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use stubbles\console\Console;
 use stubbles\input\ValueReader;
 use stubbles\lang\Rootpath;
+
+use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\ConsoleAppCreator.
  */
@@ -70,9 +71,9 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->console->mapCalls(['prompt' => ValueReader::forValue(null)]);
         assertEquals(-10, $this->consoleAppCreator->run());
-        callmap\verify($this->classFile, 'create')->wasNeverCalled();
-        callmap\verify($this->scriptFile, 'create')->wasNeverCalled();
-        callmap\verify($this->testFile, 'create')->wasNeverCalled();
+        verify($this->classFile, 'create')->wasNeverCalled();
+        verify($this->scriptFile, 'create')->wasNeverCalled();
+        verify($this->testFile, 'create')->wasNeverCalled();
     }
 
     /**
@@ -82,9 +83,9 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->console->mapCalls(['prompt' => ValueReader::forValue('foo\\bar\\Example')]);
         assertEquals(0, $this->consoleAppCreator->run());
-        callmap\verify($this->classFile, 'create')->received('foo\bar\Example');
-        callmap\verify($this->scriptFile, 'create')->received('foo\bar\Example');
-        callmap\verify($this->testFile, 'create')->received('foo\bar\Example');
+        verify($this->classFile, 'create')->received('foo\bar\Example');
+        verify($this->scriptFile, 'create')->received('foo\bar\Example');
+        verify($this->testFile, 'create')->received('foo\bar\Example');
     }
 
     /**

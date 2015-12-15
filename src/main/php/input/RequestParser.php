@@ -13,8 +13,9 @@ use stubbles\input\console\ConsoleRequest;
 use stubbles\input\broker\RequestBroker;
 use stubbles\input\broker\TargetMethod;
 use stubbles\input\errors\messages\ParamErrorMessages;
-use stubbles\lang\reflect;
 use stubbles\streams\OutputStream;
+
+use function stubbles\lang\reflect\annotationsOf;
 /**
  * Interface for command executors.
  *
@@ -151,7 +152,7 @@ class RequestParser
      */
     private function readAppDescription($object)
     {
-        $annotations = reflect\annotationsOf($object);
+        $annotations = annotationsOf($object);
         if (!$annotations->contain('AppDescription')) {
             return null;
         }

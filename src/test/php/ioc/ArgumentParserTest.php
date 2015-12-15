@@ -8,7 +8,6 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\ioc;
-use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use org\stubbles\console\test\BrokeredUserInput;
 use stubbles\input\Request;
@@ -19,6 +18,8 @@ use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
+
+use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\ioc\ArgumentParser.
  *
@@ -108,8 +109,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
                 $expected,
                 $this->bindArguments()->getConstant($constantName)
         );
-        callmap\verify($this->argumentParser, 'getopt')
-                ->received('n:f::', ['verbose']);
+        verify($this->argumentParser, 'getopt')->received('n:f::', ['verbose']);
     }
 
     /**
@@ -260,8 +260,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
                 $expected,
                 $this->bindRequest()->readParam($paramName)->unsecure()
         );
-        callmap\verify($this->argumentParser, 'getopt')
-                ->received('n:f::', ['verbose']);
+        verify($this->argumentParser, 'getopt')->received('n:f::', ['verbose']);
     }
 
     /**
@@ -287,8 +286,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
         $this->argumentParser->withOptions('n:f::')->withLongOptions(['verbose']);
         $this->bindArguments();
-        callmap\verify($this->argumentParser, 'getopt')
-                ->received('n:f::c:', ['verbose']);
+        verify($this->argumentParser, 'getopt')->received('n:f::c:', ['verbose']);
     }
 
     /**
@@ -303,8 +301,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $this->argumentParser->mapCalls(['getopt' => ['verbose' => false]]);
         $this->argumentParser->withLongOptions(['verbose']);
         $this->bindArguments();
-        callmap\verify($this->argumentParser, 'getopt')
-                ->received('c:', ['verbose']);
+        verify($this->argumentParser, 'getopt')->received('c:', ['verbose']);
     }
 
     /**
@@ -319,8 +316,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
         $this->argumentParser->withLongOptions(['verbose'])->withOptions('n:f::');
         $this->bindArguments();
-        callmap\verify($this->argumentParser, 'getopt')
-                ->received('n:f::c:', ['verbose']);
+        verify($this->argumentParser, 'getopt')->received('n:f::c:', ['verbose']);
     }
 
     /**
@@ -343,7 +339,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $injector = $this->bindArguments();
         assertTrue($injector->hasConstant('stubbles.console.input.class'));
         assertTrue($injector->hasBinding(BrokeredUserInput::class));#
-        callmap\verify($this->argumentParser, 'getopt')
+        verify($this->argumentParser, 'getopt')
                 ->received('vo:u:h', ['verbose', 'bar1:', 'bar2:', 'help']);
     }
 
@@ -373,7 +369,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
                 $injector->getInstance(BrokeredUserInput::class),
                 $injector->getInstance(BrokeredUserInput::class)
         );
-        callmap\verify($this->argumentParser, 'getopt')
+        verify($this->argumentParser, 'getopt')
                 ->received('vo:u:h', ['verbose', 'bar1:', 'bar2:', 'help']);
     }
 }

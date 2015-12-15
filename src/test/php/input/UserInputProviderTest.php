@@ -10,8 +10,9 @@
 namespace stubbles\console\input;
 use bovigo\callmap\NewInstance;
 use stubbles\ioc\Injector;
-use stubbles\lang\reflect;
 use org\stubbles\console\test\BrokeredUserInput;
+
+use function stubbles\lang\reflect\annotationsOfConstructorParameter;
 /**
  * Test for stubbles\console\input\UserInputProvider.
  *
@@ -54,7 +55,7 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function annotationsPresentOnConstructor()
     {
-        $annotations = reflect\annotationsOfConstructorParameter(
+        $annotations = annotationsOfConstructorParameter(
                 'userInputClass',
                 $this->userInputProvider
         );

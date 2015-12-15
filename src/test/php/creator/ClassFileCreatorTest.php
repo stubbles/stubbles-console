@@ -8,12 +8,13 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
-use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
 use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
+
+use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\ClassFileCreator.
  *
@@ -116,7 +117,7 @@ class ExampleConsoleApp extends ConsoleApp
 ',
                 file_get_contents($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php'))
         );
-        callmap\verify($this->console, 'writeLine')
+        verify($this->console, 'writeLine')
                 ->received('Class example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php'));
     }
 
@@ -129,7 +130,7 @@ class ExampleConsoleApp extends ConsoleApp
         assertFalse(
                 file_exists($this->rootpath->to('src/main/php/stubbles/console/creator/ClassFileCreator.php'))
         );
-        callmap\verify($this->console, 'writeLine')
+        verify($this->console, 'writeLine')
                 ->received('Class stubbles\console\creator\ClassFileCreator already exists, skipped creating the class');
     }
 

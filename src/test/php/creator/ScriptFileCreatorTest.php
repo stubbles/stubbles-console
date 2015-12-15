@@ -8,12 +8,13 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
-use bovigo\callmap;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
 use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
+
+use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\ScriptFileCreator.
  *
@@ -87,7 +88,7 @@ exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOu
 ',
                 file_get_contents($this->rootpath->to('bin/example'))
         );
-        callmap\verify($this->console, 'writeLine')
+        verify($this->console, 'writeLine')
                 ->receivedOn(2, 'Script for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('bin/example'));
     }
 
@@ -101,7 +102,7 @@ exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOu
         $this->console->mapCalls(['readLine'  => 'example']);
         $this->scriptFileCreator->create('example\console\ExampleConsoleApp');
         assertEquals('foo', file_get_contents($this->rootpath->to('bin/example')));
-        callmap\verify($this->console, 'writeLine')
+        verify($this->console, 'writeLine')
                 ->receivedOn(2, 'Script for example\console\ExampleConsoleApp already exists, skipped creating the script');
     }
 }
