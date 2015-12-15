@@ -105,8 +105,9 @@ class ArgumentParser implements BindingModule
      * configure the binder
      *
      * @param  \stubbles\ioc\Binder  $binder
+     * @param  string                $projectPath  optional  project base path
      */
-    public function configure(Binder $binder)
+    public function configure(Binder $binder, $projectPath = null)
     {
         $args = $this->parseArgs();
         $binder->bindConstant('argv')
