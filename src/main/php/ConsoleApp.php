@@ -92,6 +92,6 @@ abstract class ConsoleApp extends App
      */
     protected static function argumentParser()
     {
-        return new ArgumentParser(false);
+        return new ArgumentParser();
     }
 }
