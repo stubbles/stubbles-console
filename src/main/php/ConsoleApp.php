@@ -41,7 +41,7 @@ abstract class ConsoleApp extends App
             $err->write($iov->getMessage());
             return 10;
         } catch (ConsoleAppException $cae) {
-            $cae->writeTo($err);
+            $err->writeLine($cae->getMessage());
             return $cae->getCode();
         } catch (\Exception $e) {
             $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());

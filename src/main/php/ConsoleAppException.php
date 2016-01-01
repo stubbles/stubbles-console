@@ -9,7 +9,6 @@
  */
 namespace stubbles\console;
 use stubbles\lang\exception\Exception;
-use stubbles\streams\OutputStream;
 /**
  * Exception for signaling errors on app execution.
  *
@@ -17,13 +16,6 @@ use stubbles\streams\OutputStream;
  */
 class ConsoleAppException extends Exception
 {
-    /**
-     * closure
-     *
-     * @type  callable
-     */
-    private $messenger;
-
     /**
      * constructor
      *
@@ -33,22 +25,6 @@ class ConsoleAppException extends Exception
      */
     public function __construct($message, $code, \Exception $cause = null)
     {
-        parent::__construct($message, $cause, $code);
-    }
-
-    /**
-     * writes error message to given output stream
-     *
-     * @param   \stubbles\streams\OutputStream  $out  stream to write message to
-     */
-    public function writeTo(OutputStream $out)
-    {
-        if (null === $this->messenger) {
-            $out->writeLine('*** Exception: ' . $this->getMessage());
-            return;
-        }
-
-        $writeMessage = $this->messenger;
-        $writeMessage($out);
+        parent::__construct('*** Exception: ' . $message, $cause, $code);
     }
 }
