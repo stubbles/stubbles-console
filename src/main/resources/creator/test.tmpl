@@ -31,16 +31,6 @@ class {CLASS}Test extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function annotationsPresentOnConstructor()
-    {
-        $this->assertTrue(
-                annotationsOfConstructor($this->instance)->contain('Inject')
-        );
-    }
-
-    /**
-     * @test
-     */
     public function returnsExitCode0()
     {
         $this->assertEquals(0, $this->instance->run());

@@ -15,7 +15,6 @@ use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
 
 use function bovigo\assert\assert;
-use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\equals;
 use function bovigo\callmap\verify;
@@ -111,16 +110,6 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->instance = new ExampleConsoleApp();
-    }
-
-    /**
-     * @test
-     */
-    public function annotationsPresentOnConstructor()
-    {
-        $this->assertTrue(
-                annotationsOfConstructor($this->instance)->contain(\'Inject\')
-        );
     }
 
     /**
@@ -235,16 +224,6 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->instance = new ExampleConsoleApp();
-    }
-
-    /**
-     * @test
-     */
-    public function annotationsPresentOnConstructor()
-    {
-        $this->assertTrue(
-                annotationsOfConstructor($this->instance)->contain(\'Inject\')
-        );
     }
 
     /**
