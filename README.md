@@ -106,19 +106,25 @@ the functionality you want to implement.
 
 **What happens if the entered class already exists?**
 
-The creating script will check if a class with the given name already exists within the project. This includes all classes that can be loaded via the autoload functionality. If it does exist, creation of the app class is skipped.
+The creating script will check if a class with the given name already exists
+within the project. This includes all classes that can be loaded via the
+autoload functionality. If it does exist, creation of the app class is skipped.
 
 **What happens if the script to be created already exists?**
 
 Creation of the script will be skipped.
 
-**What happens if a unit test in _src/test/php_ with this class name already exists?**
+**What happens if a unit test in _src/test/php_ with this class name already
+exists?**
 
 Creation of the unit test will be skipped.
 
-**Can I use the createConsoleApp script to generate a script or a unit test for an already existing app?**
+**Can I use the createConsoleApp script to generate a script or a unit test for
+an already existing app?**
 
-Yes, this is possible. Just enter the name of the existing app class. As the class already exists, it's creation will be skipped, but the script and unit test will still be created if they don't exist yet.
+Yes, this is possible. Just enter the name of the existing app class. As the
+class already exists, it's creation will be skipped, but the script and unit
+test will still be created if they don't exist yet.
 
 
 Provided binding modules
