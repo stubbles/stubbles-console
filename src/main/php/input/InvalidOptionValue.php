@@ -26,14 +26,14 @@ class InvalidOptionValue extends \Exception
      */
     public function __construct(ParamErrors $paramErrors, ParamErrorMessages $messages)
     {
-        $message = '';
+        $message = [];
         foreach ($paramErrors as $paramName => $errors) {
             $name = substr($paramName, 0, 5) !== 'argv.' ? ($paramName . ': ') : '';
             foreach ($errors as $error) {
-                $message .= $name . $messages->messageFor($error) . "\n";
+                $message[] = $name . $messages->messageFor($error);
             }
         }
 
-        parent::__construct($message);
+        parent::__construct(join("\n", $message));
     }
 }

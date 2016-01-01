@@ -127,7 +127,6 @@ Options:
    -o WOW_LEVEL   For the wow.
    -u             Set another option.
    -h or --help   Prints this help.
-
 ")
             );
         }

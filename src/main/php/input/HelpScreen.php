@@ -55,7 +55,7 @@ class HelpScreen extends \Exception
             $help .= '   ' . trim(str_pad($name, $longestName) . '   ' . $description) . "\n";
         }
 
-        parent::__construct($help . "\n");
+        parent::__construct($help);
     }
 
     /**

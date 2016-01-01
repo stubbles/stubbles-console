@@ -95,34 +95,6 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function thrownConsoleAppExceptionLeadsToExitCodeOfException()
-    {
-        TestConsoleApp::$exception = new ConsoleAppException('failure', 30);
-        assert(
-                TestConsoleApp::main(
-                        'projectPath',
-                        $this->errorOutputStream
-                ),
-                equals(30)
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function messageFromConsoleAppExceptionThrownInMainIsWrittenToErrorStream()
-    {
-        TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
-        TestConsoleApp::main(new Rootpath(), $this->errorOutputStream);
-        assert(
-                trim($this->errorOutputStream->buffer()),
-                equals('*** Exception: failure')
-        );
-    }
-
-    /**
-     * @test
-     */
     public function applicationExceptionThrownInMainLeadsToExitCode20()
     {
         TestConsoleApp::$exception = new \Exception('failure');

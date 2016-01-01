@@ -35,14 +35,11 @@ abstract class ConsoleApp extends App
         try {
             return (int) self::create($projectPath)->run();
         } catch (HelpScreen $helpscreen) {
-            $err->write($helpscreen->getMessage());
+            $err->writeLine($helpscreen->getMessage());
             return 0;
         } catch (InvalidOptionValue $iov) {
-            $err->write($iov->getMessage());
+            $err->writeLine($iov->getMessage());
             return 10;
-        } catch (ConsoleAppException $cae) {
-            $err->writeLine($cae->getMessage());
-            return $cae->getCode();
         } catch (\Exception $e) {
             $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
             $err->writeLine('Stacktrace:');
