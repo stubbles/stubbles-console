@@ -279,51 +279,6 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function optionsContainCIfStubCliEnabled()
-    {
-        $this->argumentParser = NewInstance::of(
-                ArgumentParser::class,
-                [true]
-        );
-        $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
-        $this->argumentParser->withOptions('n:f::')->withLongOptions(['verbose']);
-        $this->bindArguments();
-        verify($this->argumentParser, 'getopt')->received('n:f::c:', ['verbose']);
-    }
-
-    /**
-     * @test
-     */
-    public function optionsContainCIfStubCliEnabledAndOnlyLongOptionsSet()
-    {
-        $this->argumentParser = NewInstance::of(
-                ArgumentParser::class,
-                [true]
-        );
-        $this->argumentParser->mapCalls(['getopt' => ['verbose' => false]]);
-        $this->argumentParser->withLongOptions(['verbose']);
-        $this->bindArguments();
-        verify($this->argumentParser, 'getopt')->received('c:', ['verbose']);
-    }
-
-    /**
-     * @test
-     */
-    public function optionsContainCIfStubCliEnabledAndLongOptionsSetFirst()
-    {
-        $this->argumentParser = NewInstance::of(
-                ArgumentParser::class,
-                [true]
-        );
-        $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
-        $this->argumentParser->withLongOptions(['verbose'])->withOptions('n:f::');
-        $this->bindArguments();
-        verify($this->argumentParser, 'getopt')->received('n:f::c:', ['verbose']);
-    }
-
-    /**
-     * @test
-     */
     public function bindsNoUserInputByDefault()
     {
         assertFalse(

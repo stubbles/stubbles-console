@@ -3,7 +3,8 @@
 
 ### BC breaks
 
-  * Raised minimum required PHP version to 5.6
+  * raised minimum required PHP version to 5.6
+  * removed _bin/stubcli_
 
 
 5.1.0 (2015-08-03)

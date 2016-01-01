@@ -21,65 +21,6 @@ use stubbles\streams\OutputStream;
 abstract class ConsoleApp extends App
 {
     /**
-     * switch whether stubcli was used
-     *
-     * @type  bool
-     */
-    private static $stubcli = false;
-
-    /**
-     * main method for stubcli
-     *
-     * @param   string                          $projectPath  path of current project
-     * @param   array                           $argv         list of command line arguments
-     * @param   \stubbles\streams\OutputStream  $err          stream to write errors to
-     * @return  int  exit code
-     */
-    public static function stubcli($projectPath, array $argv, OutputStream $err)
-    {
-        $commandClass  = self::parseCommandClass($argv, $err);
-        if (is_int($commandClass)) {
-            return $commandClass;
-        }
-
-        if (!class_exists($commandClass)) {
-            $err->writeLine('*** Can not find ' . $commandClass);
-            return 3;
-        }
-
-        self::$stubcli = true;
-        try {
-            return (int) $commandClass::create($projectPath)
-                                      ->run();
-        } catch (\Exception $e) {
-            return self::handleException($e, $err);
-        }
-    }
-
-    /**
-     * tries to parse command class from input
-     *
-     * @param   array                           $argv  list of command line arguments
-     * @param   \stubbles\streams\OutputStream  $err   stream to write errors to
-     * @return  int|string
-     */
-    private static function parseCommandClass(array $argv, OutputStream $err)
-    {
-        $c = array_search('-c', $argv);
-        if (false === $c) {
-            $err->writeLine('*** Missing classname option -c');
-            return 1;
-        }
-
-        if (!isset($argv[$c + 1])) {
-            $err->writeLine('*** No classname specified in -c');
-            return 2;
-        }
-
-        return $argv[$c + 1];
-    }
-
-    /**
      * main method
      *
      * @api
@@ -90,8 +31,7 @@ abstract class ConsoleApp extends App
     public static function main($projectPath, OutputStream $err)
     {
         try {
-            return (int) self::create($projectPath)
-                             ->run();
+            return (int) self::create($projectPath)->run();
         } catch (\Exception $e) {
             return self::handleException($e, $err);
         }
@@ -152,6 +92,6 @@ abstract class ConsoleApp extends App
      */
     protected static function argumentParser()
     {
-        return new ArgumentParser(self::$stubcli);
+        return new ArgumentParser(false);
     }
 }

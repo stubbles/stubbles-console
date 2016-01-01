@@ -21,7 +21,7 @@ class SelfBoundConsoleApp extends ConsoleApp
      *
      * @type  string
      */
-    public static $bar;
+    public $bar;
 
     /**
      * returns list of bindings used for this application
@@ -30,20 +30,18 @@ class SelfBoundConsoleApp extends ConsoleApp
      */
     public static function __bindings()
     {
-        return [self::argumentParser()
-                    ->withUserInput(__CLASS__)
-        ];
+        return [self::argumentParser()->withUserInput(__CLASS__)];
     }
 
     /**
      * test method
      *
      * @Request[String](paramName='argv.0')
-     * @param  string  $bar
+     * @param  string  $arg
      */
     public function setArgument($arg)
     {
-        self::$bar = $arg;
+        $this->bar = $arg;
     }
 
     /**

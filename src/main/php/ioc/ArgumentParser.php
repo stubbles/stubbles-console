@@ -21,12 +21,6 @@ use stubbles\ioc\module\BindingModule;
 class ArgumentParser implements BindingModule
 {
     /**
-     * switch whether stubcli was used to run the command
-     *
-     * @type  bool
-     */
-    private $stubcliUsed;
-    /**
      * options to be used for parsing the arguments
      *
      * @type  string
@@ -46,16 +40,6 @@ class ArgumentParser implements BindingModule
     private $userInput   = null;
 
     /**
-     * constructor
-     *
-     * @param  bool  $stubcliUsed  switch whether stubcli was used to run the command
-     */
-    public function __construct($stubcliUsed = false)
-    {
-        $this->stubcliUsed = $stubcliUsed;
-    }
-
-    /**
      * sets the options to be used for parsing the arguments
      *
      * @api
@@ -65,10 +49,6 @@ class ArgumentParser implements BindingModule
     public function withOptions($options)
     {
         $this->options = $options;
-        if ($this->stubcliUsed && !strstr($options, 'c')) {
-            $this->options .= 'c:';
-        }
-
         return $this;
     }
 
@@ -81,10 +61,6 @@ class ArgumentParser implements BindingModule
      */
     public function withLongOptions(array $options)
     {
-        if ($this->stubcliUsed && null === $this->options) {
-            $this->options = 'c:';
-        }
-
         $this->longopts = $options;
         return $this;
     }
@@ -153,7 +129,11 @@ class ArgumentParser implements BindingModule
         $this->parseOptions();
         $parsedVars = $this->getopt($this->options, $this->longopts);
         if (false === $parsedVars) {
-            throw new \RuntimeException('Error parsing "' . join(' ', $_SERVER['argv']) . '" with ' . $this->options . ' and ' . join(' ', $this->longopts));
+            throw new \RuntimeException(
+                    'Error parsing "' . join(' ', $_SERVER['argv'])
+                    . '" with ' . $this->options
+                    . ' and ' . join(' ', $this->longopts)
+            );
         }
 
         return $this->fixArgs($_SERVER['argv'], $parsedVars);
