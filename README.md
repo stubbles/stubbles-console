@@ -64,6 +64,8 @@ limit of 255 is a restriction by some operating systems.
 
 ### Reserved exit codes
 
+* 10 Returned when one of the command line options or arguments for the app
+  contains an error.
 * 20 Returned when an uncatched exception occurred during the run of the console
   app class.
 
