@@ -85,7 +85,9 @@ class ConsoleExecutor implements Executor
 
         $returnCode = pclose($pd);
         if (0 != $returnCode) {
-            throw new \RuntimeException('Executing command ' . $command . ' failed: #' . $returnCode);
+            throw new \RuntimeException(
+                    'Executing command ' . $command . ' failed: #' . $returnCode
+            );
         }
 
         return $this;
@@ -132,7 +134,10 @@ class ConsoleExecutor implements Executor
 
         $returnCode = pclose($pd);
         if (0 != $returnCode) {
-            throw new \RuntimeException('Executing command ' . $command . ' failed: #' . $returnCode);
+            throw new \RuntimeException(
+                    'Executing command ' . $command
+                    . ' failed: #' . $returnCode
+            );
         }
 
         return $result;

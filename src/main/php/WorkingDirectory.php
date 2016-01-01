@@ -77,4 +77,3 @@ class WorkingDirectory
         return $this->changeTo($this->original);
     }
 }
-

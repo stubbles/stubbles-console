@@ -12,6 +12,7 @@ use stubbles\streams\OutputStream;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\predicate\isInstanceOf;
+use function bovigo\assert\predicate\isNotSameAs;
 use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\console\ConsoleOutputStream.
@@ -54,6 +55,18 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
         assert(
                 ConsoleOutputStream::forError(),
                 isSameAs(ConsoleOutputStream::forError())
+        );
+    }
+
+    /**
+     * @test
+     * @since  6.0.0
+     */
+    public function outStreamIsNotErrorStream()
+    {
+        assert(
+                ConsoleOutputStream::forOut(),
+                isNotSameAs(ConsoleOutputStream::forError())
         );
     }
 }

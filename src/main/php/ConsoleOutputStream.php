@@ -46,11 +46,7 @@ class ConsoleOutputStream extends ResourceOutputStream
     public static function forOut()
     {
         if (null === self::$out) {
-            self::$out      = new self(fopen('php://stdout', 'w'));
-            $outputEncoding = self::detectOutputEncoding();
-            if ('UTF-8' !== $outputEncoding) {
-                self::$out = new EncodingOutputStream(self::$out, $outputEncoding . '//IGNORE');
-            }
+            self::$out = self::create('php://stdout');
         }
 
         return self::$out;
@@ -64,14 +60,27 @@ class ConsoleOutputStream extends ResourceOutputStream
     public static function forError()
     {
         if (null === self::$err) {
-            self::$err      = new self(fopen('php://stderr', 'w'));
-            $outputEncoding = self::detectOutputEncoding();
-            if ('UTF-8' !== $outputEncoding) {
-                self::$err = new EncodingOutputStream(self::$err, $outputEncoding . '//IGNORE');
-            }
+            self::$err = self::create('php://stderr');
         }
 
         return self::$err;
+    }
+
+    /**
+     * creates output stream with respect to output encoding
+     *
+     * @param   string  $target
+     * @return  \stubbles\streams\OutputStream
+     */
+    private static function create($target)
+    {
+        $out      = new self(fopen($target, 'w'));
+        $encoding = self::detectOutputEncoding();
+        if ('UTF-8' !== $encoding) {
+            $out = new EncodingOutputStream($out, $encoding . '//IGNORE');
+        }
+
+        return $out;
     }
 
     /**

@@ -68,10 +68,10 @@ class ConsoleAppCreator extends ConsoleApp
     public function run()
     {
         $className = $this->console->writeLine('Stubbles ConsoleAppCreator')
-                                   ->writeLine(' (c) 2012-2014 Stubbles Development Group')
-                                   ->writeLine('')
-                                   ->prompt('Please enter the full qualified class name for the console app: ')
-                                   ->withFilter(ClassNameFilter::instance());
+                ->writeLine(' (c) 2012-2016 Stubbles Development Group')
+                ->writeEmptyLine()
+                ->prompt('Please enter the full qualified class name for the console app: ')
+                ->withFilter(ClassNameFilter::instance());
         if (null === $className) {
             $this->console->writeLine('The entered class name is not a valid class name');
             return -10;

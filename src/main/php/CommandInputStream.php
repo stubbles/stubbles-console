@@ -34,7 +34,9 @@ class CommandInputStream extends ResourceInputStream
     public function __construct($resource, $command = null)
     {
         if (!is_resource($resource) || get_resource_type($resource) !== 'stream') {
-            throw new \InvalidArgumentException('Resource must be an already opened process resource.');
+            throw new \InvalidArgumentException(
+                    'Resource must be an already opened process resource.'
+            );
         }
 
         $this->setHandle($resource);
@@ -93,7 +95,10 @@ class CommandInputStream extends ResourceInputStream
         $returnCode   = pclose($this->handle);
         $this->handle = null;
         if (0 != $returnCode) {
-            throw new \RuntimeException('Executing command ' . $this->command . ' failed: #' . $returnCode);
+            throw new \RuntimeException(
+                    'Executing command ' . $this->command
+                    . ' failed: #' . $returnCode
+            );
         }
     }
 }
