@@ -10,7 +10,6 @@
 namespace stubbles\console;
 use stubbles\lang\exception\Exception;
 use stubbles\streams\OutputStream;
-use stubbles\streams\memory\MemoryOutputStream;
 /**
  * Exception for signaling errors on app execution.
  *
@@ -34,14 +33,7 @@ class ConsoleAppException extends Exception
      */
     public function __construct($message, $code, \Exception $cause = null)
     {
-        if (is_callable($message)) {
-            $out = new MemoryOutputStream();
-            $message($out);
-            parent::__construct($out->buffer(), $cause, $code);
-            $this->messenger = $message;
-        } else {
-            parent::__construct($message, $cause, $code);
-        }
+        parent::__construct($message, $cause, $code);
     }
 
     /**

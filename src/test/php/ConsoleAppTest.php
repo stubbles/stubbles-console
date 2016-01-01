@@ -8,7 +8,12 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use bovigo\callmap\NewInstance;
+use stubbles\console\input\HelpScreen;
+use stubbles\console\input\InvalidOptionValue;
 use stubbles\console\ioc\ArgumentParser;
+use stubbles\input\errors\ParamErrors;
+use stubbles\input\errors\messages\ParamErrorMessages;
 use stubbles\lang\Rootpath;
 use stubbles\streams\memory\MemoryOutputStream;
 use org\stubbles\console\test\AppWithoutBindingCanGetConsoleClassesInjected;
@@ -54,16 +59,51 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @since  6.0.0
      */
-    public function thrownConsoleAppExceptionLeadsToExitCodeOfException()
+    public function helpScreenLeadsToExitCode0()
     {
-        TestConsoleApp::$exception = new ConsoleAppException('failure', 10);
+        TestConsoleApp::$exception = new HelpScreen('foo', new \stdClass());
+        assert(
+                TestConsoleApp::main(
+                        'projectPath',
+                        $this->errorOutputStream
+                ),
+                equals(0)
+        );
+    }
+
+    /**
+     * @test
+     * @since  6.0.0
+     */
+    public function invalidOptionValueLeadsToExitCode10()
+    {
+        TestConsoleApp::$exception = new InvalidOptionValue(
+                NewInstance::of(ParamErrors::class),
+                NewInstance::of(ParamErrorMessages::class)
+        );
         assert(
                 TestConsoleApp::main(
                         'projectPath',
                         $this->errorOutputStream
                 ),
                 equals(10)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function thrownConsoleAppExceptionLeadsToExitCodeOfException()
+    {
+        TestConsoleApp::$exception = new ConsoleAppException('failure', 30);
+        assert(
+                TestConsoleApp::main(
+                        'projectPath',
+                        $this->errorOutputStream
+                ),
+                equals(30)
         );
     }
 
@@ -77,24 +117,6 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
         assert(
                 trim($this->errorOutputStream->buffer()),
                 equals('*** Exception: failure')
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function messageClosureFromConsoleAppExceptionThrownInMainIsWrittenToErrorStream()
-    {
-        TestConsoleApp::$exception = new ConsoleAppException(function(MemoryOutputStream $out)
-                                                             {
-                                                                 $out->writeLine('something happened');
-                                                             },
-                                                             10
-                                     );
-        TestConsoleApp::main(new Rootpath(), $this->errorOutputStream);
-        assert(
-                trim($this->errorOutputStream->buffer()),
-                equals('something happened')
         );
     }
 

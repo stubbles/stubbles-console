@@ -8,6 +8,8 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use stubbles\console\input\HelpScreen;
+use stubbles\console\input\InvalidOptionValue;
 use stubbles\console\ioc\ArgumentParser;
 use stubbles\ioc\App;
 use stubbles\ioc\Binder;
@@ -32,6 +34,12 @@ abstract class ConsoleApp extends App
     {
         try {
             return (int) self::create($projectPath)->run();
+        } catch (HelpScreen $helpscreen) {
+            $err->write($helpscreen->getMessage());
+            return 0;
+        } catch (InvalidOptionValue $iov) {
+            $err->write($iov->getMessage());
+            return 10;
         } catch (ConsoleAppException $cae) {
             $cae->writeTo($err);
             return $cae->getCode();

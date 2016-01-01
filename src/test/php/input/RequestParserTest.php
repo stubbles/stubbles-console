@@ -10,13 +10,11 @@
 namespace stubbles\console\input;
 use bovigo\callmap\NewInstance;
 use org\stubbles\console\test\BrokeredUserInput;
-use stubbles\console\ConsoleAppException;
 use stubbles\input\ValueReader;
 use stubbles\input\broker\RequestBroker;
 use stubbles\input\console\ConsoleRequest;
 use stubbles\input\errors\ParamErrors;
 use stubbles\input\errors\messages\ParamErrorMessages;
-use stubbles\streams\memory\MemoryOutputStream;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\predicate\equals;
@@ -73,10 +71,10 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException     stubbles\console\ConsoleAppException
+     * @expectedException     stubbles\console\input\HelpScreen
      * @expectedExceptionCode 0
      */
-    public function throwsConsoleAppExceptionWhenHelpIsRequestedWithDashH()
+    public function throwsHelpScreenWhenHelpIsRequestedWithDashH()
     {
         $this->consoleRequest->mapCalls(
                 ['hasParam' => true,
@@ -89,10 +87,10 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException     stubbles\console\ConsoleAppException
+     * @expectedException     stubbles\console\input\HelpScreen
      * @expectedExceptionCode 0
      */
-    public function throwsConsoleAppExceptionWhenHelpIsRequestedWithDashDashHelp()
+    public function throwsHelpScreenWhenHelpIsRequestedWithDashDashHelp()
     {
         $this->consoleRequest->mapCalls(
                 ['hasParam' => onConsecutiveCalls(false, true),
@@ -106,7 +104,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function helpClosureRendersHelpToOutputStream()
+    public function helpscreenContainsUsageInfo()
     {
         $this->consoleRequest->mapCalls(
                 ['hasParam' => true,
@@ -115,12 +113,10 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
         );
         try {
             $this->requestParser->parseTo(BrokeredUserInput::class);
-            fail('Excpected ' . ConsoleAppException::class . ', got none');
-        } catch (ConsoleAppException $cae) {
-            $memoryOutputStream = new MemoryOutputStream();
-            $cae->writeTo($memoryOutputStream);
+            fail('Excpected ' . HelpScreen::class . ', got none');
+        } catch (HelpScreen $helpscreen) {
             assert(
-                    (string) $memoryOutputStream,
+                    $helpscreen->getMessage(),
                     equals("Real awesome command line app (c) 2012 Stubbles Development Team
 Usage: bin/http [options] [application-id] [other-id]
 Options:
@@ -156,10 +152,10 @@ Options:
 
     /**
      * @test
-     * @expectedException      stubbles\console\ConsoleAppException
-     * @expectedExceptionCode  10
+     * @expectedException      stubbles\console\input\InvalidOptionValue
+     * @expectedExceptionMessage  bar: Error, dude
      */
-    public function failureWhileParsingThrowsConsoleAppException()
+    public function failureWhileParsingThrowsInvalidOptionValue()
     {
         $errors = new ParamErrors();
         $errors->append('bar', 'error_id');
@@ -168,26 +164,5 @@ Options:
         );
         $this->paramErrorMessages->mapCalls(['messageFor' => 'Error, dude!']);
         $this->requestParser->parseTo(BrokeredUserInput::class);
-    }
-
-    /**
-     * @test
-     */
-    public function errorClosureRendersErrorToOutputStream()
-    {
-        $errors = new ParamErrors();
-        $errors->append('bar', 'error_id');
-        $this->consoleRequest->mapCalls(
-                ['hasParam' => false, 'paramErrors'  => $errors]
-        );
-        $this->paramErrorMessages->mapCalls(['messageFor' => 'Error, dude!']);
-        try {
-            $this->requestParser->parseTo(BrokeredUserInput::class);
-            fail('Excpected ' . ConsoleAppException::class . ', got none');
-        } catch (ConsoleAppException $cae) {
-            $memoryOutputStream = new MemoryOutputStream();
-            $cae->writeTo($memoryOutputStream);
-            assert((string) $memoryOutputStream, equals("bar: Error, dude!\n"));
-        }
     }
 }
