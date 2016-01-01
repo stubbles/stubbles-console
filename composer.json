@@ -12,7 +12,8 @@
     "require-dev": {
         "mikey179/vfsStream": "^1.6",
         "phpunit/phpunit": "^5.1",
-        "bovigo/callmap": "^1.1"
+        "bovigo/callmap": "^1.1",
+        "bovigo/assert": "^1.5"
     },
     "autoload": {
         "psr-4": {
@@ -22,10 +23,7 @@
     "autoload-dev": {
         "psr-4": {
             "org\\stubbles\\console\\test\\": "src/test/helper"
-        },
-        "files": [
-            "vendor/phpunit/phpunit/src/Framework/Assert/Functions.php"
-        ]
+        }
     },
     "bin": ["bin/stubcli", "bin/createConsoleApp"],
     "extra": {

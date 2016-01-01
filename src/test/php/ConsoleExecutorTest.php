@@ -11,6 +11,11 @@ namespace stubbles\console;
 use bovigo\callmap\NewInstance;
 use stubbles\streams\OutputStream;
 use stubbles\streams\memory\MemoryOutputStream;
+
+use function bovigo\assert\assert;
+use function bovigo\assert\assertNull;
+use function bovigo\assert\predicate\equals;
+use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\console\ConsoleExecutor.
  *
@@ -38,7 +43,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function redirectToReturnsItself()
     {
-        assertSame($this->executor, $this->executor->redirectTo('2>&1'));
+        assert($this->executor->redirectTo('2>&1'), isSameAs($this->executor));
     }
 
     /**
@@ -54,7 +59,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeWithoutOutputStream()
     {
-        assertSame($this->executor, $this->executor->execute('echo foo'));
+        assert($this->executor->execute('echo foo'), isSameAs($this->executor));
     }
 
     /**
@@ -63,9 +68,9 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     public function outReturnsOutputStreamOriginallySet()
     {
         $outputStream = NewInstance::of(OutputStream::class);
-        assertSame(
-                $outputStream,
-                $this->executor->streamOutputTo($outputStream)->out()
+        assert(
+                $this->executor->streamOutputTo($outputStream)->out(),
+                isSameAs($outputStream)
         );
     }
 
@@ -76,7 +81,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     {
         $memory = new MemoryOutputStream();
         $this->executor->streamOutputTo($memory)->execute('echo foo');
-        assertEquals("foo\n", $memory->buffer());
+        assert($memory->buffer(), equals("foo\n"));
     }
 
     /**
@@ -94,8 +99,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     public function executeAsyncReturnsStreamToReadResultFrom()
     {
         $commandInputStream = $this->executor->executeAsync('echo foo');
-        assertInstanceOf(CommandInputStream::class, $commandInputStream);
-        assertEquals('foo', chop($commandInputStream->read()));
+        assert(chop($commandInputStream->read()), equals('foo'));
     }
 
     /**
@@ -105,7 +109,6 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     public function executeAsyncFailsThrowsRuntimeException()
     {
         $commandInputStream = $this->executor->executeAsync('php -r "throw new Exception();"');
-        assertInstanceOf(CommandInputStream::class, $commandInputStream);
         while (!$commandInputStream->eof()) {
             $commandInputStream->readLine();
         }
@@ -129,8 +132,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     public function readAfterCloseThrowsIllegalStateException()
     {
         $commandInputStream = $this->executor->executeAsync('echo foo');
-        assertInstanceOf(CommandInputStream::class, $commandInputStream);
-        assertEquals('foo', chop($commandInputStream->read()));
+        $commandInputStream->read(); // read before close
         $commandInputStream->close();
         $commandInputStream->read();
     }
@@ -140,7 +142,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeDirectReturnsOutputAsArray()
     {
-        assertEquals(['foo'], $this->executor->executeDirect('echo foo'));
+        assert($this->executor->executeDirect('echo foo'), equals(['foo']));
     }
 
     /**

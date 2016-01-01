@@ -14,6 +14,10 @@ use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
 
+use function bovigo\assert\assert;
+use function bovigo\assert\assertFalse;
+use function bovigo\assert\assertTrue;
+use function bovigo\assert\predicate\equals;
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\ClassFileCreator.
@@ -69,8 +73,17 @@ class ClassFileCreatorTest extends \PHPUnit_Framework_TestCase
         assertTrue(
                 file_exists($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php'))
         );
-        assertEquals(
-                '<?php
+    }
+
+    /**
+     * @test
+     */
+    public function createsClassFileWithCorrectContent()
+    {
+        $this->classFileCreator->create('example\console\ExampleConsoleApp');
+        assert(
+                file_get_contents($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php')),
+                equals('<?php
 /**
  * Your license or something other here.
  *
@@ -114,8 +127,7 @@ class ExampleConsoleApp extends ConsoleApp
         return 0;
     }
 }
-',
-                file_get_contents($this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php'))
+')
         );
         verify($this->console, 'writeLine')
                 ->received('Class example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/main/php/example/console/ExampleConsoleApp.php'));
@@ -144,7 +156,7 @@ class ExampleConsoleApp extends ConsoleApp
     {
         vfsStream::newFile('composer.json')
                  ->withContent('{"autoload": { "psr-4": { "stubbles\\\foo\\\": "src/main/php" } }}')
-                 ->at($this->root);;
+                 ->at($this->root);
         $this->classFileCreator->create('example\console\ExampleConsoleApp');
     }
 
@@ -162,8 +174,22 @@ class ExampleConsoleApp extends ConsoleApp
         assertTrue(
                 file_exists($this->rootpath->to('src/main/php/ExampleConsoleApp.php'))
         );
-        assertEquals(
-                '<?php
+    }
+
+    /**
+     * @test
+     * @since  4.1.0
+     * @group  issue_49
+     */
+    public function createsPsr4ClassFileWithCorrectContent()
+    {
+        vfsStream::newFile('composer.json')
+                 ->withContent('{"autoload": { "psr-4": { "example\\\console\\\": "src/main/php" } }}')
+                 ->at($this->root);
+        $this->classFileCreator->create('example\console\ExampleConsoleApp');
+        assert(
+                file_get_contents($this->rootpath->to('src/main/php/ExampleConsoleApp.php')),
+                equals('<?php
 /**
  * Your license or something other here.
  *
@@ -207,8 +233,7 @@ class ExampleConsoleApp extends ConsoleApp
         return 0;
     }
 }
-',
-                file_get_contents($this->rootpath->to('src/main/php/ExampleConsoleApp.php'))
+')
         );
     }
 }

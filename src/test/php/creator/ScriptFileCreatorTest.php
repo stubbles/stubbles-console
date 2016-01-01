@@ -14,6 +14,9 @@ use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
 
+use function bovigo\assert\assert;
+use function bovigo\assert\assertTrue;
+use function bovigo\assert\predicate\equals;
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\ScriptFileCreator.
@@ -63,8 +66,18 @@ class ScriptFileCreatorTest extends \PHPUnit_Framework_TestCase
         $this->console->mapCalls(['readLine'  => 'example']);
         $this->scriptFileCreator->create('example\console\ExampleConsoleApp');
         assertTrue(file_exists($this->rootpath->to('bin/example')));
-        assertEquals(
-                '#!/usr/bin/php
+    }
+
+    /**
+     * @test
+     */
+    public function createsScriptWithCorrectContents()
+    {
+        $this->console->mapCalls(['readLine'  => 'example']);
+        $this->scriptFileCreator->create('example\console\ExampleConsoleApp');
+        assert(
+                file_get_contents($this->rootpath->to('bin/example')),
+                equals('#!/usr/bin/php
 <?php
 /**
  * Script to execute example\console\ExampleConsoleApp.
@@ -85,8 +98,7 @@ if (\Phar::running() !== \'\') {
 
 require $rootDir . \'/vendor/autoload.php\';
 exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOutputStream::forError()));
-',
-                file_get_contents($this->rootpath->to('bin/example'))
+')
         );
         verify($this->console, 'writeLine')
                 ->receivedOn(2, 'Script for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('bin/example'));
@@ -101,7 +113,7 @@ exit(ExampleConsoleApp::main(realpath($projectPath), \stubbles\console\ConsoleOu
         file_put_contents($this->rootpath->to('bin/example'), 'foo');
         $this->console->mapCalls(['readLine'  => 'example']);
         $this->scriptFileCreator->create('example\console\ExampleConsoleApp');
-        assertEquals('foo', file_get_contents($this->rootpath->to('bin/example')));
+        assert(file_get_contents($this->rootpath->to('bin/example')), equals('foo'));
         verify($this->console, 'writeLine')
                 ->receivedOn(2, 'Script for example\console\ExampleConsoleApp already exists, skipped creating the script');
     }

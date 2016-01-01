@@ -9,6 +9,7 @@
  */
 namespace stubbles\console\input;
 use bovigo\callmap\NewInstance;
+use org\stubbles\console\test\BrokeredUserInput;
 use stubbles\console\ConsoleAppException;
 use stubbles\input\ValueReader;
 use stubbles\input\broker\RequestBroker;
@@ -17,6 +18,9 @@ use stubbles\input\errors\ParamErrors;
 use stubbles\input\errors\messages\ParamErrorMessages;
 use stubbles\streams\memory\MemoryOutputStream;
 
+use function bovigo\assert\assert;
+use function bovigo\assert\predicate\equals;
+use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\callmap\onConsecutiveCalls;
 use function bovigo\callmap\verify;
 /**
@@ -79,7 +83,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                  'readEnv'  => ValueReader::forValue('bin/http')
                 ]
         );
-        $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
+        $this->requestParser->parseTo(BrokeredUserInput::class);
         verify($this->requestBroker, 'procure')->wasNeverCalled();
     }
 
@@ -95,7 +99,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                  'readEnv'  => ValueReader::forValue('bin/http')
                 ]
         );
-        $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
+        $this->requestParser->parseTo(BrokeredUserInput::class);
         verify($this->requestBroker, 'procure')->wasNeverCalled();
     }
 
@@ -110,13 +114,14 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                 ]
         );
         try {
-            $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
-            $this->fail('Excpected stubbles\console\ConsoleAppException');
+            $this->requestParser->parseTo(BrokeredUserInput::class);
+            fail('Excpected ' . ConsoleAppException::class . ', got none');
         } catch (ConsoleAppException $cae) {
             $memoryOutputStream = new MemoryOutputStream();
             $cae->writeTo($memoryOutputStream);
-            assertEquals(
-                    "Real awesome command line app (c) 2012 Stubbles Development Team
+            assert(
+                    (string) $memoryOutputStream,
+                    equals("Real awesome command line app (c) 2012 Stubbles Development Team
 Usage: bin/http [options] [application-id] [other-id]
 Options:
    --verbose
@@ -127,8 +132,7 @@ Options:
    -u             Set another option.
    -h or --help   Prints this help.
 
-",
-                    (string) $memoryOutputStream
+")
             );
         }
     }
@@ -143,9 +147,9 @@ Options:
                  'paramErrors'  => new ParamErrors()
                 ]
         );
-        assertInstanceOf(
-                'org\stubbles\console\test\BrokeredUserInput',
-                $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput')
+        assert(
+                $this->requestParser->parseTo(BrokeredUserInput::class),
+                isInstanceOf(BrokeredUserInput::class)
         );
         verify($this->requestBroker, 'procure')->wasCalledOnce();
     }
@@ -163,7 +167,7 @@ Options:
                 ['hasParam' => false, 'paramErrors'  => $errors]
         );
         $this->paramErrorMessages->mapCalls(['messageFor' => 'Error, dude!']);
-        $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
+        $this->requestParser->parseTo(BrokeredUserInput::class);
     }
 
     /**
@@ -178,15 +182,12 @@ Options:
         );
         $this->paramErrorMessages->mapCalls(['messageFor' => 'Error, dude!']);
         try {
-            $this->requestParser->parseTo('org\stubbles\console\test\BrokeredUserInput');
-            $this->fail('Excpected stubbles\console\ConsoleAppException');
+            $this->requestParser->parseTo(BrokeredUserInput::class);
+            fail('Excpected ' . ConsoleAppException::class . ', got none');
         } catch (ConsoleAppException $cae) {
             $memoryOutputStream = new MemoryOutputStream();
             $cae->writeTo($memoryOutputStream);
-            assertEquals(
-                    "bar: Error, dude!\n",
-                    (string) $memoryOutputStream
-            );
+            assert((string) $memoryOutputStream, equals("bar: Error, dude!\n"));
         }
     }
 }

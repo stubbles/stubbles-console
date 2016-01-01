@@ -10,6 +10,9 @@ use stubbles\console\Console;
 use stubbles\input\ValueReader;
 use stubbles\lang\Rootpath;
 
+use function bovigo\assert\assert;
+use function bovigo\assert\predicate\equals;
+use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\ConsoleAppCreator.
@@ -70,7 +73,7 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     public function doesNotCreateClassWhenClassNameIsInvalid()
     {
         $this->console->mapCalls(['prompt' => ValueReader::forValue(null)]);
-        assertEquals(-10, $this->consoleAppCreator->run());
+        assert($this->consoleAppCreator->run(), equals(-10));
         verify($this->classFile, 'create')->wasNeverCalled();
         verify($this->scriptFile, 'create')->wasNeverCalled();
         verify($this->testFile, 'create')->wasNeverCalled();
@@ -82,7 +85,7 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     public function returnsExitCodeZeroOnSuccess()
     {
         $this->console->mapCalls(['prompt' => ValueReader::forValue('foo\\bar\\Example')]);
-        assertEquals(0, $this->consoleAppCreator->run());
+        assert($this->consoleAppCreator->run(), equals(0));
         verify($this->classFile, 'create')->received('foo\bar\Example');
         verify($this->scriptFile, 'create')->received('foo\bar\Example');
         verify($this->testFile, 'create')->received('foo\bar\Example');
@@ -93,9 +96,9 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateInstance()
     {
-        assertInstanceOf(
-                ConsoleAppCreator::class,
-                ConsoleAppCreator::create(new Rootpath())
+        assert(
+                ConsoleAppCreator::create(new Rootpath()),
+                isInstanceOf(ConsoleAppCreator::class)
         );
     }
 }

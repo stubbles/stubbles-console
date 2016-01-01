@@ -9,6 +9,10 @@
  */
 namespace stubbles\console;
 use stubbles\streams\OutputStream;
+
+use function bovigo\assert\assert;
+use function bovigo\assert\predicate\isInstanceOf;
+use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\console\ConsoleOutputStream.
  *
@@ -21,10 +25,7 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfOutputStreamForOut()
     {
-        assertInstanceOf(
-                OutputStream::class,
-                ConsoleOutputStream::forOut()
-        );
+        assert(ConsoleOutputStream::forOut(), isInstanceOf(OutputStream::class));
     }
 
     /**
@@ -34,7 +35,7 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function alwaysReturnsSameInstanceForOut()
     {
-        assertSame(ConsoleOutputStream::forOut(), ConsoleOutputStream::forOut());
+        assert(ConsoleOutputStream::forOut(), isSameAs(ConsoleOutputStream::forOut()));
     }
 
     /**
@@ -42,10 +43,7 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfOutputStreamForError()
     {
-        assertInstanceOf(
-                OutputStream::class,
-                ConsoleOutputStream::forError()
-        );
+        assert(ConsoleOutputStream::forError(), isInstanceOf(OutputStream::class));
     }
 
     /**
@@ -53,9 +51,9 @@ class ConsoleOutputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function alwaysReturnsSameInstanceForError()
     {
-        assertSame(
+        assert(
                 ConsoleOutputStream::forError(),
-                ConsoleOutputStream::forError()
+                isSameAs(ConsoleOutputStream::forError())
         );
     }
 }

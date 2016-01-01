@@ -19,6 +19,12 @@ use stubbles\ioc\Injector;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
 
+use function bovigo\assert\assert;
+use function bovigo\assert\assertFalse;
+use function bovigo\assert\assertTrue;
+use function bovigo\assert\predicate\equals;
+use function bovigo\assert\predicate\isInstanceOf;
+use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\ioc\ArgumentParser.
@@ -77,9 +83,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function argumentsAreBoundWhenNoOptionsDefined($expected, $constantName)
     {
         $_SERVER['argv'] = ['foo.php', 'bar', 'baz'];
-        assertEquals(
-                $expected,
-                $this->bindArguments()->getConstant($constantName)
+        assert(
+                $this->bindArguments()->getConstant($constantName),
+                equals($expected)
         );
     }
 
@@ -105,9 +111,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'install'];
         $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
         $this->argumentParser->withOptions('n:f::')->withLongOptions(['verbose']);
-        assertEquals(
-                $expected,
-                $this->bindArguments()->getConstant($constantName)
+        assert(
+                $this->bindArguments()->getConstant($constantName),
+                equals($expected)
         );
         verify($this->argumentParser, 'getopt')->received('n:f::', ['verbose']);
     }
@@ -117,9 +123,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequest()
     {
-        assertTrue(
-                $this->bindArguments()->hasBinding(Request::class)
-        );
+        assertTrue($this->bindArguments()->hasBinding(Request::class));
     }
 
     /**
@@ -127,9 +131,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsConsoleRequest()
     {
-        assertTrue(
-                $this->bindArguments()->hasBinding(ConsoleRequest::class)
-        );
+        assertTrue($this->bindArguments()->hasBinding(ConsoleRequest::class));
     }
 
     /**
@@ -137,9 +139,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestToConsoleRequest()
     {
-        assertInstanceOf(
-                ConsoleRequest::class,
-                 $this->bindArguments()->getInstance(Request::class)
+        assert(
+                $this->bindArguments()->getInstance(Request::class),
+                isInstanceOf(ConsoleRequest::class)
         );
     }
 
@@ -148,9 +150,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsRequestToBaseConsoleRequest()
     {
-        assertInstanceOf(
-                BaseConsoleRequest::class,
-                $this->bindArguments()->getInstance(Request::class)
+        assert(
+                $this->bindArguments()->getInstance(Request::class),
+                isInstanceOf(BaseConsoleRequest::class)
         );
     }
 
@@ -159,9 +161,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsConsoleRequestToBaseConsoleRequest()
     {
-        assertInstanceOf(
-                BaseConsoleRequest::class,
-                $this->bindArguments()->getInstance(ConsoleRequest::class)
+        assert(
+                $this->bindArguments()->getInstance(ConsoleRequest::class),
+                isInstanceOf(BaseConsoleRequest::class)
         );
     }
 
@@ -171,9 +173,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsRequestAsSingleton()
     {
         $injector = $this->bindArguments();
-        assertSame(
+        assert(
                 $injector->getInstance(Request::class),
-                $injector->getInstance(Request::class)
+                isSameAs($injector->getInstance(Request::class))
         );
     }
 
@@ -183,9 +185,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsConsoleRequestAsSingleton()
     {
         $injector = $this->bindArguments();
-        assertSame(
+        assert(
                 $injector->getInstance(Request::class),
-                $injector->getInstance(ConsoleRequest::class)
+                isSameAs($injector->getInstance(ConsoleRequest::class))
         );
     }
 
@@ -229,9 +231,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function argumentsAvailableViaRequestWhenNoOptionsDefined($expected, $paramName)
     {
         $_SERVER['argv'] = ['foo', 'bar', 'baz'];
-        assertEquals(
-                $expected,
-                $this->bindRequest()->readParam($paramName)->unsecure()
+        assert(
+                $this->bindRequest()->readParam($paramName)->unsecure(),
+                equals($expected)
         );
     }
 
@@ -256,9 +258,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'bar'];
         $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
         $this->argumentParser->withOptions('n:f::')->withLongOptions(['verbose']);
-        assertEquals(
-                $expected,
-                $this->bindRequest()->readParam($paramName)->unsecure()
+        assert(
+                $this->bindRequest()->readParam($paramName)->unsecure(),
+                equals($expected)
         );
         verify($this->argumentParser, 'getopt')->received('n:f::', ['verbose']);
     }
@@ -365,9 +367,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $binder->bindMap(ParamBroker::class)
                ->withEntry('Mock', NewInstance::of(ParamBroker::class));
         $injector = $binder->getInjector();
-        assertSame(
+        assert(
                 $injector->getInstance(BrokeredUserInput::class),
-                $injector->getInstance(BrokeredUserInput::class)
+                isSameAs($injector->getInstance(BrokeredUserInput::class))
         );
         verify($this->argumentParser, 'getopt')
                 ->received('vo:u:h', ['verbose', 'bar1:', 'bar2:', 'help']);

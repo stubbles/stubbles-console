@@ -8,6 +8,11 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+
+use function bovigo\assert\assert;
+use function bovigo\assert\assertFalse;
+use function bovigo\assert\assertTrue;
+use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\console\WorkingDirectory.
  *
@@ -22,7 +27,7 @@ class WorkingDirectoryTest extends \PHPUnit_Framework_TestCase
     public function currentIsGivenOriginalWhenNotChanged()
     {
         $workingDirectory = new WorkingDirectory(__DIR__);
-        assertEquals(__DIR__, $workingDirectory->current());
+        assert($workingDirectory->current(), equals(__DIR__));
     }
 
     /**
@@ -31,7 +36,7 @@ class WorkingDirectoryTest extends \PHPUnit_Framework_TestCase
     public function currentIsGetCwdWhenNoOriginalGivenAndNotChanged()
     {
         $workingDirectory = new WorkingDirectory();
-        assertEquals(getcwd(), $workingDirectory->current());
+        assert($workingDirectory->current(), equals(getcwd()));
     }
 
     /**
@@ -50,7 +55,7 @@ class WorkingDirectoryTest extends \PHPUnit_Framework_TestCase
     {
         $workingDirectory = new WorkingDirectory(__DIR__);
         $workingDirectory->changeTo('/doesNotExist');
-        assertEquals(__DIR__, $workingDirectory->current());
+        assert($workingDirectory->current(), equals(__DIR__));
     }
 
     /**
@@ -69,7 +74,7 @@ class WorkingDirectoryTest extends \PHPUnit_Framework_TestCase
     {
         $workingDirectory = new WorkingDirectory();
         $workingDirectory->changeTo(__DIR__);
-        assertEquals(__DIR__, $workingDirectory->current());
+        assert($workingDirectory->current(), equals(__DIR__));
     }
 
     /**
@@ -80,6 +85,6 @@ class WorkingDirectoryTest extends \PHPUnit_Framework_TestCase
         $workingDirectory = new WorkingDirectory(__DIR__);
         $workingDirectory->changeTo(__DIR__ . '/..');
         $workingDirectory->restoreOriginal();
-        assertEquals(__DIR__, $workingDirectory->current());
+        assert($workingDirectory->current(), equals(__DIR__));
     }
 }

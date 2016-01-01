@@ -9,6 +9,10 @@
  */
 namespace stubbles\console;
 use stubbles\streams\InputStream;
+
+use function bovigo\assert\assert;
+use function bovigo\assert\predicate\isInstanceOf;
+use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\console\ConsoleInputStream.
  *
@@ -21,10 +25,7 @@ class ConsoleInputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsInstanceOfInputStream()
     {
-        assertInstanceOf(
-                InputStream::class,
-                ConsoleInputStream::forIn()
-        );
+        assert(ConsoleInputStream::forIn(), isInstanceOf(InputStream::class));
     }
 
     /**
@@ -32,6 +33,6 @@ class ConsoleInputStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function alwaysReturnsSameInstance()
     {
-        assertSame(ConsoleInputStream::forIn(), ConsoleInputStream::forIn());
+        assert(ConsoleInputStream::forIn(), isSameAs(ConsoleInputStream::forIn()));
     }
 }

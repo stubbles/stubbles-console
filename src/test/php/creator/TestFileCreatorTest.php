@@ -14,6 +14,10 @@ use stubbles\console\Console;
 use stubbles\lang\ResourceLoader;
 use stubbles\lang\Rootpath;
 
+use function bovigo\assert\assert;
+use function bovigo\assert\assertFalse;
+use function bovigo\assert\assertTrue;
+use function bovigo\assert\predicate\equals;
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\TestFileCreator.
@@ -66,9 +70,20 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
     public function createsTestIfDoesNotExist()
     {
         $this->testFileCreator->create('example\console\ExampleConsoleApp');
-        assertTrue(file_exists($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')));
-        assertEquals(
-                '<?php
+        assertTrue(file_exists(
+                $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function createsTestWithCorrectContents()
+    {
+        $this->testFileCreator->create('example\console\ExampleConsoleApp');
+        assert(
+                file_get_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')),
+                equals('<?php
 /**
  * Your license or something other here.
  *
@@ -127,8 +142,7 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-',
-                file_get_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'))
+')
         );
         verify($this->console, 'writeLine')
                 ->received('Test for example\console\ExampleConsoleApp created at ' . $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'));
@@ -142,11 +156,11 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
         mkdir($this->rootpath->to('src/test/php/example/console'), 0755, true);
         file_put_contents($this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php'), 'foo');
         $this->testFileCreator->create('example\console\ExampleConsoleApp');
-        assertEquals(
-                'foo',
+        assert(
                 file_get_contents(
                         $this->rootpath->to('src/test/php/example/console/ExampleConsoleAppTest.php')
-                 )
+                ),
+                equals('foo')
          );
         verify($this->console, 'writeLine')
                 ->received('Test for example\console\ExampleConsoleApp already exists, skipped creating the test');
@@ -178,8 +192,22 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
                  ->at($this->root);;
         $this->testFileCreator->create('example\console\ExampleConsoleApp');
         assertTrue(file_exists($this->rootpath->to('src/test/php/ExampleConsoleAppTest.php')));
-        assertEquals(
-                '<?php
+    }
+
+    /**
+     * @test
+     * @since  4.1.0
+     * @group  issue_49
+     */
+    public function createsTestInPsr4PathWithCorrectContents()
+    {
+        vfsStream::newFile('composer.json')
+                 ->withContent('{"autoload": { "psr-4": { "example\\\console\\\": "src/main/php" } }}')
+                 ->at($this->root);;
+        $this->testFileCreator->create('example\console\ExampleConsoleApp');
+        assert(
+                file_get_contents($this->rootpath->to('src/test/php/ExampleConsoleAppTest.php')),
+                equals('<?php
 /**
  * Your license or something other here.
  *
@@ -238,8 +266,7 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-',
-                file_get_contents($this->rootpath->to('src/test/php/ExampleConsoleAppTest.php'))
+')
         );
     }
 }

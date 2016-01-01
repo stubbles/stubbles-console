@@ -13,6 +13,12 @@ use stubbles\input\errors\ParamErrors;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
 
+use function bovigo\assert\assert;
+use function bovigo\assert\assertFalse;
+use function bovigo\assert\assertNull;
+use function bovigo\assert\assertTrue;
+use function bovigo\assert\predicate\equals;
+use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\onConsecutiveCalls;
 use function bovigo\callmap\verify;
 use function stubbles\lang\reflect\annotationsOfConstructorParameter;
@@ -70,23 +76,23 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     {
         $inParamAnnotations = annotationsOfConstructorParameter('in', $this->console);
         assertTrue($inParamAnnotations->contain('Named'));
-        assertEquals(
-                'stdin',
-                $inParamAnnotations->firstNamed('Named')->getName()
+        assert(
+                $inParamAnnotations->firstNamed('Named')->getName(),
+                equals('stdin')
         );
 
         $outParamAnnotations = annotationsOfConstructorParameter('out', $this->console);
         assertTrue($outParamAnnotations->contain('Named'));
-        assertEquals(
-                'stdout',
-                $outParamAnnotations->firstNamed('Named')->getName()
+        assert(
+                $outParamAnnotations->firstNamed('Named')->getName(),
+                equals('stdout')
         );
 
         $errParamAnnotations = annotationsOfConstructorParameter('err', $this->console);
         assertTrue($errParamAnnotations->contain('Named'));
-        assertEquals(
-                'stderr',
-                $errParamAnnotations->firstNamed('Named')->getName()
+        assert(
+                $errParamAnnotations->firstNamed('Named')->getName(),
+                equals('stderr')
         );
     }
 
@@ -96,7 +102,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesInputStreamForRead()
     {
         $this->inputStream->mapCalls(['read' => 'foo']);
-        assertEquals('foo', $this->console->read());
+        assert($this->console->read(), equals('foo'));
     }
 
     /**
@@ -105,7 +111,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesInputStreamForReadLine()
     {
         $this->inputStream->mapCalls(['readLine' => 'foo']);
-        assertEquals('foo', $this->console->readLine());
+        assert($this->console->readLine(), equals('foo'));
     }
 
     /**
@@ -115,7 +121,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function usesInputStreamForBytesLeft()
     {
         $this->inputStream->mapCalls(['bytesLeft' => 20]);
-        assertEquals(20, $this->console->bytesLeft());
+        assert($this->console->bytesLeft(), equals(20));
     }
 
     /**
@@ -133,7 +139,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWrite()
     {
-        assertSame($this->console, $this->console->write('foo'));
+        assert($this->console->write('foo'), isSameAs($this->console));
         verify($this->outputStream, 'write')->received('foo');
         verify($this->errorStream, 'write')->wasNeverCalled();
     }
@@ -143,7 +149,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteLine()
     {
-        assertSame($this->console, $this->console->writeLine('foo'));
+        assert($this->console->writeLine('foo'), isSameAs($this->console));
         verify($this->outputStream, 'writeLine')->received('foo');
         verify($this->errorStream, 'writeLine')->wasNeverCalled();
     }
@@ -154,9 +160,9 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteLines()
     {
-        assertSame(
-                $this->console,
-                $this->console->writeLines(['foo', 'bar', 'baz'])
+        assert(
+                $this->console->writeLines(['foo', 'bar', 'baz']),
+                isSameAs($this->console)
         );
         verify($this->outputStream, 'writeLines')->received(['foo', 'bar', 'baz']);
         verify($this->errorStream, 'writeLines')->wasNeverCalled();
@@ -168,7 +174,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteEmptyLine()
     {
-        assertSame($this->console, $this->console->writeEmptyLine());
+        assert($this->console->writeEmptyLine(), isSameAs($this->console));
         verify($this->outputStream, 'writeLine')->received('');
         verify($this->errorStream, 'writeLine')->wasNeverCalled();
     }
@@ -178,7 +184,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteError()
     {
-        assertSame($this->console, $this->console->writeError('foo'));
+        assert($this->console->writeError('foo'), isSameAs($this->console));
         verify($this->errorStream, 'write')->received('foo');
         verify($this->outputStream, 'write')->wasNeverCalled();
     }
@@ -188,7 +194,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteErrorLine()
     {
-        assertSame($this->console, $this->console->writeErrorLine('foo'));
+        assert($this->console->writeErrorLine('foo'), isSameAs($this->console));
         verify($this->errorStream, 'writeLine')->received('foo');
         verify($this->outputStream, 'writeLine')->wasNeverCalled();
     }
@@ -199,9 +205,9 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteErrorLines()
     {
-        assertSame(
-                $this->console,
-                $this->console->writeErrorLines(['foo', 'bar', 'baz'])
+        assert(
+                $this->console->writeErrorLines(['foo', 'bar', 'baz']),
+                isSameAs($this->console)
         );
         verify($this->errorStream, 'writeLines')->received(['foo', 'bar', 'baz']);
         verify($this->outputStream, 'writeLines')->wasNeverCalled();
@@ -213,7 +219,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteEmptyErrorLine()
     {
-        assertSame($this->console, $this->console->writeEmptyErrorLine(''));
+        assert($this->console->writeEmptyErrorLine(''), isSameAs($this->console));
         verify($this->errorStream, 'writeLine')->received('');
         verify($this->outputStream, 'writeLine')->wasNeverCalled();
     }
@@ -226,10 +232,10 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function promptWritesMessageToOutputStreamAndReturnsValueFromInputStream()
     {
         $this->inputStream->mapCalls(['readLine' => '303']);
-        assertEquals(
-                303,
+        assert(
                 $this->console->prompt('Please enter a number: ')
-                              ->asInt()
+                              ->asInt(),
+                equals(303)
         );
         verify($this->outputStream, 'write')
                 ->received('Please enter a number: ');
@@ -259,7 +265,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function readValueReturnsValueFromInputStream()
     {
         $this->inputStream->mapCalls(['readLine' => '303']);
-        assertEquals(303, $this->console->readValue()->asInt());
+        assert($this->console->readValue()->asInt(), equals(303));
     }
 
     /**

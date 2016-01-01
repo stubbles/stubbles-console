@@ -12,6 +12,10 @@ use bovigo\callmap\NewInstance;
 use stubbles\ioc\Injector;
 use org\stubbles\console\test\BrokeredUserInput;
 
+use function bovigo\assert\assert;
+use function bovigo\assert\assertTrue;
+use function bovigo\assert\predicate\equals;
+use function bovigo\assert\predicate\isSameAs;
 use function stubbles\lang\reflect\annotationsOfConstructorParameter;
 /**
  * Test for stubbles\console\input\UserInputProvider.
@@ -60,9 +64,9 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
                 $this->userInputProvider
         );
         assertTrue($annotations->contain('Named'));
-        assertEquals(
-                'stubbles.console.input.class',
-                $annotations->firstNamed('Named')->getName()
+        assert(
+                $annotations->firstNamed('Named')->getName(),
+                equals('stubbles.console.input.class')
         );
     }
 
@@ -74,9 +78,9 @@ class UserInputProviderTest extends \PHPUnit_Framework_TestCase
         $brokeredUserInput = new BrokeredUserInput();
         $this->injector->mapCalls(['getInstance' => $brokeredUserInput]);
         $this->requestParser->mapCalls(['parseInto' => $brokeredUserInput]);
-        assertSame(
-                $brokeredUserInput,
-                $this->userInputProvider->get('main')
+        assert(
+                $this->userInputProvider->get('main'),
+                isSameAs($brokeredUserInput)
         );
     }
 }

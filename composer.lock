@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0f89629c2fbe095301b504afeaf0fa8d",
-    "content-hash": "e5708088d6aa7e4212765e081c5c3c84",
+    "hash": "f269c7ed40db5490aabb9c5fcfc5357d",
+    "content-hash": "dbf8733560f806e01c29b520b5070c8c",
     "packages": [
         {
             "name": "stubbles/core",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-core.git",
-                "reference": "de547c38dfc736e79672a90362a961088d31c6c2"
+                "reference": "d1787484dbb8a2d383331b55fa527037bab26160"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-core/zipball/de547c38dfc736e79672a90362a961088d31c6c2",
-                "reference": "de547c38dfc736e79672a90362a961088d31c6c2",
+                "url": "https://api.github.com/repos/stubbles/stubbles-core/zipball/d1787484dbb8a2d383331b55fa527037bab26160",
+                "reference": "d1787484dbb8a2d383331b55fa527037bab26160",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,8 @@
                 "php": ">=5.6.0"
             },
             "require-dev": {
-                "bovigo/callmap": "^1.1",
+                "bovigo/assert": "^1.5",
+                "bovigo/callmap": "^2.0",
                 "mikey179/vfsstream": "^1.6",
                 "phpunit/phpunit": "^5.1"
             },
@@ -53,7 +54,7 @@
             ],
             "description": "Provides base classes for Stubbles packages.",
             "homepage": "http://stubbles.net/",
-            "time": "2015-12-15 20:45:12"
+            "time": "2016-01-01 08:45:41"
         },
         {
             "name": "stubbles/input",
@@ -61,12 +62,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-input.git",
-                "reference": "619678c595b9530b9e38d7fea45c6e084672ef0d"
+                "reference": "e952f1c12f23111b3c2949a2fe08f7ef0aa34131"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/619678c595b9530b9e38d7fea45c6e084672ef0d",
-                "reference": "619678c595b9530b9e38d7fea45c6e084672ef0d",
+                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/e952f1c12f23111b3c2949a2fe08f7ef0aa34131",
+                "reference": "e952f1c12f23111b3c2949a2fe08f7ef0aa34131",
                 "shasum": ""
             },
             "require": {
@@ -74,6 +75,7 @@
                 "stubbles/core": "^7.0"
             },
             "require-dev": {
+                "bovigo/assert": "^1.5",
                 "bovigo/callmap": "^1.1",
                 "mikey179/vfsstream": "^1.6",
                 "phpunit/phpunit": "^5.1",
@@ -99,10 +101,55 @@
             ],
             "description": "Stubbles Input enables to handle input data via validation and filtering.",
             "homepage": "http://stubbles.net/",
-            "time": "2015-12-15 20:40:09"
+            "time": "2016-01-01 08:54:48"
         }
     ],
     "packages-dev": [
+        {
+            "name": "bovigo/assert",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mikey179/bovigo-assert.git",
+                "reference": "374b41780916284cc42dbb5da7a339ebc24ac738"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mikey179/bovigo-assert/zipball/374b41780916284cc42dbb5da7a339ebc24ac738",
+                "reference": "374b41780916284cc42dbb5da7a339ebc24ac738",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "sebastian/comparator": "^1.2",
+                "sebastian/exporter": "^1.2"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "^1.6",
+                "phpunit/phpunit": "^5.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "bovigo\\assert\\": "src/main/php"
+                },
+                "files": [
+                    "src/main/php/assert.php",
+                    "src/main/php/predicate/predicates.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Provides assertions for unit tests.",
+            "time": "2016-01-01 08:35:50"
+        },
         {
             "name": "bovigo/callmap",
             "version": "v1.1.0",
@@ -1184,16 +1231,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002"
+                "reference": "3df409958a646dad2bc5046c3fb671ee24a1a691"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002",
-                "reference": "177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/3df409958a646dad2bc5046c3fb671ee24a1a691",
+                "reference": "3df409958a646dad2bc5046c3fb671ee24a1a691",
                 "shasum": ""
             },
             "require": {
@@ -1229,7 +1276,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:36:17"
+            "time": "2015-12-26 13:39:53"
         }
     ],
     "aliases": [],

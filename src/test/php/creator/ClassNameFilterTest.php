@@ -9,6 +9,11 @@
  */
 namespace stubbles\console\creator;
 use stubbles\input\Param;
+
+use function bovigo\assert\assert;
+use function bovigo\assert\assertNull;
+use function bovigo\assert\assertTrue;
+use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\console\creator\ClassNameFilter.
  *
@@ -101,9 +106,9 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function trimsInputValue()
     {
-        assertEquals(
-                'foo\bar\Baz',
-                $this->classNameFilter->apply(new Param('stdin', '  foo\bar\Baz  '))
+        assert(
+                $this->classNameFilter->apply(new Param('stdin', '  foo\bar\Baz  ')),
+                equals('foo\bar\Baz')
         );
     }
 
@@ -112,9 +117,9 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function fixesQuotedNamespaceSeparator()
     {
-        assertEquals(
-                'foo\bar\Baz',
-                $this->classNameFilter->apply(new Param('stdin', 'foo\\\\bar\\\\Baz'))
+        assert(
+                $this->classNameFilter->apply(new Param('stdin', 'foo\\\\bar\\\\Baz')),
+                equals('foo\bar\Baz')
         );
     }
 }
