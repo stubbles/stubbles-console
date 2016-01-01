@@ -5,6 +5,10 @@
 
   * raised minimum required PHP version to 5.6
   * removed _bin/stubcli_
+  * changed how `stubbles\console\Executor` works with output streams:
+    * removed `stubbles\console\Executor::streamOutputTo()`
+    * removed `stubbles\console\Executor::out()`
+    * `stubbles\console\Executor::execute()` now takes an output stream as optional second argument
 
 
 5.1.0 (2015-08-03)

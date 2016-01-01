@@ -17,27 +17,16 @@ use stubbles\streams\OutputStream;
 interface Executor
 {
     /**
-     * sets the output stream to write data outputted by executed command to
-     *
-     * @param   \stubbles\streams\OutputStream  $out
-     * @return  \stubbles\console\Executor
-     */
-    public function streamOutputTo(OutputStream $out);
-
-    /**
-     * returns the output stream to write data outputted by executed command to
-     *
-     * @return  \stubbles\streams\OutputStream
-     */
-    public function out();
-
-    /**
      * executes given command
      *
-     * @param   string  $command
+     * If no output stream is passed the output of the command is simply
+     * ignored.
+     *
+     * @param   string                          $command
+     * @param   \stubbles\streams\OutputStream  $out      optional  where to write command output to
      * @return  \stubbles\console\Executor
      */
-    public function execute($command);
+    public function execute($command, OutputStream $out = null);
 
     /**
      * executes given command asynchronous

@@ -49,14 +49,6 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function hasNoOutputStreamByDefault()
-    {
-        assertNull($this->executor->out());
-    }
-
-    /**
-     * @test
-     */
     public function executeWithoutOutputStream()
     {
         assert($this->executor->execute('echo foo'), isSameAs($this->executor));
@@ -65,22 +57,10 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function outReturnsOutputStreamOriginallySet()
-    {
-        $outputStream = NewInstance::of(OutputStream::class);
-        assert(
-                $this->executor->streamOutputTo($outputStream)->out(),
-                isSameAs($outputStream)
-        );
-    }
-
-    /**
-     * @test
-     */
     public function executeWithOutputStreamWritesResponseDataToOutputStream()
     {
         $memory = new MemoryOutputStream();
-        $this->executor->streamOutputTo($memory)->execute('echo foo');
+        $this->executor->execute('echo foo', $memory);
         assert($memory->buffer(), equals("foo\n"));
     }
 
@@ -90,7 +70,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeFailsThrowsRuntimeException()
     {
-        $this->executor->execute('php -r "throw new Exception();"');
+        $this->executor->execute(PHP_BINARY . ' -r "throw new Exception();"');
     }
 
     /**
@@ -108,7 +88,9 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeAsyncFailsThrowsRuntimeException()
     {
-        $commandInputStream = $this->executor->executeAsync('php -r "throw new Exception();"');
+        $commandInputStream = $this->executor->executeAsync(
+                PHP_BINARY . ' -r "throw new Exception();"'
+        );
         while (!$commandInputStream->eof()) {
             $commandInputStream->readLine();
         }
@@ -151,6 +133,8 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeDirectFailsThrowsRuntimeException()
     {
-        $this->executor->executeDirect('php -r "throw new Exception();"');
+        $this->executor->executeDirect(
+                PHP_BINARY . ' -r "throw new Exception();"'
+        );
     }
 }

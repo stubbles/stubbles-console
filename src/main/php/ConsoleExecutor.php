@@ -15,39 +15,11 @@ use stubbles\streams\OutputStream;
 class ConsoleExecutor implements Executor
 {
     /**
-     * output stream to write data outputted by executed command to
-     *
-     * @type  \stubbles\streams\OutputStream
-     */
-    private $out;
-    /**
      * redirect direction
      *
      * @type  string
      */
     private $redirect = '2>&1';
-
-    /**
-     * sets the output stream to write data outputted by executed command to
-     *
-     * @param   \stubbles\streams\OutputStream  $out
-     * @return  \stubbles\console\Executor
-     */
-    public function streamOutputTo(OutputStream $out)
-    {
-        $this->out = $out;
-        return $this;
-    }
-
-    /**
-     * returns the output stream to write data outputted by executed command to
-     *
-     * @return  \stubbles\streams\OutputStream
-     */
-    public function out()
-    {
-        return $this->out;
-    }
 
     /**
      * sets the redirect
@@ -64,11 +36,15 @@ class ConsoleExecutor implements Executor
     /**
      * executes given command
      *
-     * @param   string  $command
+     * If no output stream is passed the output of the command is simply
+     * ignored.
+     *
+     * @param   string                          $command
+     * @param   \stubbles\streams\OutputStream  $out      optional  where to write command output to
      * @return  \stubbles\console\Executor
      * @throws  \RuntimeException
      */
-    public function execute($command)
+    public function execute($command, OutputStream $out = null)
     {
         $pd = popen($command . ' ' . $this->redirect, 'r');
         if (false === $pd) {
@@ -78,8 +54,8 @@ class ConsoleExecutor implements Executor
         // must read all output even if we don't need it, otherwise we don't
         // receive a correct return code when closing the process file pointer
         while (!feof($pd) && false !== ($line = fgets($pd, 4096))) {
-            if (null !== $this->out) {
-                $this->out->writeLine(rtrim($line));
+            if (null !== $out) {
+                $out->writeLine(rtrim($line));
             }
         }
 
