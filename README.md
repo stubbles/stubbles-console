@@ -17,8 +17,8 @@ Build status
 Installation
 ------------
 
-_bovigo/assert_ is distributed as [Composer](https://getcomposer.org/) package.
-To install it as a dependency of your package use the following
+_stubbles/console_ is distributed as [Composer](https://getcomposer.org/)
+package. To install it as a dependency of your package use the following
 command:
 
     composer require "stubbles/console": "^5.1"
@@ -222,8 +222,8 @@ dependencies can be created. This means you can have a unit test like this:
     public function canCreateInstance()
     {
         $this->assertInstanceOf(
-                'example\\app\\MyConsoleApp',
-                {CLASS}::create(new Rootpath())
+                MyConsoleApp::class,
+                MyConsoleApp::create(new Rootpath())
         );
     }
 ```
@@ -344,6 +344,7 @@ Write message to stdout.
 Write a line to stdout.
 
 ### `writeEmptyLine()`
+_Available since release 2.6.0._
 Write an empty line to stdout.
 
 ### `writeError($bytes)`
@@ -353,6 +354,7 @@ Write error message to stderr.
 Write an error message line to stderr.
 
 ### `writeEmptyErrorLine()`
+_Available since release 2.6.0._
 Write an empty error message line to stderr.
 
 
