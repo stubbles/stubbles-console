@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f269c7ed40db5490aabb9c5fcfc5357d",
-    "content-hash": "dbf8733560f806e01c29b520b5070c8c",
+    "hash": "0feb42c90fe7fa072aefbe606a79f7ab",
+    "content-hash": "22512d9322b5b02290748852c3323de0",
     "packages": [
         {
             "name": "stubbles/core",
@@ -152,32 +152,34 @@
         },
         {
             "name": "bovigo/callmap",
-            "version": "v1.1.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/bovigo-callmap.git",
-                "reference": "1977f29b0eea36dc7fb84416baa2dc59e074aaed"
+                "reference": "d8a4e9b7c052a0908e9bac16ee7f82c83bd113f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/bovigo-callmap/zipball/1977f29b0eea36dc7fb84416baa2dc59e074aaed",
-                "reference": "1977f29b0eea36dc7fb84416baa2dc59e074aaed",
+                "url": "https://api.github.com/repos/mikey179/bovigo-callmap/zipball/d8a4e9b7c052a0908e9bac16ee7f82c83bd113f6",
+                "reference": "d8a4e9b7c052a0908e9bac16ee7f82c83bd113f6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=5.6.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8"
+                "bovigo/assert": " ^1.2",
+                "phpunit/phpunit": "~5.1"
             },
             "suggest": {
-                "phpunit/phpunit": "To use argument verification",
+                "bovigo/assert": "To use argument verification",
+                "phpunit/phpunit": "Alternative option for argument verification",
                 "xp-framework/core": "Alternative option for argument verification"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -193,7 +195,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Allows to stub and mock method calls by applying a callmap.",
-            "time": "2015-10-05 16:18:01"
+            "time": "2015-12-30 09:47:35"
         },
         {
             "name": "doctrine/instantiator",
