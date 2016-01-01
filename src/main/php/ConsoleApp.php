@@ -32,29 +32,15 @@ abstract class ConsoleApp extends App
     {
         try {
             return (int) self::create($projectPath)->run();
+        } catch (ConsoleAppException $cae) {
+            $cae->writeTo($err);
+            return $cae->getCode();
         } catch (\Exception $e) {
-            return self::handleException($e, $err);
+            $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
+            $err->writeLine('Stacktrace:');
+            $err->writeLine($e->getTraceAsString());
+            return 20;
         }
-    }
-
-    /**
-     * handle exception
-     *
-     * @param   \Exception                      $e    exception to handle
-     * @param   \stubbles\streams\OutputStream  $err  stream to write exception information to
-     * @return  int
-     */
-    private static function handleException(\Exception $e, OutputStream $err)
-    {
-        if ($e instanceof ConsoleAppException) {
-            $e->writeTo($err);
-            return $e->getCode();
-        }
-
-        $err->writeLine('*** ' . get_class($e) . ': ' . $e->getMessage());
-        $err->writeLine('Stacktrace:');
-        $err->writeLine($e->getTraceAsString());
-        return 20;
     }
 
     /**
