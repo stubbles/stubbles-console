@@ -373,7 +373,7 @@ From time to time it is necessary to run another command line program from withi
 your application. Stubbles Console provides a convenient way to do this via the
 `stubbles\console\Executor` class.
 
-It provides three different ways to run a command line program:
+It provides four different ways to run a command line program:
 
 1. `execute($command, callable  $out = null)`: This will simply execute the
    given command. If the executor receives an callable the callable will be
