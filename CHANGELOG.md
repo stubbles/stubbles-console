@@ -5,13 +5,14 @@
 
   * raised minimum required PHP version to 5.6
   * removed _bin/stubcli_
+  * `stubbles\console\Executor` is not an interface any more but an implementation
+    * deprecated `stubbles\console\ConsoleExecutor`, will be removed with 7.0.0
   * changed how `stubbles\console\Executor` works with output streams:
     * removed `stubbles\console\Executor::streamOutputTo()`
     * removed `stubbles\console\Executor::out()`
-    * `stubbles\console\Executor::execute()` now takes an output stream as optional second argument
+    * `stubbles\console\Executor::execute()` now takes a callable as optional second argument which receives each single line
     * all methods now have an optional parameter `$redirect` with which output redirection can be influenced
-  * `stubbles\console\Executor` is not an interface any more but an implementation
-    * deprecated `stubbles\console\ConsoleExecutor`, will be removed with 7.0.0
+  * added `stubbles\console\Executor::outputOf()`
 
 
 5.1.0 (2015-08-03)

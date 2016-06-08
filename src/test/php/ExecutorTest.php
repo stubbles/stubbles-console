@@ -49,7 +49,7 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
     public function executeWithOutputStreamWritesResponseDataToOutputStream()
     {
         $memory = new MemoryOutputStream();
-        $this->executor->execute('echo foo', $memory);
+        $this->executor->execute('echo foo', [$memory, 'writeLine']);
         assert($memory->buffer(), equals("foo\n"));
     }
 
@@ -113,7 +113,7 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeDirectReturnsOutputAsArray()
     {
-        assert($this->executor->executeDirect('echo foo'), equals(['foo']));
+        assert($this->executor->executeDirect('echo foo && echo bar'), equals(['foo', 'bar']));
     }
 
     /**
