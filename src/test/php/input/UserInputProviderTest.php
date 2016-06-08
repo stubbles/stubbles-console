@@ -16,7 +16,7 @@ use function bovigo\assert\assert;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isSameAs;
-use function stubbles\lang\reflect\annotationsOfConstructorParameter;
+use function stubbles\reflect\annotationsOfConstructorParameter;
 /**
  * Test for stubbles\console\input\UserInputProvider.
  *

@@ -11,8 +11,8 @@ namespace stubbles\console\creator;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
 use stubbles\console\Console;
-use stubbles\lang\ResourceLoader;
-use stubbles\lang\Rootpath;
+use stubbles\values\ResourceLoader;
+use stubbles\values\Rootpath;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertTrue;
@@ -89,9 +89,9 @@ class TestFileCreatorTest extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
-use stubbles\lang\Rootpath;
+use stubbles\values\Rootpath;
 
-use function stubbles\lang\reflect\annotationsOfConstructor;
+use function stubbles\reflect\annotationsOfConstructor;
 /**
  * Test for example\console\ExampleConsoleApp.
  */
@@ -157,7 +157,7 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\lang\exception\ConfigurationException
+     * @expectedException  UnexpectedValueException
      * @since  4.1.0
      * @group  issue_49
      */
@@ -203,9 +203,9 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
  * @package  example\console
  */
 namespace example\console;
-use stubbles\lang\Rootpath;
+use stubbles\values\Rootpath;
 
-use function stubbles\lang\reflect\annotationsOfConstructor;
+use function stubbles\reflect\annotationsOfConstructor;
 /**
  * Test for example\console\ExampleConsoleApp.
  */

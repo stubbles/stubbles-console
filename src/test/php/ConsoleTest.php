@@ -21,7 +21,7 @@ use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\onConsecutiveCalls;
 use function bovigo\callmap\verify;
-use function stubbles\lang\reflect\annotationsOfConstructorParameter;
+use function stubbles\reflect\annotationsOfConstructorParameter;
 /**
  * Test for stubbles\console\Console.
  *
@@ -249,10 +249,10 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function promptEnrichesParamErrors()
     {
         $paramErrors = new ParamErrors();
-        $this->inputStream->mapCalls(['readLine' => 'no date here']);
+        $this->inputStream->mapCalls(['readLine' => 'some invalid input']);
         assertNull(
-                $this->console->prompt('Please enter a number: ', $paramErrors)
-                        ->asHttpUri()
+                $this->console->prompt('Please enter something: ', $paramErrors)
+                        ->when(function() { return false; }, 'ERROR')
         );
         assertTrue($paramErrors->existFor('stdin'));
     }
@@ -276,8 +276,10 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function readValueEnrichesParamErrors()
     {
         $paramErrors = new ParamErrors();
-        $this->inputStream->mapCalls(['readLine' => 'no date here']);
-        assertNull($this->console->readValue($paramErrors)->asHttpUri());
+        $this->inputStream->mapCalls(['readLine' => 'some invalid input']);
+        assertNull($this->console->readValue($paramErrors)
+                ->when(function() { return false; }, 'ERROR')
+        );
         assertTrue($paramErrors->existFor('stdin'));
     }
 

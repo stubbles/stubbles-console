@@ -11,7 +11,7 @@ namespace stubbles\console\input;
 use stubbles\input\broker\RequestBroker;
 use stubbles\input\broker\TargetMethod;
 
-use function stubbles\lang\reflect\annotationsOf;
+use function stubbles\reflect\annotationsOf;
 /**
  * Helpscreen to be displayed when script usage is requested.
  *

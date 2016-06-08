@@ -9,10 +9,8 @@
  */
 namespace stubbles\console\creator;
 use stubbles\console\Console;
-use stubbles\lang\ResourceLoader;
-use stubbles\lang\Rootpath;
-use stubbles\lang\exception\ConfigurationException;
-use stubbles\lang\exception\FileNotFoundException;
+use stubbles\values\ResourceLoader;
+use stubbles\values\Rootpath;
 /**
  * Base class for file creation.
  */
@@ -27,22 +25,22 @@ abstract class FileCreator
     /**
      * path to project
      *
-     * @type  \stubbles\lang\Rootpath
+     * @type  \stubbles\values\Rootpath
      */
     protected $rootpath;
     /**
      * access to resources
      *
-     * @type  \stubbles\lang\ResourceLoader
+     * @type  \stubbles\values\ResourceLoader
      */
     private $resourceLoader;
 
     /**
      * constructor
      *
-     * @param  \stubbles\console\Console      $console
-     * @param  \stubbles\lang\Rootpath        $rootpath
-     * @param  \stubbles\lang\ResourceLoader  $resourceLoader
+     * @param  \stubbles\console\Console        $console
+     * @param  \stubbles\values\Rootpath        $rootpath
+     * @param  \stubbles\values\ResourceLoader  $resourceLoader
      */
     public function __construct(Console $console, Rootpath $rootpath, ResourceLoader $resourceLoader)
     {
@@ -94,7 +92,7 @@ abstract class FileCreator
      * @param   string  $className   name of class to retrieve file name for
      * @param   string  $type        whether it a normal class or a test class
      * @return  string
-     * @throws  \stubbles\lang\exception\ConfigurationException
+     * @throws  \UnexpectedValueException
      */
     private function fileNameForPsr4(array $psr4Pathes, $className, $type)
     {
@@ -111,7 +109,7 @@ abstract class FileCreator
             }
         }
 
-        throw new ConfigurationException(
+        throw new \UnexpectedValueException(
                 'No PSR-4 path for class ' . $className . ' found in composer.json'
         );
     }
@@ -149,13 +147,13 @@ abstract class FileCreator
      *
      * @param   string $template
      * @return  string
-     * @throws  \stubbles\lang\exception\FileNotFoundException
+     * @throws  \RuntimeException
      */
     private function pathForTemplate($template)
     {
         $pathes = $this->resourceLoader->availableResourceUris('creator/' . $template);
         if (!isset($pathes[0])) {
-            throw new FileNotFoundException($template);
+            throw new \RuntimeException('Could not load template ' . $template);
         }
 
         return $pathes[0];

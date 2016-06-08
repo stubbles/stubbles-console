@@ -8,7 +8,7 @@ namespace stubbles\console\creator;
 use bovigo\callmap\NewInstance;
 use stubbles\console\Console;
 use stubbles\input\ValueReader;
-use stubbles\lang\Rootpath;
+use stubbles\values\Rootpath;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\predicate\equals;

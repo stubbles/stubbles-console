@@ -8,8 +8,8 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use stubbles\lang\exception\IOException;
 use stubbles\streams\ResourceInputStream;
+use stubbles\streams\StreamException;
 /**
  * Input stream to read output of an executed command.
  *
@@ -61,7 +61,7 @@ class CommandInputStream extends ResourceInputStream
      * @param   int  $length  optional  max amount of bytes to read
      * @return  string
      * @throws  \LogicException
-     * @throws  \stubbles\lang\exception\IOException
+     * @throws  \stubbles\streams\StreamException
      */
     public function read($length = 8192)
     {
@@ -72,7 +72,7 @@ class CommandInputStream extends ResourceInputStream
         $data = @fgets($this->handle, $length);
         if (false === $data) {
             if (!@feof($this->handle)) {
-                throw new IOException('Can not read from input stream.');
+                throw new StreamException('Can not read from input stream.');
             }
 
             return '';
