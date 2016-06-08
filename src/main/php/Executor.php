@@ -57,6 +57,10 @@ class Executor
     /**
      * executes command directly and returns output as array (each line as one entry)
      *
+     * In case you only want to iterate over the output you should use outputOf()
+     * instead as it will yield a line as soon as it occurs, whereas this method
+     * waits until the command finishes until it returns all output lines at once.
+     *
      * @param   string  $command
      * @param   string  $redirect  optional  how to redirect error output
      * @return  string[]

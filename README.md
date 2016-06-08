@@ -21,7 +21,7 @@ _stubbles/console_ is distributed as [Composer](https://getcomposer.org/)
 package. To install it as a dependency of your package use the following
 command:
 
-    composer require "stubbles/console": "^5.1"
+    composer require "stubbles/console": "^6.0"
 
 
 Requirements
@@ -43,8 +43,8 @@ must extend `stubbles\console\ConsoleApp`, and have two purposes:
    which means 0 for a successful execution and any other exit code for in case
    an error happened.
 
-For details about the IoC part check the docs about [Apps in stubbles/core](https://github.com/stubbles/stubbles-core/wiki/Apps-binding-modules).
-Generally, understanding the Inversion of Control functionality in [stubbles/core](https://github.com/stubbles/stubbles-core/wiki)
+For details about the IoC part check the docs about [Apps in stubbles/ioc](https://github.com/stubbles/stubbles-ioc/blob/master/docs/application.md).
+Generally, understanding the Inversion of Control functionality in [stubbles/ioc](https://github.com/stubbles/stubbles-ioc)
 will help a lot in regard on how to design the further classes in your command
 line app.
 
@@ -258,7 +258,7 @@ Reading from command line
 -------------------------
 
 In order to read user input from the command line one can use the
-`stubbles\console\ConsoleInputStream`. It is a normal [input stream](https://github.com/stubbles/stubbles-core/wiki/Stream-interfaces)
+`stubbles\console\ConsoleInputStream`. It is a normal [input stream](https://github.com/stubbles/stubbles-streams)
 from which can be read.
 
 If you want to get such an input stream injected in your class it is recommended
@@ -284,7 +284,7 @@ Writing to command line
 
 To write to the command line there are two possibilities: either write directly
 to standard out, or write to the error out. Both ways are implemented as an
-[output stream](https://github.com/stubbles/stubbles-core/wiki/Stream-interfaces).
+[output stream](https://github.com/stubbles/stubbles-streams).
 
 If you want to get such an output stream injected in your class it is
 recommended to typehint against stubbles\streams\OutputStream and add a
@@ -371,19 +371,22 @@ Command line executor
 
 From time to time it is necessary to run another command line program from within
 your application. Stubbles Console provides a convenient way to do this via the
-`stubbles\console\Executor` interface. It is recommended to not create the
-executor instance yourself but to get one injected.
+`stubbles\console\Executor` class.
 
 It provides three different ways to run a command line program:
 
-1. `execute($command, OutputStream  $out = null)`: This will simply execute the
-   given command. If the executor receives an [output stream](https://github.com/stubbles/stubbles-core/wiki/Stream-interfaces)
-   any output of the command is written to this stream.
+1. `execute($command, callable  $out = null)`: This will simply execute the
+   given command. If the executor receives an callable the callable will be
+   executed for each single line of the command's output.
 2. `executeAsync($command)`: This will execute the command, but reading the
    output of the command can be done later via the returned `CommandInputStream`
-   instance which is a normal [input stream](https://github.com/stubbles/stubbles-core/wiki/Stream-interfaces).
+   instance which is a normal [input stream](https://github.com/stubbles/stubbles-streams).
 3. `executeDirect($command)`: The will execute the given command, and return its
    output as array, where one entry resembles one line of the output.
+4. `outputOf($command)`: This will execute the given command and return a
+   [Generator](http://php.net/manual/en/language.generators.php) which yields
+   each single line from the command's output as it occurs. (_Available since
+   release 6.0.0._)
 
 If the executed command returns an exit code other than 0 this is considered as
 failure, resulting in a `\RuntimeException`.
@@ -391,7 +394,9 @@ failure, resulting in a `\RuntimeException`.
 ### Redirecting output
 
 If you want to redirect the output of the command to execute you can provide a
-redirect option  via `redirectTo($redirect)`.
+redirect as an optional last argument for each of the methods listed above. By
+default the error output of a command is redirected to the standard output using
+_2>&1_.
 
 ### Examples
 
@@ -404,24 +409,23 @@ $executor->execute('git clone git://github.com/stubbles/stubbles-console.git');
 Running a command and retrieve the output:
 
 ```php
-$executor->execute('git clone git://github.com/stubbles/stubbles-console.git', $myOutputStream);
+$executor->execute('git clone git://github.com/stubbles/stubbles-console.git', [$myOutputStream, 'writeLine']);
 ```
 
 Running a command asynchronously:
 
 ```php
-    $inputStream = $executor->executeAsync('git clone git://github.com/stubbles/stubbles-console.git');
-    // ... do some other work here ...
-    while (!$inputStream->eof()) {
-        echo $inputStream->readLine();
-    }
+$inputStream = $executor->executeAsync('git clone git://github.com/stubbles/stubbles-console.git');
+// ... do some other work here ...
+while (!$inputStream->eof()) {
+    echo $inputStream->readLine();
+}
 ```
 
 Directly receive command output:
 
 ```php
-    $lines = $executor->executeDirect('git clone git://github.com/stubbles/stubbles-console.git');
-    foreach ($lines as $line) {
-        echo $line;
-    }
+foreach ($executor->outputOf('git clone git://github.com/stubbles/stubbles-console.git') as $line) {
+    echo $line;
+}
 ```
