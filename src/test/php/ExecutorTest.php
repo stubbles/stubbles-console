@@ -8,25 +8,22 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use bovigo\callmap\NewInstance;
-use stubbles\streams\OutputStream;
 use stubbles\streams\memory\MemoryOutputStream;
 
 use function bovigo\assert\assert;
-use function bovigo\assert\assertNull;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isSameAs;
 /**
- * Test for stubbles\console\ConsoleExecutor.
+ * Test for stubbles\console\Executor.
  *
  * @group  console
  */
-class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
+class ExecutorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * instance to test
      *
-     * @type  \stubbles\console\ConsoleExecutor
+     * @type  \stubbles\console\Executor
      */
     private $executor;
 
@@ -35,15 +32,7 @@ class ConsoleExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->executor = new ConsoleExecutor();
-    }
-
-    /**
-     * @test
-     */
-    public function redirectToReturnsItself()
-    {
-        assert($this->executor->redirectTo('2>&1'), isSameAs($this->executor));
+        $this->executor = new Executor();
     }
 
     /**

@@ -9,6 +9,9 @@
     * removed `stubbles\console\Executor::streamOutputTo()`
     * removed `stubbles\console\Executor::out()`
     * `stubbles\console\Executor::execute()` now takes an output stream as optional second argument
+    * all methods now have an optional parameter `$redirect` with which output redirection can be influenced
+  * `stubbles\console\Executor` is not an interface any more but an implementation
+    * deprecated `stubbles\console\ConsoleExecutor`, will be removed with 7.0.0
 
 
 5.1.0 (2015-08-03)

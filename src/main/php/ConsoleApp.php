@@ -69,8 +69,6 @@ abstract class ConsoleApp extends App
             $binder->bind(OutputStream::class)
                    ->named('stderr')
                    ->toInstance(ConsoleOutputStream::forError());
-            $binder->bind(Executor::class)
-                   ->to(ConsoleExecutor::class);
         };
         return $bindings;
     }

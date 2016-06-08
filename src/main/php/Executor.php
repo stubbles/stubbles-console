@@ -10,11 +10,11 @@
 namespace stubbles\console;
 use stubbles\streams\OutputStream;
 /**
- * Interface for command executors.
+ * Execute commands on the command line.
  *
  * @api
  */
-interface Executor
+class Executor
 {
     /**
      * executes given command
@@ -23,10 +23,34 @@ interface Executor
      * ignored.
      *
      * @param   string                          $command
-     * @param   \stubbles\streams\OutputStream  $out      optional  where to write command output to
+     * @param   \stubbles\streams\OutputStream  $out       optional  where to write command output to
+     * @param   string                          $redirect  optional  how to redirect error output
      * @return  \stubbles\console\Executor
      */
-    public function execute($command, OutputStream $out = null);
+    public function execute($command, OutputStream $out = null, $redirect = '2>&1')
+    {
+        $pd = popen($command . ' ' . $redirect, 'r');
+        if (false === $pd) {
+            throw new \RuntimeException('Can not execute ' . $command);
+        }
+
+        // must read all output even if we don't need it, otherwise we don't
+        // receive a correct return code when closing the process file pointer
+        while (!feof($pd) && false !== ($line = fgets($pd, 4096))) {
+            if (null !== $out) {
+                $out->writeLine(rtrim($line));
+            }
+        }
+
+        $returnCode = pclose($pd);
+        if (0 != $returnCode) {
+            throw new \RuntimeException(
+                    'Executing command ' . $command . ' failed: #' . $returnCode
+            );
+        }
+
+        return $this;
+    }
 
     /**
      * executes given command asynchronous
@@ -35,15 +59,46 @@ interface Executor
      * used to read the output of the command at a later point in time.
      *
      * @param   string  $command
+     * @param   string  $redirect  optional  how to redirect error output
      * @return  \stubbles\streams\InputStream
      */
-    public function executeAsync($command);
+    public function executeAsync($command, $redirect = '2>&1')
+    {
+        $pd = popen($command . ' ' . $redirect, 'r');
+        if (false === $pd) {
+            throw new \RuntimeException('Can not execute ' . $command);
+        }
+
+        return new CommandInputStream($pd, $command);
+    }
 
     /**
      * executes command directly and returns output as array (each line as one entry)
      *
      * @param   string  $command
+     * @param   string  $redirect  optional  how to redirect error output
      * @return  string[]
      */
-    public function executeDirect($command);
+    public function executeDirect($command, $redirect = '2>&1')
+    {
+        $pd = popen($command . ' ' . $redirect, 'r');
+        if (false === $pd) {
+            throw new \RuntimeException('Can not execute ' . $command);
+        }
+
+        $result = [];
+        while (!feof($pd) && false !== ($line = fgets($pd, 4096))) {
+            $result[] = rtrim($line);
+        }
+
+        $returnCode = pclose($pd);
+        if (0 != $returnCode) {
+            throw new \RuntimeException(
+                    'Executing command ' . $command
+                    . ' failed: #' . $returnCode
+            );
+        }
+
+        return $result;
+    }
 }

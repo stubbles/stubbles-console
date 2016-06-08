@@ -189,6 +189,6 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function executorIsBoundAutomatically()
     {
         $app = AppWithoutBindingCanGetConsoleClassesInjected::create('projectPath');
-        assert($app->executor, isInstanceOf(ConsoleExecutor::class));
+        assert($app->executor, isInstanceOf(Executor::class));
     }
 }
