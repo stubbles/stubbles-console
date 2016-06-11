@@ -9,9 +9,9 @@
  */
 namespace stubbles\console;
 use bovigo\callmap\NewInstance;
+use stubbles\console\input\ArgumentParser;
 use stubbles\console\input\HelpScreen;
 use stubbles\console\input\InvalidOptionValue;
-use stubbles\console\ioc\ArgumentParser;
 use stubbles\input\errors\ParamErrors;
 use stubbles\input\errors\messages\ParamErrorMessages;
 use stubbles\streams\memory\MemoryOutputStream;

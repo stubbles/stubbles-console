@@ -9,9 +9,9 @@
  */
 namespace stubbles\console;
 use stubbles\App;
+use stubbles\console\input\ArgumentParser;
 use stubbles\console\input\HelpScreen;
 use stubbles\console\input\InvalidOptionValue;
-use stubbles\console\ioc\ArgumentParser;
 use stubbles\ioc\Binder;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;

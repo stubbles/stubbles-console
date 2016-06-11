@@ -7,10 +7,7 @@
  *
  * @package  stubbles\console
  */
-namespace stubbles\console\ioc;
-use stubbles\console\input\BaseConsoleRequest;
-use stubbles\console\input\ConsoleRequest;
-use stubbles\console\input\UserInputProvider;
+namespace stubbles\console\input;
 use stubbles\input\Request;
 use stubbles\input\broker\RequestBroker;
 use stubbles\ioc\Binder;

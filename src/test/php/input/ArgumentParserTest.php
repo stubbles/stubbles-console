@@ -7,11 +7,9 @@
  *
  * @package  stubbles\console
  */
-namespace stubbles\console\ioc;
+namespace stubbles\console\input;
 use bovigo\callmap\NewInstance;
 use org\stubbles\console\test\BrokeredUserInput;
-use stubbles\console\input\BaseConsoleRequest;
-use stubbles\console\input\ConsoleRequest;
 use stubbles\input\Request;
 use stubbles\input\broker\param\ParamBroker;
 use stubbles\ioc\Binder;
