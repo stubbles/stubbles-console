@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-input.git",
-                "reference": "dd4f319f49f094e977de004a07711b0ce5772266"
+                "reference": "1f01d89bb2c76c3b458ceb84a0d3c232f7d64380"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/dd4f319f49f094e977de004a07711b0ce5772266",
-                "reference": "dd4f319f49f094e977de004a07711b0ce5772266",
+                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/1f01d89bb2c76c3b458ceb84a0d3c232f7d64380",
+                "reference": "1f01d89bb2c76c3b458ceb84a0d3c232f7d64380",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
             ],
             "description": "Stubbles Input enables to handle input data via validation and filtering.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-06-11 14:03:18"
+            "time": "2016-06-11 15:26:20"
         },
         {
             "name": "stubbles/ioc",
