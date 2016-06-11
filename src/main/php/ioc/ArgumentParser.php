@@ -8,11 +8,11 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\ioc;
+use stubbles\console\input\BaseConsoleRequest;
+use stubbles\console\input\ConsoleRequest;
 use stubbles\console\input\UserInputProvider;
 use stubbles\input\Request;
 use stubbles\input\broker\RequestBroker;
-use stubbles\input\console\ConsoleRequest;
-use stubbles\input\console\BaseConsoleRequest;
 use stubbles\ioc\Binder;
 use stubbles\ioc\module\BindingModule;
 /**

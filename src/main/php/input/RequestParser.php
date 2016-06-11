@@ -8,7 +8,6 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\input;
-use stubbles\input\console\ConsoleRequest;
 use stubbles\input\broker\RequestBroker;
 use stubbles\input\errors\messages\ParamErrorMessages;
 /**

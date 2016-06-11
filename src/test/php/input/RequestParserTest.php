@@ -12,7 +12,6 @@ use bovigo\callmap\NewInstance;
 use org\stubbles\console\test\BrokeredUserInput;
 use stubbles\input\ValueReader;
 use stubbles\input\broker\RequestBroker;
-use stubbles\input\console\ConsoleRequest;
 use stubbles\input\errors\ParamErrors;
 use stubbles\input\errors\messages\ParamErrorMessages;
 

@@ -10,10 +10,10 @@
 namespace stubbles\console\ioc;
 use bovigo\callmap\NewInstance;
 use org\stubbles\console\test\BrokeredUserInput;
+use stubbles\console\input\BaseConsoleRequest;
+use stubbles\console\input\ConsoleRequest;
 use stubbles\input\Request;
 use stubbles\input\broker\param\ParamBroker;
-use stubbles\input\console\BaseConsoleRequest;
-use stubbles\input\console\ConsoleRequest;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
 use stubbles\streams\InputStream;

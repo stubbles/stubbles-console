@@ -1,4 +1,4 @@
-6.0.0 (201?-??-??)
+6.0.0 (2016-??-??)
 ------------------
 
 ### BC breaks
@@ -13,6 +13,8 @@
     * `stubbles\console\Executor::execute()` now takes a callable as optional second argument which receives each single line
     * all methods now have an optional parameter `$redirect` with which output redirection can be influenced
   * added `stubbles\console\Executor::outputOf()`
+  * moved `stubbles\input\console\ConsoleRequest` from stubbles/input to `stubbles\console\input\ConsoleRequest`
+  * moved `stubbles\input\console\BaseConsoleRequest` from stubbles/input to `stubbles\console\input\BaseConsoleRequest`
 
 
 5.1.0 (2015-08-03)
