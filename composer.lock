@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "stubbles/input",
-            "version": "dev-master",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-input.git",
-                "reference": "1f01d89bb2c76c3b458ceb84a0d3c232f7d64380"
+                "reference": "a574f0ae39a06d343b3766dae085d35f83b95361"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/1f01d89bb2c76c3b458ceb84a0d3c232f7d64380",
-                "reference": "1f01d89bb2c76c3b458ceb84a0d3c232f7d64380",
+                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/a574f0ae39a06d343b3766dae085d35f83b95361",
+                "reference": "a574f0ae39a06d343b3766dae085d35f83b95361",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
             ],
             "description": "Stubbles Input enables to handle input data via validation and filtering.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-06-11 15:26:20"
+            "time": "2016-06-12 12:54:48"
         },
         {
             "name": "stubbles/ioc",
@@ -1057,16 +1057,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.2.1",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "0dc8fd8e87e0366c22b6c25d1f43c4e2e66847b3"
+                "reference": "b13d0d9426ced06958bd32104653526a6c998a52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/0dc8fd8e87e0366c22b6c25d1f43c4e2e66847b3",
-                "reference": "0dc8fd8e87e0366c22b6c25d1f43c4e2e66847b3",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/b13d0d9426ced06958bd32104653526a6c998a52",
+                "reference": "b13d0d9426ced06958bd32104653526a6c998a52",
                 "shasum": ""
             },
             "require": {
@@ -1112,7 +1112,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-06-04 05:52:19"
+            "time": "2016-06-12 07:37:26"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
