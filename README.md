@@ -321,7 +321,7 @@ class provides methods to read and write:
 _Available since release 2.1.0._
 
 Writes a message to stdout and returns a value reader similar to
-[reading request parameters](https://github.com/stubbles/stubbles-input/wiki/ReadingRequestParameters).
+[reading request parameters](https://github.com/stubbles/stubbles-input/blob/master/docs/read_params.md).
 In case you need access to error messages that may happen during value
 validation you need to supply `stubbles\input\ParamErrors`, errors will be
 accumulated therein under the param name stdin.
