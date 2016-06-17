@@ -1,3 +1,9 @@
+6.0.1 (2016-06-17)
+------------------
+
+ * removed reference to _bin/stubcli_ in composer.json
+
+
 6.0.0 (2016-06-12)
 ------------------
 

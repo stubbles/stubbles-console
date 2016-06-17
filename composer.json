@@ -28,7 +28,7 @@
             "org\\stubbles\\console\\test\\": "src/test/helper"
         }
     },
-    "bin": ["bin/stubcli", "bin/createConsoleApp"],
+    "bin": ["bin/createConsoleApp"],
     "extra": {
         "branch-alias": {
             "dev-master": "6.0.x-dev"
