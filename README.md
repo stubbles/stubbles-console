@@ -21,7 +21,7 @@ _stubbles/console_ is distributed as [Composer](https://getcomposer.org/)
 package. To install it as a dependency of your package use the following
 command:
 
-    composer require "stubbles/console": "^6.0"
+    composer require "stubbles/console": "^6.1"
 
 
 Requirements
@@ -373,7 +373,7 @@ From time to time it is necessary to run another command line program from withi
 your application. Stubbles Console provides a convenient way to do this via the
 `stubbles\console\Executor` class.
 
-It provides four different ways to run a command line program:
+It provides three different ways to run a command line program:
 
 1. `execute($command, callable  $out = null)`: This will simply execute the
    given command. If the executor receives an callable the callable will be
@@ -381,9 +381,7 @@ It provides four different ways to run a command line program:
 2. `executeAsync($command)`: This will execute the command, but reading the
    output of the command can be done later via the returned `CommandInputStream`
    instance which is a normal [input stream](https://github.com/stubbles/stubbles-streams).
-3. `executeDirect($command)`: The will execute the given command, and return its
-   output as array, where one entry resembles one line of the output.
-4. `outputOf($command)`: This will execute the given command and return a
+3. `outputOf($command)`: This will execute the given command and return a
    [Generator](http://php.net/manual/en/language.generators.php) which yields
    each single line from the command's output as it occurs. (_Available since
    release 6.0.0._)
@@ -429,3 +427,17 @@ foreach ($executor->outputOf('git clone git://github.com/stubbles/stubbles-conso
     echo $line;
 }
 ```
+
+### Collect output in a variable
+
+Sometimes it's sufficient to collect the output of a command in a separate
+variable. This can be done using the `stubbles\console\collect()` function:
+
+```php
+$out = '';
+$executor->execute('git clone git://github.com/stubbles/stubbles-console.git', collect($out));
+```
+
+Afterwards, `$out` contains all output from the command, separated by `PHP_EOL`.
+Alternatively, an array can be used, each element in the array will be a line
+from the command output then.

@@ -8,6 +8,30 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+
+use function stubbles\values\typeOf;
+/**
+ * creates a callable to collect output in given reference
+ *
+ * @param   string|array  &$out  something which will receive each line from the command output
+ * @return  callable
+ * @throws  \InvalidArgumentException  in case $out is neither a string nor an array
+ * @since   6.1.0
+ */
+function collect(&$out)
+{
+    if (is_string($out)) {
+        return function($line) use(&$out) { $out .= $line . PHP_EOL; };
+    } elseif (is_array($out)) {
+        return function($line) use(&$out) { $out[] = $line; };
+    }
+
+    throw new \InvalidArgumentException(
+            'Parameter $out must be a string or an array, but was of type '
+             . typeOf($out)
+    );
+}
+
 /**
  * Execute commands on the command line.
  *
@@ -18,18 +42,16 @@ class Executor
     /**
      * executes given command
      *
-     * If no callable is passed the output of the command is simply ignored.
-     *
      * @param   string    $command
-     * @param   callable  $out       optional  callable which will receive each line from the command output
+     * @param   callable  $collect   optional  callable which will receive each line from the command output
      * @param   string    $redirect  optional  how to redirect error output
      * @return  \stubbles\console\Executor
      */
-    public function execute($command, callable $out = null, $redirect = '2>&1')
+    public function execute($command, callable $collect = null, $redirect = '2>&1')
     {
         foreach ($this->outputOf($command, $redirect) as $line) {
-            if (null !== $out) {
-                $out($line);
+            if (null !== $collect) {
+                $collect($line);
             }
         }
 
@@ -64,6 +86,7 @@ class Executor
      * @param   string  $command
      * @param   string  $redirect  optional  how to redirect error output
      * @return  string[]
+     * @deprecated  since 6.1.0, use $executor->execute($command, collect($array)) or iterator_to_array($executor->outputOf($command)) instead, will be removed with 7.0.0
      */
     public function executeDirect($command, $redirect = '2>&1')
     {

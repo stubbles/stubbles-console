@@ -1,3 +1,16 @@
+6.1.0 (2016-06-22)
+------------------
+
+### BC breaks
+
+  * deprecated `stubbles\console\Executor::executeDirect($command)`, use `$executor->execute($command, collect($array))` or `iterator_to_array($executor->outputOf($command))` instead, will be removed with 7.0.0
+
+
+### Other changes
+
+    * added `stubbles\console\collect()`, but only available when `stubbles\console\Executor` is used
+
+
 6.0.1 (2016-06-17)
 ------------------
 

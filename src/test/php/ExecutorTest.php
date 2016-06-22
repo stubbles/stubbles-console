@@ -11,6 +11,7 @@ namespace stubbles\console;
 use stubbles\streams\memory\MemoryOutputStream;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isSameAs;
 /**
@@ -46,11 +47,44 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function executeWithOutputStreamWritesResponseDataToOutputStream()
+    public function executeWithCallableCallsCallableWithCommandOutput()
     {
         $memory = new MemoryOutputStream();
-        $this->executor->execute('echo foo', [$memory, 'writeLine']);
-        assert($memory->buffer(), equals("foo\n"));
+        $this->executor->execute('echo foo;echo bar', [$memory, 'writeLine']);
+        assert($memory->buffer(), equals("foo\nbar\n"));
+    }
+
+    /**
+     * @test
+     * @since  6.1.0
+     */
+    public function executeWithCollectStringAppendsCommandOutputToString()
+    {
+        $out = '';
+        $this->executor->execute('echo foo;echo bar', collect($out));
+        assert($out, equals("foo\nbar\n"));
+    }
+
+    /**
+     * @test
+     * @since  6.1.0
+     */
+    public function executeWithCollectArrayAppendsCommandOutputToArray()
+    {
+        $out = [];
+        $this->executor->execute('echo foo;echo bar', collect($out));
+        assert($out, equals(['foo', 'bar']));
+    }
+
+    /**
+     * @test
+     * @since  6.1.0
+     */
+    public function collectInNonStringAndNonArrayThrowsInvalidArgumentException()
+    {
+        expect(function() { $var = 0; collect($var); })
+                ->throws(\InvalidArgumentException::class)
+                ->withMessage('Parameter $out must be a string or an array, but was of type integer');
     }
 
     /**
@@ -110,6 +144,7 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @deprecated  since 6.1.0, will be removed with 7.0.0
      */
     public function executeDirectReturnsOutputAsArray()
     {
@@ -119,6 +154,7 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException  RuntimeException
+     * @deprecated  since 6.1.0, will be removed with 7.0.0
      */
     public function executeDirectFailsThrowsRuntimeException()
     {
