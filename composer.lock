@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e7229a269ae649a3e475a603ea89a09b",
-    "content-hash": "12fc5cc38f25ecde10829d33b295c9ee",
+    "hash": "fa2f90f9f7b7c9056f7277c4a2113e5b",
+    "content-hash": "35f0aa16728edea5c2d7ec415c5a6d02",
     "packages": [
         {
             "name": "stubbles/input",
@@ -293,16 +293,16 @@
     "packages-dev": [
         {
             "name": "bovigo/assert",
-            "version": "v1.6.0",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/bovigo-assert.git",
-                "reference": "4400cb962f7219de0975feaa240ad896dc933a8e"
+                "reference": "a087559945afce4e96ea756b40b1c80a6ec187ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/bovigo-assert/zipball/4400cb962f7219de0975feaa240ad896dc933a8e",
-                "reference": "4400cb962f7219de0975feaa240ad896dc933a8e",
+                "url": "https://api.github.com/repos/mikey179/bovigo-assert/zipball/a087559945afce4e96ea756b40b1c80a6ec187ce",
+                "reference": "a087559945afce4e96ea756b40b1c80a6ec187ce",
                 "shasum": ""
             },
             "require": {
@@ -334,28 +334,28 @@
                 "BSD-3-Clause"
             ],
             "description": "Provides assertions for unit tests.",
-            "time": "2016-02-21 12:34:16"
+            "time": "2016-06-20 19:33:02"
         },
         {
             "name": "bovigo/callmap",
-            "version": "v2.0.1",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/bovigo-callmap.git",
-                "reference": "d8a4e9b7c052a0908e9bac16ee7f82c83bd113f6"
+                "reference": "18164f739cd4d88a6ebc0173258c1b45d62b1c32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/bovigo-callmap/zipball/d8a4e9b7c052a0908e9bac16ee7f82c83bd113f6",
-                "reference": "d8a4e9b7c052a0908e9bac16ee7f82c83bd113f6",
+                "url": "https://api.github.com/repos/mikey179/bovigo-callmap/zipball/18164f739cd4d88a6ebc0173258c1b45d62b1c32",
+                "reference": "18164f739cd4d88a6ebc0173258c1b45d62b1c32",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.6.0"
             },
             "require-dev": {
-                "bovigo/assert": " ^1.2",
-                "phpunit/phpunit": "~5.1"
+                "bovigo/assert": " ^1.6",
+                "phpunit/phpunit": "~5.4"
             },
             "suggest": {
                 "bovigo/assert": "To use argument verification",
@@ -365,7 +365,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
@@ -381,7 +381,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Allows to stub and mock method calls by applying a callmap.",
-            "time": "2015-12-30 09:47:35"
+            "time": "2016-06-20 15:01:55"
         },
         {
             "name": "doctrine/instantiator",
