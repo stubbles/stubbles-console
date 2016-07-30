@@ -11,10 +11,13 @@ declare(strict_types=1);
 namespace stubbles\console;
 use stubbles\streams\memory\MemoryOutputStream;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\expect;
-use function bovigo\assert\predicate\equals;
-use function bovigo\assert\predicate\isSameAs;
+use function bovigo\assert\{
+    assert,
+    assertEmptyString,
+    expect,
+    predicate\equals,
+    predicate\isSameAs
+};
 /**
  * Test for stubbles\console\Executor.
  *
@@ -85,16 +88,27 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
     {
         expect(function() { $var = 0; collect($var); })
                 ->throws(\InvalidArgumentException::class)
-                ->withMessage('Parameter $out must be a string or an array, but was of type integer');
+                ->withMessage(
+                        'Parameter $out must be a string or an array, but was of'
+                        . ' type integer'
+                );
     }
 
     /**
      * @test
-     * @expectedException  RuntimeException
      */
     public function executeFailsThrowsRuntimeException()
     {
-        $this->executor->execute(PHP_BINARY . ' -r "throw new Exception();"');
+        expect(function() {
+                $this->executor->execute(
+                        PHP_BINARY . ' -r "throw new Exception();"'
+                );
+        })
+                ->throws(\RuntimeException::class)
+                ->withMessage(
+                        'Executing command "' . PHP_BINARY
+                        . ' -r "throw new Exception();"" failed: #255'
+                );
     }
 
     /**
@@ -102,44 +116,67 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function executeAsyncReturnsStreamToReadResultFrom()
     {
-        $commandInputStream = $this->executor->executeAsync('echo foo');
-        assert(chop($commandInputStream->read()), equals('foo'));
+        $inputStream = $this->executor->executeAsync('echo foo');
+        assert(chop($inputStream->read()), equals('foo'));
     }
 
     /**
      * @test
-     * @expectedException  RuntimeException
+     * @since  7.0.0
+     */
+    public function readAfterEofOnAsyncExecutionReturnsEmptyString()
+    {
+        $inputStream = $this->executor->executeAsync('echo foo');
+        $inputStream->read();
+        assertEmptyString($inputStream->read());
+    }
+
+    /**
+     * @test
      */
     public function executeAsyncFailsThrowsRuntimeException()
     {
-        $commandInputStream = $this->executor->executeAsync(
+        $inputStream = $this->executor->executeAsync(
                 PHP_BINARY . ' -r "throw new Exception();"'
         );
-        while (!$commandInputStream->eof()) {
-            $commandInputStream->readLine();
+        while (!$inputStream->eof()) {
+            $inputStream->readLine();
         }
 
-        $commandInputStream->close();
+        expect(function() use ($inputStream) { $inputStream->close(); })
+                ->throws(\RuntimeException::class)
+                ->withMessage(
+                        'Executing command "' . PHP_BINARY
+                        . ' -r "throw new Exception();"" failed: #255'
+                );
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     */
-    public function illegalResourceForCommandInputStreamThrowsIllegalArgumentException()
-    {
-        new CommandInputStream('invalid');
-    }
-
-    /**
-     * @test
-     * @expectedException  LogicException
      */
     public function readAfterCloseThrowsIllegalStateException()
     {
-        $commandInputStream = $this->executor->executeAsync('echo foo');
-        $commandInputStream->read(); // read before close
-        $commandInputStream->close();
-        $commandInputStream->read();
+        $inputStream = $this->executor->executeAsync('echo foo');
+        $inputStream->read(); // read before close
+        $inputStream->close();
+        expect(function() use ($inputStream) { $inputStream->read(); })
+                ->throws(\LogicException::class)
+                ->withMessage('Can not read from closed input stream.');
+    }
+
+    /**
+     * @test
+     * @since  7.0.0
+     */
+    public function destructInputStreamForFailedCommandDoesNotThrowException()
+    {
+        $inputStream = $this->executor->executeAsync(
+                PHP_BINARY . ' -r "throw new Exception();"'
+        );
+        expect(function() use ($inputStream) {
+            $inputStream->read();
+            $inputStream = null;
+        })
+                ->doesNotThrow();
     }
 }

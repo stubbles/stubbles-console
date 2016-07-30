@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace stubbles\console;
 use stubbles\streams\InputStream;
+use stubbles\streams\ResourceInputStream;
+use stubbles\streams\StreamException;
 
 use function stubbles\values\typeOf;
 /**
@@ -72,10 +74,72 @@ class Executor
      */
     public function executeAsync(string $command, string $redirect = '2>&1'): InputStream
     {
-        return new CommandInputStream(
+        return new class(
                 $this->runCommand($command, $redirect),
                 $command
-        );
+        ) extends ResourceInputStream {
+            public function __construct($resource, string $command)
+            {
+                $this->setHandle($resource);
+                $this->command = $command;
+            }
+
+            public function __destruct()
+            {
+                try {
+                    $this->close();
+                } catch (\Exception $e) {
+                    // ignore exception
+                }
+            }
+
+            /**
+             * reads given amount of bytes
+             *
+             * @param   int  $length  optional  max amount of bytes to read
+             * @return  string
+             * @throws  \LogicException
+             * @throws  \stubbles\streams\StreamException
+             */
+            public function read(int $length = 8192): string
+            {
+                if (null === $this->handle) {
+                    throw new \LogicException('Can not read from closed input stream.');
+                }
+
+                $data = @fgets($this->handle, $length);
+                if (false === $data) {
+                    if (!@feof($this->handle)) {
+                        throw new StreamException('Can not read from input stream.');
+                    }
+
+                    return '';
+                }
+
+                return $data;
+            }
+
+            /**
+             * closes the stream
+             *
+             * @throws  \RuntimeException
+             */
+            public function close()
+            {
+                if (null === $this->handle) {
+                    return;
+                }
+
+                $returnCode   = pclose($this->handle);
+                $this->handle = null;
+                if (0 != $returnCode) {
+                    throw new \RuntimeException(
+                            'Executing command "' . $this->command . '"'
+                            . ' failed: #' . $returnCode
+                    );
+                }
+            }
+        };
     }
 
     /**
@@ -96,7 +160,7 @@ class Executor
         $returnCode = pclose($pd);
         if (0 != $returnCode) {
             throw new \RuntimeException(
-                    'Executing command ' . $command
+                    'Executing command "' . $command . '"'
                     . ' failed: #' . $returnCode
             );
         }
