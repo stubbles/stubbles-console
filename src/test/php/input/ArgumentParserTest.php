@@ -143,22 +143,11 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function bindsRequestToBaseConsoleRequest()
-    {
-        assert(
-                $this->bindArguments()->getInstance(Request::class),
-                isInstanceOf(BaseConsoleRequest::class)
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function bindsConsoleRequestToBaseConsoleRequest()
+    public function bindsConsoleRequestToConsoleRequest()
     {
         assert(
                 $this->bindArguments()->getInstance(ConsoleRequest::class),
-                isInstanceOf(BaseConsoleRequest::class)
+                isInstanceOf(ConsoleRequest::class)
         );
     }
 

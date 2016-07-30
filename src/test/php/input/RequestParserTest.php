@@ -39,19 +39,19 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     /**
      * console request instance
      *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
+     * @type  ConsoleRequest
      */
     private $consoleRequest;
     /**
      * request broker
      *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
+     * @type  RequestBroker
      */
     private $requestBroker;
     /**
      * mocked param error messages list
      *
-     * @type  \PHPUnit_Framework_MockObject_MockObject
+     * @type  ParamErrorMessages
      */
     private $paramErrorMessages;
 
@@ -60,7 +60,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->consoleRequest     = NewInstance::of(ConsoleRequest::class);
+        $this->consoleRequest     = NewInstance::stub(ConsoleRequest::class);
         $this->requestBroker      = NewInstance::stub(RequestBroker::class);
         $this->paramErrorMessages = NewInstance::of(ParamErrorMessages::class);
         $this->requestParser      = new RequestParser(

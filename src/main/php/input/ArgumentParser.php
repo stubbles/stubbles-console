@@ -95,7 +95,7 @@ class ArgumentParser implements BindingModule
                    ->to($value);
         }
 
-        $request = new BaseConsoleRequest($args, $_SERVER);
+        $request = new ConsoleRequest($args, $_SERVER);
         $binder->bind(Request::class)
                ->toInstance($request);
         $binder->bind(ConsoleRequest::class)

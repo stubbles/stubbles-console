@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace stubbles\console\input;
 use stubbles\input\{
-    Request,
+    ParamRequest,
+    Params,
     ValueReader,
     ValueValidator,
     errors\ParamErrors
@@ -21,21 +22,69 @@ use stubbles\input\{
  * @api
  * @since  2.0.0
  */
-interface ConsoleRequest extends Request
+class ConsoleRequest extends ParamRequest
 {
+    /**
+     * list of environment variables
+     *
+     * @type  \stubbles\input\Params
+     */
+    private $env;
+
+    /**
+     * constructor
+     *
+     * @param  array  $params
+     * @param  array  $env
+     */
+    public function __construct(array $params, array $env)
+    {
+        parent::__construct($params);
+        $this->env = new Params($env);
+    }
+
+    /**
+     * creates an instance from raw data
+     *
+     * Will use $_SERVER['argv'] for params and $_SERVER for env.
+     *
+     * @api
+     * @return  \stubbles\console\input\ConsoleRequest
+     */
+    public static function fromRawSource(): self
+    {
+        return new self($_SERVER['argv'], $_SERVER);
+    }
+
+    /**
+     * returns the request method
+     *
+     * @return  string
+     */
+    public function method(): string
+    {
+        return 'cli';
+    }
+
     /**
      * return a list of all environment names registered in this request
      *
      * @return  string[]
      */
-    public function envNames(): array;
+    public function envNames(): array
+    {
+        return $this->env->names();
+    }
 
     /**
      * returns list of errors for environment parameters
      *
      * @return  \stubbles\input\errors\ParamErrors
      */
-    public function envErrors(): ParamErrors;
+    public function envErrors(): ParamErrors
+    {
+        return $this->env->errors();
+    }
 
     /**
      * checks whether a request param is set
@@ -43,7 +92,10 @@ interface ConsoleRequest extends Request
      * @param   string  $envName
      * @return  bool
      */
-    public function hasEnv(string $envName): bool;
+    public function hasEnv(string $envName): bool
+    {
+        return $this->env->contain($envName);
+    }
 
     /**
      * checks whether a request value from parameters is valid or not
@@ -51,7 +103,10 @@ interface ConsoleRequest extends Request
      * @param   string  $envName  name of environment value
      * @return  \stubbles\input\ValueValidator
      */
-    public function validateEnv(string $envName): ValueValidator;
+    public function validateEnv(string $envName): ValueValidator
+    {
+        return new ValueValidator($this->env->value($envName));
+    }
 
     /**
      * returns request value from params for validation
@@ -59,5 +114,12 @@ interface ConsoleRequest extends Request
      * @param   string  $envName  name of environment value
      * @return  \stubbles\input\ValueReader
      */
-    public function readEnv(string $envName): ValueReader;
+    public function readEnv(string $envName): ValueReader
+    {
+        return new ValueReader(
+                $this->env->errors(),
+                $envName,
+                $this->env->value($envName)
+        );
+    }
 }
