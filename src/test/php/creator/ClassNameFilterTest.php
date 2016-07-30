@@ -8,7 +8,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\creator;
-use stubbles\input\Param;
+use stubbles\values\Value;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertNull;
@@ -53,7 +53,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
     public function returnsNullWhenParamValueIsEmpty($value)
     {
         assertNull(
-                $this->classNameFilter->apply(new Param('stdin', $value))
+                $this->classNameFilter->apply(Value::of($value))[0]
         );
     }
 
@@ -64,9 +64,8 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function addsErrorToParamWhenParamValueIsEmpty($value)
     {
-        $param = new Param('stdin', $value);
-        $this->classNameFilter->apply($param);
-        assertTrue($param->hasError('CLASSNAME_EMPTY'));
+        list($_, $errors) = $this->classNameFilter->apply(Value::of($value));
+        assertTrue(isset($errors['CLASSNAME_EMPTY']));
     }
 
     /**
@@ -85,7 +84,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
     public function returnsNullWhenParamValueHasInvalidSyntax($value)
     {
         assertNull(
-                $this->classNameFilter->apply(new Param('stdin', $value))
+                $this->classNameFilter->apply(Value::of($value))[0]
         );
     }
 
@@ -96,9 +95,8 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function addsErrorToParamWhenParamValueHasInvalidSyntax($value)
     {
-        $param = new Param('stdin', $value);
-        $this->classNameFilter->apply($param);
-        assertTrue($param->hasError('CLASSNAME_INVALID'));
+        list($_, $errors) = $this->classNameFilter->apply(Value::of($value));
+        assertTrue(isset($errors['CLASSNAME_INVALID']));
     }
 
     /**
@@ -107,7 +105,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
     public function trimsInputValue()
     {
         assert(
-                $this->classNameFilter->apply(new Param('stdin', '  foo\bar\Baz  ')),
+                $this->classNameFilter->apply(Value::of('  foo\bar\Baz  '))[0],
                 equals('foo\bar\Baz')
         );
     }
@@ -118,7 +116,7 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
     public function fixesQuotedNamespaceSeparator()
     {
         assert(
-                $this->classNameFilter->apply(new Param('stdin', 'foo\\\\bar\\\\Baz')),
+                $this->classNameFilter->apply(Value::of('foo\\\\bar\\\\Baz'))[0],
                 equals('foo\bar\Baz')
         );
     }

@@ -13,10 +13,11 @@ use stubbles\input\ValueReader;
 use stubbles\input\errors\ParamErrors;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
+use stubbles\values\Value;
 /**
  * Interface to read and write on command line.
  */
-class Console implements InputStream, OutputStream
+class Console implements InputStream
 {
     /**
      * stresm to read data from
@@ -120,7 +121,7 @@ class Console implements InputStream, OutputStream
             return ValueReader::forValue($this->in->readLine());
         }
 
-        return new ValueReader($paramErrors, new Param('stdin', $this->in->readLine()));
+        return new ValueReader($paramErrors, 'stdin', Value::of($this->in->readLine()));
     }
 
     /**
@@ -130,7 +131,7 @@ class Console implements InputStream, OutputStream
      * @param   int  $length  max amount of bytes to read
      * @return  string
      */
-    public function read($length = 8192)
+    public function read(int $length = 8192): string
     {
         return $this->in->read($length);
     }
@@ -142,7 +143,7 @@ class Console implements InputStream, OutputStream
      * @param   int  $length  max amount of bytes to read
      * @return  string
      */
-    public function readLine($length = 8192)
+    public function readLine(int $length = 8192): string
     {
         return $this->in->readLine($length);
     }
@@ -153,7 +154,7 @@ class Console implements InputStream, OutputStream
      * @return  int
      * @since   2.4.0
      */
-    public function bytesLeft()
+    public function bytesLeft(): int
     {
         return $this->in->bytesLeft();
     }
@@ -164,7 +165,7 @@ class Console implements InputStream, OutputStream
      * @return  bool
      * @since   2.4.0
      */
-    public function eof()
+    public function eof(): bool
     {
         return $this->in->eof();
     }
@@ -176,7 +177,7 @@ class Console implements InputStream, OutputStream
      * @param   string  $bytes
      * @return  \stubbles\console\Console
      */
-    public function write($bytes)
+    public function write(string $bytes): self
     {
         $this->out->write($bytes);
         return $this;
@@ -189,7 +190,7 @@ class Console implements InputStream, OutputStream
      * @param   string  $bytes
      * @return  \stubbles\console\Console
      */
-    public function writeLine($bytes)
+    public function writeLine(string $bytes): self
     {
         $this->out->writeLine($bytes);
         return $this;
@@ -202,7 +203,7 @@ class Console implements InputStream, OutputStream
      * @return  \stubbles\console\Console
      * @since   2.4.0
      */
-    public function writeLines(array $lines)
+    public function writeLines(array $lines): self
     {
         $this->out->writeLines($lines);
         return $this;
@@ -214,7 +215,7 @@ class Console implements InputStream, OutputStream
      * @return  \stubbles\console\Console
      * @since   2.6.0
      */
-    public function writeEmptyLine()
+    public function writeEmptyLine(): self
     {
         $this->writeLine('');
         return $this;
@@ -227,7 +228,7 @@ class Console implements InputStream, OutputStream
      * @param   string  $bytes
      * @return  \stubbles\console\Console
      */
-    public function writeError($bytes)
+    public function writeError(string $bytes): self
     {
         $this->err->write($bytes);
         return $this;
@@ -240,7 +241,7 @@ class Console implements InputStream, OutputStream
      * @param   string  $bytes
      * @return  \stubbles\console\Console
      */
-    public function writeErrorLine($bytes)
+    public function writeErrorLine(string $bytes): self
     {
         $this->err->writeLine($bytes);
         return $this;
@@ -253,7 +254,7 @@ class Console implements InputStream, OutputStream
      * @return  \stubbles\console\Console
      * @since   2.4.0
      */
-    public function writeErrorLines(array $lines)
+    public function writeErrorLines(array $lines): self
     {
         $this->err->writeLines($lines);
         return $this;
@@ -265,7 +266,7 @@ class Console implements InputStream, OutputStream
      * @return  \stubbles\console\Console
      * @since   2.6.0
      */
-    public function writeEmptyErrorLine()
+    public function writeEmptyErrorLine(): self
     {
         $this->writeErrorLine('');
         return $this;

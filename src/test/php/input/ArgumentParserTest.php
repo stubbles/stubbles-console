@@ -293,7 +293,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $this->argumentParser->mapCalls(['getopt' => []]);
         $injector = $this->bindArguments();
         assertTrue($injector->hasConstant('stubbles.console.input.class'));
-        assertTrue($injector->hasBinding(BrokeredUserInput::class));#
+        assertTrue($injector->hasBinding(BrokeredUserInput::class));
         verify($this->argumentParser, 'getopt')
                 ->received('vo:u:h', ['verbose', 'bar1:', 'bar2:', 'help']);
     }

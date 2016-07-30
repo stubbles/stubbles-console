@@ -13,6 +13,7 @@ use org\stubbles\console\test\BrokeredUserInput;
 use stubbles\input\ValueReader;
 use stubbles\input\broker\RequestBroker;
 use stubbles\input\errors\ParamErrors;
+use stubbles\input\errors\messages\LocalizedMessage;
 use stubbles\input\errors\messages\ParamErrorMessages;
 
 use function bovigo\assert\assert;
@@ -160,7 +161,7 @@ Options:
         $this->consoleRequest->mapCalls(
                 ['hasParam' => false, 'paramErrors'  => $errors]
         );
-        $this->paramErrorMessages->mapCalls(['messageFor' => 'Error, dude!']);
+        $this->paramErrorMessages->mapCalls(['messageFor' => new LocalizedMessage('en_*', 'Error, dude!')]);
         $this->requestParser->parseTo(BrokeredUserInput::class);
     }
 }

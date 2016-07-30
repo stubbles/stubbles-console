@@ -63,7 +63,7 @@ class CommandInputStream extends ResourceInputStream
      * @throws  \LogicException
      * @throws  \stubbles\streams\StreamException
      */
-    public function read($length = 8192)
+    public function read(int $length = 8192): string
     {
         if (null === $this->handle) {
             throw new \LogicException('Can not read from closed input stream.');

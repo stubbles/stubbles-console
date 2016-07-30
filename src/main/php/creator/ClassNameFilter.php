@@ -11,40 +11,38 @@ namespace stubbles\console\creator;
 use stubbles\input\Filter;
 use stubbles\input\Param;
 use stubbles\input\filter\ReusableFilter;
+use stubbles\values\Value;
 /**
  * Filter for class names entered via user input.
  *
  * @since  3.0.0
  */
-class ClassNameFilter implements Filter
+class ClassNameFilter extends Filter
 {
     use ReusableFilter;
 
     /**
-     * apply filter on given param
+     * apply filter on given value
      *
-     * @param   \stubbles\input\Param  $param
-     * @return  mixed  filtered value
+     * @param   \stubbles\values\Value;  $value
+     * @return  array
      */
-    public function apply(Param $param)
+    public function apply(Value $value): array
     {
-        if ($param->isEmpty()) {
-            $param->addError('CLASSNAME_EMPTY');
-            return null;
+        if ($value->isEmpty()) {
+            return $this->error('CLASSNAME_EMPTY');
         }
 
-        $className = str_replace('\\\\', '\\', trim($param->value()));
+        $className = str_replace('\\\\', '\\', trim($value->value()));
         if (! ((bool) preg_match('/^([a-zA-Z_]{1}[a-zA-Z0-9_\\\\]*)$/', $className))) {
-            $param->addError('CLASSNAME_INVALID');
-            return null;
+            return $this->error('CLASSNAME_INVALID');;
         }
 
         if (! (bool) preg_match('/^([a-zA-Z_]{1}[a-zA-Z0-9_]*)$/', $this->nonQualifiedClassNameOf($className))) {
-            $param->addError('CLASSNAME_INVALID');
-            return null;
+            return $this->error('CLASSNAME_INVALID');;
         }
 
-        return $className;
+        return $this->filtered($className);
     }
 
     /**

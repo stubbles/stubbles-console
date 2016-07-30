@@ -139,6 +139,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWrite()
     {
+        $this->outputStream->mapCalls(['write' => 3]);
         assert($this->console->write('foo'), isSameAs($this->console));
         verify($this->outputStream, 'write')->received('foo');
         verify($this->errorStream, 'write')->wasNeverCalled();
@@ -149,6 +150,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteLine()
     {
+        $this->outputStream->mapCalls(['writeLine' => 4]);
         assert($this->console->writeLine('foo'), isSameAs($this->console));
         verify($this->outputStream, 'writeLine')->received('foo');
         verify($this->errorStream, 'writeLine')->wasNeverCalled();
@@ -160,6 +162,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteLines()
     {
+        $this->outputStream->mapCalls(['writeLines' => 12]);
         assert(
                 $this->console->writeLines(['foo', 'bar', 'baz']),
                 isSameAs($this->console)
@@ -174,6 +177,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesOutputStreamForWriteEmptyLine()
     {
+        $this->outputStream->mapCalls(['writeLine' => 1]);
         assert($this->console->writeEmptyLine(), isSameAs($this->console));
         verify($this->outputStream, 'writeLine')->received('');
         verify($this->errorStream, 'writeLine')->wasNeverCalled();
@@ -184,6 +188,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteError()
     {
+        $this->errorStream->mapCalls(['write' => 3]);
         assert($this->console->writeError('foo'), isSameAs($this->console));
         verify($this->errorStream, 'write')->received('foo');
         verify($this->outputStream, 'write')->wasNeverCalled();
@@ -194,6 +199,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteErrorLine()
     {
+        $this->errorStream->mapCalls(['writeLine' => 4]);
         assert($this->console->writeErrorLine('foo'), isSameAs($this->console));
         verify($this->errorStream, 'writeLine')->received('foo');
         verify($this->outputStream, 'writeLine')->wasNeverCalled();
@@ -205,6 +211,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteErrorLines()
     {
+        $this->errorStream->mapCalls(['writeLines' => 12]);
         assert(
                 $this->console->writeErrorLines(['foo', 'bar', 'baz']),
                 isSameAs($this->console)
@@ -219,6 +226,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
      */
     public function usesErrorStreamForWriteEmptyErrorLine()
     {
+        $this->errorStream->mapCalls(['writeLine' => 1]);
         assert($this->console->writeEmptyErrorLine(''), isSameAs($this->console));
         verify($this->errorStream, 'writeLine')->received('');
         verify($this->outputStream, 'writeLine')->wasNeverCalled();
@@ -232,6 +240,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function promptWritesMessageToOutputStreamAndReturnsValueFromInputStream()
     {
         $this->inputStream->mapCalls(['readLine' => '303']);
+        $this->outputStream->mapCalls(['write' => 22]);
         assert(
                 $this->console->prompt('Please enter a number: ')
                               ->asInt(),
@@ -250,6 +259,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     {
         $paramErrors = new ParamErrors();
         $this->inputStream->mapCalls(['readLine' => 'some invalid input']);
+        $this->outputStream->mapCalls(['write' => 23]);
         assertNull(
                 $this->console->prompt('Please enter something: ', $paramErrors)
                         ->when(function() { return false; }, 'ERROR')
@@ -291,6 +301,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function confirmReturnsTrueWhenInputValueIsLowercaseY()
     {
         $this->inputStream->mapCalls(['readLine' => 'y']);
+        $this->outputStream->mapCalls(['write' => 25]);
         assertTrue($this->console->confirm('Do you want to continue: '));
         verify($this->outputStream, 'write')
                 ->received('Do you want to continue: ');
@@ -304,6 +315,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function confirmReturnsTrueWhenInputValueIsUppercaseY()
     {
         $this->inputStream->mapCalls(['readLine' => 'Y']);
+        $this->outputStream->mapCalls(['write' => 25]);
         assertTrue($this->console->confirm('Do you want to continue: '));
         verify($this->outputStream, 'write')
                 ->received('Do you want to continue: ');
@@ -317,6 +329,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function confirmReturnsFalseWhenInputValueIsLowercaseN()
     {
         $this->inputStream->mapCalls(['readLine' => 'n']);
+        $this->outputStream->mapCalls(['write' => 25]);
         assertFalse($this->console->confirm('Do you want to continue: '));
     }
 
@@ -328,6 +341,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function confirmReturnsFalseWhenInputValueIsUppercaseN()
     {
         $this->inputStream->mapCalls(['readLine' => 'N']);
+        $this->outputStream->mapCalls(['write' => 25]);
         assertFalse($this->console->confirm('Do you want to continue: '));
     }
 
@@ -341,6 +355,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->inputStream->mapCalls([
                 'readLine' => onConsecutiveCalls('foo', '', 'n')
         ]);
+        $this->outputStream->mapCalls(['write' => 25]);
         assertFalse($this->console->confirm('Do you want to continue: '));
     }
 
@@ -354,6 +369,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->inputStream->mapCalls([
                 'readLine' => onConsecutiveCalls('foo', '')
         ]);
+        $this->outputStream->mapCalls(['write' => 25]);
         assertFalse($this->console->confirm('Do you want to continue: ', 'n'));
     }
 

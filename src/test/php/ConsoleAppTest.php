@@ -148,7 +148,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function canCreateInstanceWithSelfBoundApp()
     {
         $_SERVER['argv'][1] = 'value';
-        $app = SelfBoundConsoleApp::create(new Rootpath());
+        $app = SelfBoundConsoleApp::create((string) (new Rootpath()));
         assert($app->bar, equals('value'));
     }
 

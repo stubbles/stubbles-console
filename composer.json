@@ -5,18 +5,18 @@
     "license": "BSD-3-Clause",
     "description": "Stubbles package to build command line apps.",
     "require": {
-        "php": ">=5.6.0",
-        "stubbles/input": "^6.0",
-        "stubbles/ioc": "^7.1",
-        "stubbles/reflect": "^7.0",
-        "stubbles/streams": "^7.0",
-        "stubbles/values": "^7.2"
+        "php": "^7.0",
+        "stubbles/input": "^7.0",
+        "stubbles/ioc": "^8.0.1",
+        "stubbles/reflect": "^8.0",
+        "stubbles/streams": "^8.0",
+        "stubbles/values": "^8.1"
     },
     "require-dev": {
         "mikey179/vfsStream": "^1.6",
         "phpunit/phpunit": "^5.4",
-        "bovigo/callmap": "^2.0",
-        "bovigo/assert": "^1.6"
+        "bovigo/callmap": "^3.1",
+        "bovigo/assert": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -31,7 +31,7 @@
     "bin": ["bin/createConsoleApp"],
     "extra": {
         "branch-alias": {
-            "dev-master": "6.1.x-dev"
+            "dev-master": "7.0.x-dev"
         }
     },
     "minimum-stability": "dev",

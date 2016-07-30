@@ -55,7 +55,7 @@ abstract class ConsoleApp extends App
      * @param   string  $className    full qualified class name of class to create an instance of
      * @return  \stubbles\ioc\module\BindingModule[]
      */
-    protected static function getBindingsForApp($className)
+    protected static function getBindingsForApp(string $className): array
     {
         $bindings   = parent::getBindingsForApp($className);
         $bindings[] = function(Binder $binder)

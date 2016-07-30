@@ -57,7 +57,7 @@ class UserInputProvider implements InjectionProvider
      * @param   string  $name
      * @return  object
      */
-    public function get($name = null)
+    public function get(string $name = null)
     {
         return $this->requestParser->parseInto(
                 $this->injector->getInstance(

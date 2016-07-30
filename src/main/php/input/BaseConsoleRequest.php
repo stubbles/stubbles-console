@@ -35,7 +35,7 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
      */
     public function __construct(array $params, array $env)
     {
-        parent::__construct(new Params($params));
+        parent::__construct($params);
         $this->env = new Params($env);
     }
 
@@ -57,7 +57,7 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
      *
      * @return  string
      */
-    public function method()
+    public function method(): string
     {
         return 'cli';
     }
@@ -114,7 +114,8 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
     {
         return new ValueReader(
                 $this->env->errors(),
-                $this->env->get($envName)
+                $envName,
+                $this->env->value($envName)
         );
     }
 }
