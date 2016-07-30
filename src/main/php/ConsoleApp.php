@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -30,7 +31,7 @@ abstract class ConsoleApp extends App
      * @param   \stubbles\streams\OutputStream  $err          stream to write errors to
      * @return  int  exit code
      */
-    public static function main($projectPath, OutputStream $err)
+    public static function main(string $projectPath, OutputStream $err): int
     {
         try {
             return (int) self::create($projectPath)->run();
@@ -77,9 +78,9 @@ abstract class ConsoleApp extends App
      * creates argument binding module
      *
      * @api
-     * @return  \stubbles\console\ioc\ArgumentParser
+     * @return  \stubbles\console\input\ArgumentParser
      */
-    protected static function argumentParser()
+    protected static function argumentParser(): ArgumentParser
     {
         return new ArgumentParser();
     }

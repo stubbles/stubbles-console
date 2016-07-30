@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -14,10 +15,12 @@ use stubbles\console\Console;
 use stubbles\values\ResourceLoader;
 use stubbles\values\Rootpath;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertFalse;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\predicate\equals;
+use function bovigo\assert\{
+    assert,
+    assertFalse,
+    assertTrue,
+    predicate\equals
+};
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\ClassFileCreator.

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -8,7 +9,12 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\input;
-use stubbles\input\Request;
+use stubbles\input\{
+    Request,
+    ValueReader,
+    ValueValidator,
+    errors\ParamErrors
+};
 /**
  * Interface for command line requests.
  *
@@ -22,14 +28,14 @@ interface ConsoleRequest extends Request
      *
      * @return  string[]
      */
-    public function envNames();
+    public function envNames(): array;
 
     /**
      * returns list of errors for environment parameters
      *
      * @return  \stubbles\input\errors\ParamErrors
      */
-    public function envErrors();
+    public function envErrors(): ParamErrors;
 
     /**
      * checks whether a request param is set
@@ -37,7 +43,7 @@ interface ConsoleRequest extends Request
      * @param   string  $envName
      * @return  bool
      */
-    public function hasEnv($envName);
+    public function hasEnv(string $envName): bool;
 
     /**
      * checks whether a request value from parameters is valid or not
@@ -45,7 +51,7 @@ interface ConsoleRequest extends Request
      * @param   string  $envName  name of environment value
      * @return  \stubbles\input\ValueValidator
      */
-    public function validateEnv($envName);
+    public function validateEnv(string $envName): ValueValidator;
 
     /**
      * returns request value from params for validation
@@ -53,5 +59,5 @@ interface ConsoleRequest extends Request
      * @param   string  $envName  name of environment value
      * @return  \stubbles\input\ValueReader
      */
-    public function readEnv($envName);
+    public function readEnv(string $envName): ValueReader;
 }

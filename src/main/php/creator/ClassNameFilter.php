@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -34,7 +35,7 @@ class ClassNameFilter extends Filter
         }
 
         $className = str_replace('\\\\', '\\', trim($value->value()));
-        if (! ((bool) preg_match('/^([a-zA-Z_]{1}[a-zA-Z0-9_\\\\]*)$/', $className))) {
+        if (!((bool) preg_match('/^([a-zA-Z_]{1}[a-zA-Z0-9_\\\\]*)$/', $className))) {
             return $this->error('CLASSNAME_INVALID');;
         }
 

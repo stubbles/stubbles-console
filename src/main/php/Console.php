@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -69,7 +70,7 @@ class Console implements InputStream
      * @return  \stubbles\input\ValueReader
      * @since   2.1.0
      */
-    public function prompt($message, ParamErrors $paramErrors = null)
+    public function prompt(string $message, ParamErrors $paramErrors = null): ValueReader
     {
         $this->out->write($message);
         return $this->readValue($paramErrors);
@@ -89,7 +90,7 @@ class Console implements InputStream
      * @return  bool
      * @since   2.1.0
      */
-    public function confirm($message, $default = null)
+    public function confirm(string $message, string $default = null): bool
     {
         $result = null;
         while (null === $result) {
@@ -115,7 +116,7 @@ class Console implements InputStream
      * @return  \stubbles\input\ValueReader
      * @since   2.1.0
      */
-    public function readValue(ParamErrors $paramErrors = null)
+    public function readValue(ParamErrors $paramErrors = null): ValueReader
     {
         if (null === $paramErrors) {
             return ValueReader::forValue($this->in->readLine());

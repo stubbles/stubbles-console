@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -18,14 +19,19 @@ class TestFileCreator extends FileCreator
      *
      * @param  string  $className
      */
-    public function create($className)
+    public function create(string $className)
     {
         $testClassFile = $this->fileNameforClass($className . 'Test', 'test');
         if (!file_exists($testClassFile)) {
             $this->createFile($testClassFile, $className, 'test.tmpl');
-            $this->console->writeLine('Test for ' . $className . ' created at ' . $testClassFile);
+            $this->console->writeLine(
+                    'Test for ' . $className . ' created at ' . $testClassFile
+            );
         } else {
-            $this->console->writeLine('Test for ' . $className . ' already exists, skipped creating the test');
+            $this->console->writeLine(
+                    'Test for ' . $className
+                    . ' already exists, skipped creating the test'
+            );
         }
     }
 

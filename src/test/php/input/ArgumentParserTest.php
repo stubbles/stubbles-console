@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -17,12 +18,14 @@ use stubbles\ioc\Injector;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertFalse;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\predicate\equals;
-use function bovigo\assert\predicate\isInstanceOf;
-use function bovigo\assert\predicate\isSameAs;
+use function bovigo\assert\{
+    assert,
+    assertFalse,
+    assertTrue,
+    predicate\equals,
+    predicate\isInstanceOf,
+    predicate\isSameAs
+};
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\ioc\ArgumentParser.
@@ -37,13 +40,13 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      *
      * @type  \stubbles\console\ioc\ArgumentParser
      */
-    protected $argumentParser;
+    private $argumentParser;
     /**
      * backup of $_SERVER['argv']
      *
      * @type  array
      */
-    protected $argvBackup;
+    private $argvBackup;
 
     /**
      * set up test environment
@@ -62,10 +65,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         $_SERVER['argv'] = $this->argvBackup;
     }
 
-    /**
-     * @return  array
-     */
-    public function boundNonOptionArguments()
+    public function boundNonOptionArguments(): array
     {
         return [
             ['bar', 'argv.0'],
@@ -78,7 +78,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  boundNonOptionArguments
      */
-    public function argumentsAreBoundWhenNoOptionsDefined($expected, $constantName)
+    public function argumentsAreBoundWhenNoOptionsDefined($expected, string $constantName)
     {
         $_SERVER['argv'] = ['foo.php', 'bar', 'baz'];
         assert(
@@ -87,10 +87,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return  array
-     */
-    public function boundOptionArguments()
+    public function boundOptionArguments(): array
     {
         return [
             ['example', 'argv.n'],
@@ -104,7 +101,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  boundOptionArguments
      */
-    public function argumentsAreBoundAfterParsingWhenOptionsDefined($expected, $constantName)
+    public function argumentsAreBoundAfterParsingWhenOptionsDefined($expected, string $constantName)
     {
         $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'install'];
         $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
@@ -189,12 +186,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * binds arguments
-     *
-     * @return  Injector
-     */
-    protected function bindArguments()
+    protected function bindArguments(): Injector
     {
         $binder = new Binder();
         $this->argumentParser->configure($binder);
@@ -211,10 +203,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         return $this->bindArguments()->getInstance(Request::class);
     }
 
-    /**
-     * @return  array
-     */
-    public function requestArgumentsWhenNoOptionsDefined()
+    public function requestArgumentsWhenNoOptionsDefined(): array
     {
         return [
             ['bar', 'argv.0'],
@@ -226,8 +215,10 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  requestArgumentsWhenNoOptionsDefined
      */
-    public function argumentsAvailableViaRequestWhenNoOptionsDefined($expected, $paramName)
-    {
+    public function argumentsAvailableViaRequestWhenNoOptionsDefined(
+            string $expected,
+            string $paramName
+    ) {
         $_SERVER['argv'] = ['foo', 'bar', 'baz'];
         assert(
                 $this->bindRequest()->readParam($paramName)->unsecure(),
@@ -235,10 +226,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return  array
-     */
-    public function requestArgumentsWhenOptionsDefined()
+    public function requestArgumentsWhenOptionsDefined(): array
     {
         return [
             ['example', 'n'],
@@ -251,7 +239,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  requestArgumentsWhenOptionsDefined
      */
-    public function argumentsAvailableViaRequestAfterParsingWhenOptionsDefined($expected, $paramName)
+    public function argumentsAvailableViaRequestAfterParsingWhenOptionsDefined($expected, string $paramName)
     {
         $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'bar'];
         $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);

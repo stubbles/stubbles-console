@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -8,6 +9,7 @@
  * @package  stubbles\console
  */
 namespace stubbles\console;
+use stubbles\streams\InputStream;
 
 use function stubbles\values\typeOf;
 /**
@@ -18,7 +20,7 @@ use function stubbles\values\typeOf;
  * @throws  \InvalidArgumentException  in case $out is neither a string nor an array
  * @since   6.1.0
  */
-function collect(&$out)
+function collect(&$out): callable
 {
     if (is_string($out)) {
         return function($line) use(&$out) { $out .= $line . PHP_EOL; };
@@ -47,7 +49,7 @@ class Executor
      * @param   string    $redirect  optional  how to redirect error output
      * @return  \stubbles\console\Executor
      */
-    public function execute($command, callable $collect = null, $redirect = '2>&1')
+    public function execute(string $command, callable $collect = null, string $redirect = '2>&1'): self
     {
         foreach ($this->outputOf($command, $redirect) as $line) {
             if (null !== $collect) {
@@ -68,7 +70,7 @@ class Executor
      * @param   string  $redirect  optional  how to redirect error output
      * @return  \stubbles\streams\InputStream
      */
-    public function executeAsync($command, $redirect = '2>&1')
+    public function executeAsync(string $command, string $redirect = '2>&1'): InputStream
     {
         return new CommandInputStream(
                 $this->runCommand($command, $redirect),
@@ -88,7 +90,7 @@ class Executor
      * @return  string[]
      * @deprecated  since 6.1.0, use $executor->execute($command, collect($array)) or iterator_to_array($executor->outputOf($command)) instead, will be removed with 7.0.0
      */
-    public function executeDirect($command, $redirect = '2>&1')
+    public function executeDirect(string $command, string $redirect = '2>&1'): array
     {
         return iterator_to_array($this->outputOf($command, $redirect));
     }
@@ -101,7 +103,7 @@ class Executor
      * @return  \Generator
      * @since   6.0.0
      */
-    public function outputOf($command, $redirect = '2>&1')
+    public function outputOf(string $command, string $redirect = '2>&1'): \Generator
     {
         $pd = $this->runCommand($command, $redirect);
         while (!feof($pd) && false !== ($line = fgets($pd, 4096))) {
@@ -125,7 +127,7 @@ class Executor
      * @return  resource
      * @throws  \RuntimeException
      */
-    private function runCommand($command, $redirect = '2>&1')
+    private function runCommand(string $command, string $redirect = '2>&1')
     {
         $pd = popen($command . ' ' . $redirect, 'r');
         if (false === $pd) {

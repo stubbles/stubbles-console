@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Your license or something other here.
  *
@@ -97,7 +98,7 @@ class ConsoleAppCreatorTest extends \PHPUnit_Framework_TestCase
     public function canCreateInstance()
     {
         assert(
-                ConsoleAppCreator::create(new Rootpath()),
+                ConsoleAppCreator::create(Rootpath::default()),
                 isInstanceOf(ConsoleAppCreator::class)
         );
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -36,7 +37,7 @@ class WorkingDirectory
      * @param  string  $original  working directory when script was started  optional
      * @Named('stubbles.cwd')
      */
-    public function __construct($original = null)
+    public function __construct(string $original = null)
     {
         $this->current = $this->original = empty($original) ? getcwd() : $original;
     }
@@ -46,7 +47,7 @@ class WorkingDirectory
      *
      * @return  string
      */
-    public function current()
+    public function current(): string
     {
         return $this->current;
     }
@@ -57,7 +58,7 @@ class WorkingDirectory
      * @param   string  $target  directory to change current working directory to
      * @return  bool  whether change was successful
      */
-    public function changeTo($target)
+    public function changeTo(string $target): bool
     {
         if (@chdir($target) === true) {
             $this->current = $target;
@@ -72,7 +73,7 @@ class WorkingDirectory
      *
      * @return  bool  whether restoring was successful
      */
-    public function restoreOriginal()
+    public function restoreOriginal(): bool
     {
         return $this->changeTo($this->original);
     }

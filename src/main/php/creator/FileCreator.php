@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -54,7 +55,7 @@ abstract class FileCreator
      *
      * @param  string  $className
      */
-    public abstract function create($className);
+    public abstract function create(string $className);
 
     /**
      * returns name of class file to create
@@ -63,10 +64,13 @@ abstract class FileCreator
      * @param   string  $type
      * @return  string
      */
-    protected function fileNameforClass($className, $type = 'main')
+    protected function fileNameforClass(string $className, string $type = 'main'): string
     {
         if (file_exists($this->rootpath->to('composer.json'))) {
-            $composer = json_decode(file_get_contents($this->rootpath->to('composer.json')), true);
+            $composer = json_decode(
+                    file_get_contents($this->rootpath->to('composer.json')),
+                    true
+            );
             if (isset($composer['autoload']['psr-4'])) {
                 return $this->fileNameForPsr4(
                         $composer['autoload']['psr-4'],
@@ -94,7 +98,7 @@ abstract class FileCreator
      * @return  string
      * @throws  \UnexpectedValueException
      */
-    private function fileNameForPsr4(array $psr4Pathes, $className, $type)
+    private function fileNameForPsr4(array $psr4Pathes, string $className, string $type): string
     {
         foreach ($psr4Pathes as $prefix => $path) {
             if (substr($className, 0, strlen($prefix)) === $prefix) {
@@ -121,7 +125,7 @@ abstract class FileCreator
      * @param  string  $className
      * @param  string  $template
      */
-    protected function createFile($fileName, $className, $template)
+    protected function createFile(string $fileName, string $className, string $template)
     {
         $directory = dirname($fileName);
         if (!file_exists($directory . '/.')) {
@@ -131,9 +135,7 @@ abstract class FileCreator
         file_put_contents(
                 $fileName,
                 str_replace(
-                        ['{NAMESPACE}',
-                         '{CLASS}'
-                        ],
+                        ['{NAMESPACE}', '{CLASS}'],
                         [$this->namespaceOf($className),
                          $this->nonQualifiedClassNameOf($className)
                         ],
@@ -149,7 +151,7 @@ abstract class FileCreator
      * @return  string
      * @throws  \RuntimeException
      */
-    private function pathForTemplate($template)
+    private function pathForTemplate(string $template): string
     {
         $pathes = $this->resourceLoader->availableResourceUris('creator/' . $template);
         if (!isset($pathes[0])) {
@@ -165,7 +167,7 @@ abstract class FileCreator
      * @param   string  $className
      * @return  string
      */
-    private function namespaceOf($className)
+    private function namespaceOf(string $className): string
     {
         return substr($className, 0, strrpos($className, '\\'));
     }
@@ -176,7 +178,7 @@ abstract class FileCreator
      * @param   string  $className
      * @return  string
      */
-    private function nonQualifiedClassNameOf($className)
+    private function nonQualifiedClassNameOf(string $className): string
     {
         return substr($className, strrpos($className, '\\') + 1);
     }

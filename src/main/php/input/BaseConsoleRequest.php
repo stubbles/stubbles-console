@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -8,10 +9,13 @@
  * @package  stubbles\console
  */
 namespace stubbles\console\input;
-use stubbles\input\AbstractRequest;
-use stubbles\input\Params;
-use stubbles\input\ValueReader;
-use stubbles\input\ValueValidator;
+use stubbles\input\{
+    AbstractRequest,
+    Params,
+    ValueReader,
+    ValueValidator,
+    errors\ParamErrors
+};
 /**
  * Request implementation for command line.
  *
@@ -45,9 +49,9 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
      * Will use $_SERVER['argv'] for params and $_SERVER for env.
      *
      * @api
-     * @return  \stubbles\input\console\ConsoleRequest
+     * @return  \stubbles\console\input\ConsoleRequest
      */
-    public static function fromRawSource()
+    public static function fromRawSource(): self
     {
         return new self($_SERVER['argv'], $_SERVER);
     }
@@ -67,7 +71,7 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
      *
      * @return  string[]
      */
-    public function envNames()
+    public function envNames(): array
     {
         return $this->env->names();
     }
@@ -75,9 +79,9 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
     /**
      * returns list of errors for environment parameters
      *
-     * @return  \stubbles\input\ParamErrors
+     * @return  \stubbles\input\errors\ParamErrors
      */
-    public function envErrors()
+    public function envErrors(): ParamErrors
     {
         return $this->env->errors();
     }
@@ -88,7 +92,7 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
      * @param   string  $envName
      * @return  bool
      */
-    public function hasEnv($envName)
+    public function hasEnv(string $envName): bool
     {
         return $this->env->contain($envName);
     }
@@ -99,7 +103,7 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
      * @param   string  $envName  name of environment value
      * @return  \stubbles\input\ValueValidator
      */
-    public function validateEnv($envName)
+    public function validateEnv(string $envName): ValueValidator
     {
         return new ValueValidator($this->env->value($envName));
     }
@@ -110,7 +114,7 @@ class BaseConsoleRequest extends AbstractRequest implements ConsoleRequest
      * @param   string  $envName  name of environment value
      * @return  \stubbles\input\ValueReader
      */
-    public function readEnv($envName)
+    public function readEnv(string $envName): ValueReader
     {
         return new ValueReader(
                 $this->env->errors(),

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -12,11 +13,13 @@ use stubbles\input\ValueReader;
 use stubbles\input\ValueValidator;
 use stubbles\input\errors\ParamErrors;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertFalse;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\predicate\equals;
-use function bovigo\assert\predicate\isInstanceOf;
+use function bovigo\assert\{
+    assert,
+    assertFalse,
+    assertTrue,
+    predicate\equals,
+    predicate\isInstanceOf
+};
 /**
  * Tests for stubbles\console\input\BaseConsoleRequest.
  *

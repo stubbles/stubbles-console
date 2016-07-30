@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -20,9 +21,8 @@ class InvalidOptionValue extends \Exception
     /**
      * constructor
      *
-     * @param   \stubbles\input\errors\ParamErrors                  $paramErrors
-     * @param   \stubbles\input\errors\messages\ParamErrorMessages  $messages
-     * @return  string
+     * @param  \stubbles\input\errors\ParamErrors                  $paramErrors
+     * @param  \stubbles\input\errors\messages\ParamErrorMessages  $messages
      */
     public function __construct(ParamErrors $paramErrors, ParamErrorMessages $messages)
     {

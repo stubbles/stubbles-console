@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -13,12 +14,14 @@ use stubbles\input\errors\ParamErrors;
 use stubbles\streams\InputStream;
 use stubbles\streams\OutputStream;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertFalse;
-use function bovigo\assert\assertNull;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\predicate\equals;
-use function bovigo\assert\predicate\isSameAs;
+use function bovigo\assert\{
+    assert,
+    assertFalse,
+    assertNull,
+    assertTrue,
+    predicate\equals,
+    predicate\isSameAs
+};
 use function bovigo\callmap\onConsecutiveCalls;
 use function bovigo\callmap\verify;
 use function stubbles\reflect\annotationsOfConstructorParameter;

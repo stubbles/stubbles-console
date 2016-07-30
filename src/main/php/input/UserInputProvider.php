@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -44,8 +45,11 @@ class UserInputProvider implements InjectionProvider
      * @param  string                                 $userInputClass
      * @Named{userInputClass}('stubbles.console.input.class')
      */
-    public function __construct(RequestParser $requestParser, Injector $injector, $userInputClass)
-    {
+    public function __construct(
+            RequestParser $requestParser,
+            Injector $injector,
+            string $userInputClass
+    ) {
         $this->requestParser  = $requestParser;
         $this->injector       = $injector;
         $this->userInputClass = $userInputClass;

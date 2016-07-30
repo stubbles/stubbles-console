@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -41,9 +42,9 @@ class ArgumentParser implements BindingModule
      *
      * @api
      * @param   string  $options
-     * @return  \stubbles\console\ioc\ArgumentParser
+     * @return  \stubbles\console\input\ArgumentParser
      */
-    public function withOptions($options)
+    public function withOptions(string $options): self
     {
         $this->options = $options;
         return $this;
@@ -54,9 +55,9 @@ class ArgumentParser implements BindingModule
      *
      * @api
      * @param   string[]  $options
-     * @return  \stubbles\console\ioc\ArgumentParser
+     * @return  \stubbles\console\input\ArgumentParser
      */
-    public function withLongOptions(array $options)
+    public function withLongOptions(array $options): self
     {
         $this->longopts = $options;
         return $this;
@@ -66,9 +67,9 @@ class ArgumentParser implements BindingModule
      * sets class to store user input into
      *
      * @param   string  $className
-     * @return  \stubbles\console\ioc\ArgumentParser
+     * @return  \stubbles\console\input\ArgumentParser
      */
-    public function withUserInput($className)
+    public function withUserInput(string $className): self
     {
         $this->userInput = $className;
         return $this;
@@ -117,7 +118,7 @@ class ArgumentParser implements BindingModule
      * @return  array
      * @throws  \RuntimeException
      */
-    private function parseArgs()
+    private function parseArgs(): array
     {
         if (null === $this->options && count($this->longopts) === 0 && null === $this->userInput) {
             return $this->fixArgs($_SERVER['argv']);
@@ -143,7 +144,7 @@ class ArgumentParser implements BindingModule
      * @param   array  $parsedVars
      * @return  array
      */
-    private function fixArgs(array $args, array $parsedVars = [])
+    private function fixArgs(array $args, array $parsedVars = []): array
     {
         array_shift($args); // script name
         $vars     = [];
@@ -182,7 +183,7 @@ class ArgumentParser implements BindingModule
             }
         }
 
-        if (!strpos($this->options, 'h')) {
+        if (null === $this->options || !strpos($this->options, 'h')) {
             $this->options .= 'h';
         }
 
@@ -196,9 +197,9 @@ class ArgumentParser implements BindingModule
      *
      * @param   string    $options   options to be used for parsing the arguments
      * @param   string[]  $longopts  long options to be used for parsing the arguments
-     * @return  array
+     * @return  array|false
      */
-    protected function getopt($options, array $longopts)
+    protected function getopt(string $options, array $longopts)
     {
         return getopt($options, $longopts);
     }

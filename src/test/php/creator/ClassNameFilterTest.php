@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -10,10 +11,12 @@
 namespace stubbles\console\creator;
 use stubbles\values\Value;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertNull;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\predicate\equals;
+use function bovigo\assert\{
+    assert,
+    assertNull,
+    assertTrue,
+    predicate\equals
+};
 /**
  * Test for stubbles\console\creator\ClassNameFilter.
  *
@@ -37,16 +40,12 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
         $this->classNameFilter = new ClassNameFilter();
     }
 
-    /**
-     * @return  array
-     */
-    public function emptyParamValues()
+    public function emptyParamValues(): array
     {
         return [[null], ['']];
     }
 
     /**
-     * @param  string  $value
      * @test
      * @dataProvider  emptyParamValues
      */
@@ -58,7 +57,6 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param  string  $value
      * @test
      * @dataProvider  emptyParamValues
      */
@@ -68,20 +66,16 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
         assertTrue(isset($errors['CLASSNAME_EMPTY']));
     }
 
-    /**
-     * @return  array
-     */
-    public function invalidParamValues()
+    public function invalidParamValues(): array
     {
         return [['500'], ['foo\500']];
     }
 
     /**
-     * @param  string  $value
      * @test
      * @dataProvider  invalidParamValues
      */
-    public function returnsNullWhenParamValueHasInvalidSyntax($value)
+    public function returnsNullWhenParamValueHasInvalidSyntax(string $value)
     {
         assertNull(
                 $this->classNameFilter->apply(Value::of($value))[0]
@@ -89,11 +83,10 @@ class ClassNameFilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param  string  $value
      * @test
      * @dataProvider  invalidParamValues
      */
-    public function addsErrorToParamWhenParamValueHasInvalidSyntax($value)
+    public function addsErrorToParamWhenParamValueHasInvalidSyntax(string $value)
     {
         list($_, $errors) = $this->classNameFilter->apply(Value::of($value));
         assertTrue(isset($errors['CLASSNAME_INVALID']));

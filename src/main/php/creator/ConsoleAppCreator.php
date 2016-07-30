@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -65,7 +66,7 @@ class ConsoleAppCreator extends ConsoleApp
      *
      * @return  int
      */
-    public function run()
+    public function run(): int
     {
         $className = $this->console->writeLine('Stubbles ConsoleAppCreator')
                 ->writeLine(' (c) 2012-2016 Stubbles Development Group')

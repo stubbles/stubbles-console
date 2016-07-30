@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -99,7 +100,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         TestConsoleApp::$exception = new \Exception('failure');
         assert(
-                TestConsoleApp::main(new Rootpath(), $this->errorOutputStream),
+                TestConsoleApp::main(Rootpath::default(), $this->errorOutputStream),
                 equals(20)
         );
     }
@@ -111,7 +112,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     {
         $e = new \Exception('failure');
         TestConsoleApp::$exception = $e;
-        TestConsoleApp::main(new Rootpath(), $this->errorOutputStream);
+        TestConsoleApp::main(Rootpath::default(), $this->errorOutputStream);
         assert(
                 trim($this->errorOutputStream->buffer()),
                 equals("*** Exception: failure\nStacktrace:\n" . $e->getTraceAsString())
@@ -124,7 +125,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function commandReturnCodeIsReturned()
     {
         assert(
-                TestConsoleApp::main(new Rootpath(), $this->errorOutputStream),
+                TestConsoleApp::main(Rootpath::default(), $this->errorOutputStream),
                 equals(0)
         );
     }
@@ -148,7 +149,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     public function canCreateInstanceWithSelfBoundApp()
     {
         $_SERVER['argv'][1] = 'value';
-        $app = SelfBoundConsoleApp::create((string) (new Rootpath()));
+        $app = SelfBoundConsoleApp::create(Rootpath::default());
         assert($app->bar, equals('value'));
     }
 

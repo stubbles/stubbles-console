@@ -251,12 +251,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-values.git",
-                "reference": "82b592239ec91b51ab5daff80f34f07a8a6b6dde"
+                "reference": "5aaa5979a12fe7e7eeca4beb9b2c84f6762f4508"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/82b592239ec91b51ab5daff80f34f07a8a6b6dde",
-                "reference": "82b592239ec91b51ab5daff80f34f07a8a6b6dde",
+                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/5aaa5979a12fe7e7eeca4beb9b2c84f6762f4508",
+                "reference": "5aaa5979a12fe7e7eeca4beb9b2c84f6762f4508",
                 "shasum": ""
             },
             "require": {
@@ -289,7 +289,7 @@
             ],
             "description": "Useful classes to ease the work with values.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-07-28 21:08:21"
+            "time": "2016-07-30 11:16:45"
         }
     ],
     "packages-dev": [

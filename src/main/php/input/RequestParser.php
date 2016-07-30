@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -62,7 +63,7 @@ class RequestParser
      * @param   string  $group   restrict parsing to given group
      * @return  object
      */
-    public function parseTo($class, $group = null)
+    public function parseTo(string $class, string $group = null)
     {
         return $this->parseInto(new $class(), $group);
     }
@@ -78,7 +79,7 @@ class RequestParser
      * @throws  \stubbles\console\input\HelpScreen
      * @throws  \stubbles\console\input\InvalidOptionValue
      */
-    public function parseInto($object, $group = null)
+    public function parseInto($object, string $group = null)
     {
         if ($this->request->hasParam('h') || $this->request->hasParam('help')) {
             throw new HelpScreen(

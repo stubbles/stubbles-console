@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -18,15 +19,20 @@ class ScriptFileCreator extends FileCreator
      *
      * @param  string  $className
      */
-    public function create($className)
+    public function create(string $className)
     {
         $this->console->writeLine('Please enter the script name for the console app: ');
         $stubFileName = $this->rootpath->to('bin',  $this->console->readLine());
         if (!file_exists($stubFileName)) {
             $this->createFile($stubFileName, $className, 'script.tmpl');
-            $this->console->writeLine('Script for ' . $className . ' created at ' . $stubFileName);
+            $this->console->writeLine(
+                    'Script for ' . $className . ' created at ' . $stubFileName
+            );
         } else {
-            $this->console->writeLine('Script for ' . $className . ' already exists, skipped creating the script');
+            $this->console->writeLine(
+                    'Script for ' . $className
+                    . ' already exists, skipped creating the script'
+            );
         }
     }
 }

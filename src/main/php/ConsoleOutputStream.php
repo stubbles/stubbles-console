@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -9,6 +10,7 @@
  */
 namespace stubbles\console;
 use stubbles\streams\EncodingOutputStream;
+use stubbles\streams\OutputStream;
 use stubbles\streams\ResourceOutputStream;
 /**
  * Class for console output streams.
@@ -43,7 +45,7 @@ class ConsoleOutputStream extends ResourceOutputStream
      *
      * @return  \stubbles\streams\OutputStream
      */
-    public static function forOut()
+    public static function forOut(): OutputStream
     {
         if (null === self::$out) {
             self::$out = self::create('php://stdout');
@@ -57,7 +59,7 @@ class ConsoleOutputStream extends ResourceOutputStream
      *
      * @return  \stubbles\streams\OutputStream
      */
-    public static function forError()
+    public static function forError(): OutputStream
     {
         if (null === self::$err) {
             self::$err = self::create('php://stderr');
@@ -72,7 +74,7 @@ class ConsoleOutputStream extends ResourceOutputStream
      * @param   string  $target
      * @return  \stubbles\streams\OutputStream
      */
-    private static function create($target)
+    private static function create(string $target): OutputStream
     {
         $out      = new self(fopen($target, 'w'));
         $encoding = self::detectOutputEncoding();
@@ -88,7 +90,7 @@ class ConsoleOutputStream extends ResourceOutputStream
      *
      * @return  string
      */
-    private static function detectOutputEncoding()
+    private static function detectOutputEncoding(): string
     {
         $outputEncoding = iconv_get_encoding('output_encoding');
         if ('CP1252' === $outputEncoding && DIRECTORY_SEPARATOR !== '/') {

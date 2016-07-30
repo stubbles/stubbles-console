@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -9,6 +10,7 @@
  */
 namespace stubbles\console;
 use stubbles\streams\DecodingInputStream;
+use stubbles\streams\InputStream;
 use stubbles\streams\ResourceInputStream;
 /**
  * Class for console input streams.
@@ -35,7 +37,7 @@ class ConsoleInputStream extends ResourceInputStream
      *
      * @return  \stubbles\streams\InputStream
      */
-    public static function forIn()
+    public static function forIn(): InputStream
     {
         if (null === self::$in) {
             self::$in      = new self();

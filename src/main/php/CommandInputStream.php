@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -31,7 +32,7 @@ class CommandInputStream extends ResourceInputStream
      * @param   string    $command   optional
      * @throws  \InvalidArgumentException
      */
-    public function __construct($resource, $command = null)
+    public function __construct($resource, string $command = null)
     {
         if (!is_resource($resource) || get_resource_type($resource) !== 'stream') {
             throw new \InvalidArgumentException(

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -27,7 +28,7 @@ class HelpScreen extends \Exception
      * @param   string  $group       optional  restrict parsing to given group
      * @return  \Closure
      */
-    public function __construct($scriptName, $object, $group = null)
+    public function __construct(string $scriptName, $object, string $group = null)
     {
         $help  = $this->readAppDescription($object);
         $help .= 'Usage: ' . $scriptName . ' [options]';
@@ -64,7 +65,7 @@ class HelpScreen extends \Exception
      * @param   object  $object
      * @return  string
      */
-    private function readAppDescription($object)
+    private function readAppDescription($object): string
     {
         $annotations = annotationsOf($object);
         if (!$annotations->contain('AppDescription')) {
@@ -80,7 +81,7 @@ class HelpScreen extends \Exception
      * @param   \stubbles\input\broker\TargetMethod  $targetMethod
      * @return  string
      */
-    private function getOptionName(TargetMethod $targetMethod)
+    private function getOptionName(TargetMethod $targetMethod): string
     {
         $name   = $targetMethod->paramName();
         $prefix = strlen($name) === 1 ? '-' : '--';
