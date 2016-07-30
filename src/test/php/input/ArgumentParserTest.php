@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package  stubbles\console
  */
 namespace stubbles\console\input;
+use bovigo\callmap\NewCallable;
 use bovigo\callmap\NewInstance;
 use org\stubbles\console\test\BrokeredUserInput;
 use stubbles\input\Request;
@@ -42,6 +43,10 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     private $argumentParser;
     /**
+     * @type  \bovigo\callmap\FunctionProxy
+     */
+    private $getopt;
+    /**
      * backup of $_SERVER['argv']
      *
      * @type  array
@@ -53,8 +58,10 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->argumentParser = NewInstance::of(ArgumentParser::class);
         $this->argvBackup     = $_SERVER['argv'];
+        $this->getopt         = NewCallable::stub('getopt');
+        $this->argumentParser = (new ArgumentParser())
+                ->withCliOptionParser($this->getopt);
     }
 
     /**
@@ -104,13 +111,13 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function argumentsAreBoundAfterParsingWhenOptionsDefined($expected, string $constantName)
     {
         $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'install'];
-        $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
+        $this->getopt->mapCall(['n' => 'example', 'verbose' => false]);
         $this->argumentParser->withOptions('n:f::')->withLongOptions(['verbose']);
         assert(
                 $this->bindArguments()->getConstant($constantName),
                 equals($expected)
         );
-        verify($this->argumentParser, 'getopt')->received('n:f::', ['verbose']);
+        verify($this->getopt)->received('n:f::', ['verbose']);
     }
 
     /**
@@ -182,12 +189,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
         return $binder->getInjector();
     }
 
-    /**
-     * binds request
-     *
-     * @return  stubbles\input\Request
-     */
-    private function bindRequest()
+    private function bindRequest(): Request
     {
         return $this->bindArguments()->getInstance(Request::class);
     }
@@ -228,16 +230,18 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  requestArgumentsWhenOptionsDefined
      */
-    public function argumentsAvailableViaRequestAfterParsingWhenOptionsDefined($expected, string $paramName)
-    {
+    public function argumentsAvailableViaRequestAfterParsingWhenOptionsDefined(
+            $expected,
+            string $paramName
+    ) {
         $_SERVER['argv'] = ['foo.php', '-n', 'example', '--verbose', 'bar'];
-        $this->argumentParser->mapCalls(['getopt' => ['n' => 'example', 'verbose' => false]]);
+        $this->getopt->mapCall(['n' => 'example', 'verbose' => false]);
         $this->argumentParser->withOptions('n:f::')->withLongOptions(['verbose']);
         assert(
                 $this->bindRequest()->readParam($paramName)->unsecure(),
                 equals($expected)
         );
-        verify($this->argumentParser, 'getopt')->received('n:f::', ['verbose']);
+        verify($this->getopt)->received('n:f::', ['verbose']);
     }
 
     /**
@@ -246,7 +250,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidOptionsThrowConfigurationException()
     {
-        $this->argumentParser->mapCalls(['getopt' => false]);
+        $this->getopt->mapCall(false);
         $this->argumentParser->withOptions('//');
         $this->bindArguments();
     }
@@ -256,9 +260,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
      */
     public function bindsNoUserInputByDefault()
     {
-        assertFalse(
-                $this->bindArguments()->hasConstant('stubbles.console.input.class')
-        );
+        assertFalse($this->bindArguments()->hasConstant(
+                'stubbles.console.input.class'
+        ));
     }
 
     /**
@@ -267,12 +271,14 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsUserInputIfSet()
     {
         $this->argumentParser->withUserInput(BrokeredUserInput::class);
-        $this->argumentParser->mapCalls(['getopt' => []]);
+        $this->getopt->mapCall([]);
         $injector = $this->bindArguments();
         assertTrue($injector->hasConstant('stubbles.console.input.class'));
         assertTrue($injector->hasBinding(BrokeredUserInput::class));
-        verify($this->argumentParser, 'getopt')
-                ->received('vo:u:h', ['verbose', 'bar1:', 'bar2:', 'help']);
+        verify($this->getopt)->received(
+                'vo:u:h',
+                ['verbose', 'bar1:', 'bar2:', 'help']
+        );
     }
 
     /**
@@ -282,7 +288,7 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     public function bindsUserInputAsSingleton()
     {
         $this->argumentParser->withUserInput(BrokeredUserInput::class);
-        $this->argumentParser->mapCalls(['getopt' => ['bar2' => 'foo', 'o' => 'baz']]);
+        $this->getopt->mapCall(['bar2' => 'foo', 'o' => 'baz']);
         $binder = new Binder();
         $this->argumentParser->configure($binder);
         $binder->bind(OutputStream::class)
@@ -301,7 +307,9 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
                 $injector->getInstance(BrokeredUserInput::class),
                 isSameAs($injector->getInstance(BrokeredUserInput::class))
         );
-        verify($this->argumentParser, 'getopt')
-                ->received('vo:u:h', ['verbose', 'bar1:', 'bar2:', 'help']);
+        verify($this->getopt)->received(
+                'vo:u:h',
+                ['verbose', 'bar1:', 'bar2:', 'help']
+        );
     }
 }

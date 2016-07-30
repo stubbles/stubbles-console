@@ -7,6 +7,11 @@
   * introduced scalar type hints and strict type checking
 
 
+### Other changes
+
+  * added `stubbles\console\input\ArgumentParser::withCliOptionParser()`
+
+
 6.1.0 (2016-06-22)
 ------------------
 

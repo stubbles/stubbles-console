@@ -23,19 +23,39 @@ class ArgumentParser implements BindingModule
      *
      * @type  string
      */
-    protected $options   = null;
+    private $options   = null;
     /**
      * long options to be used for parsing the arguments
      *
      * @type  string[]
      */
-    protected $longopts  = [];
+    private $longopts  = [];
     /**
      * name of user input class
      *
      * @type  string
      */
-    private $userInput   = null;
+    private $userInput = null;
+    /**
+     * callable to parse command line options with
+     *
+     * @type   callable
+     * @since  7.0.0
+     */
+    private $cliOptionParser = 'getopt';
+
+    /**
+     * sets callable which will be used to parse command line options with
+     *
+     * @param   callable  $getopt
+     * @return  \stubbles\console\input\ArgumentParser
+     * @since   7.0.0
+     */
+    public function withCliOptionParser(callable $getopt): self
+    {
+        $this->cliOptionParser = $getopt;
+        return $this;
+    }
 
     /**
      * sets the options to be used for parsing the arguments
@@ -124,8 +144,12 @@ class ArgumentParser implements BindingModule
             return $this->fixArgs($_SERVER['argv']);
         }
 
-        $this->parseOptions();
-        $parsedVars = $this->getopt($this->options, $this->longopts);
+        if (null !== $this->userInput) {
+            $this->collectOptionsFromUserInputClass();
+        }
+
+        $parseCommandLineOptions = $this->cliOptionParser;
+        $parsedVars = $parseCommandLineOptions($this->options, $this->longopts);
         if (false === $parsedVars) {
             throw new \RuntimeException(
                     'Error parsing "' . join(' ', $_SERVER['argv'])
@@ -164,12 +188,8 @@ class ArgumentParser implements BindingModule
     /**
      * parses options from user input class
      */
-    private function parseOptions()
+    private function collectOptionsFromUserInputClass()
     {
-        if (null === $this->userInput) {
-            return;
-        }
-
         foreach (RequestBroker::targetMethodsOf($this->userInput) as $targetMethod) {
             $name = $targetMethod->paramName();
             if (substr($name, 0, 5) === 'argv.') {
@@ -190,17 +210,5 @@ class ArgumentParser implements BindingModule
         if (!in_array('help', $this->longopts)) {
             $this->longopts[] = 'help';
         }
-    }
-
-    /**
-     * helper method to enable proper testing, as PHP's getopt() is not mockable
-     *
-     * @param   string    $options   options to be used for parsing the arguments
-     * @param   string[]  $longopts  long options to be used for parsing the arguments
-     * @return  array|false
-     */
-    protected function getopt(string $options, array $longopts)
-    {
-        return getopt($options, $longopts);
     }
 }
