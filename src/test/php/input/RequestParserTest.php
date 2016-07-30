@@ -18,6 +18,7 @@ use stubbles\input\errors\messages\LocalizedMessage;
 use stubbles\input\errors\messages\ParamErrorMessages;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\callmap\onConsecutiveCalls;
@@ -72,8 +73,6 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException     stubbles\console\input\HelpScreen
-     * @expectedExceptionCode 0
      */
     public function throwsHelpScreenWhenHelpIsRequestedWithDashH()
     {
@@ -82,14 +81,16 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                  'readEnv'  => ValueReader::forValue('bin/http')
                 ]
         );
-        $this->requestParser->parseTo(BrokeredUserInput::class);
+        expect(function() {
+                $this->requestParser->parseTo(BrokeredUserInput::class);
+        })
+                ->throws(HelpScreen::class)
+                ->withCode(0);
         verify($this->requestBroker, 'procure')->wasNeverCalled();
     }
 
     /**
      * @test
-     * @expectedException     stubbles\console\input\HelpScreen
-     * @expectedExceptionCode 0
      */
     public function throwsHelpScreenWhenHelpIsRequestedWithDashDashHelp()
     {
@@ -98,7 +99,11 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
                  'readEnv'  => ValueReader::forValue('bin/http')
                 ]
         );
-        $this->requestParser->parseTo(BrokeredUserInput::class);
+        expect(function() {
+                $this->requestParser->parseTo(BrokeredUserInput::class);
+        })
+                ->throws(HelpScreen::class)
+                ->withCode(0);
         verify($this->requestBroker, 'procure')->wasNeverCalled();
     }
 
@@ -152,8 +157,6 @@ Options:
 
     /**
      * @test
-     * @expectedException      stubbles\console\input\InvalidOptionValue
-     * @expectedExceptionMessage  bar: Error, dude
      */
     public function failureWhileParsingThrowsInvalidOptionValue()
     {
@@ -163,6 +166,10 @@ Options:
                 ['hasParam' => false, 'paramErrors'  => $errors]
         );
         $this->paramErrorMessages->mapCalls(['messageFor' => new LocalizedMessage('en_*', 'Error, dude!')]);
-        $this->requestParser->parseTo(BrokeredUserInput::class);
+        expect(function() {
+                $this->requestParser->parseTo(BrokeredUserInput::class);
+        })
+                ->throws(InvalidOptionValue::class)
+                ->withMessage('bar: Error, dude!');
     }
 }

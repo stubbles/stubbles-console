@@ -19,6 +19,7 @@ use function bovigo\assert\{
     assert,
     assertFalse,
     assertTrue,
+    expect,
     predicate\equals
 };
 use function bovigo\callmap\verify;
@@ -151,16 +152,18 @@ class ExampleConsoleApp extends ConsoleApp
 
     /**
      * @test
-     * @expectedException  UnexpectedValueException
-     * @since  4.1.0
      * @group  issue_49
+     * @since  4.1.0
      */
     public function throwsConfigurationExceptionWhenNoPsr4PathDefinedForNamespace()
     {
         vfsStream::newFile('composer.json')
                  ->withContent('{"autoload": { "psr-4": { "stubbles\\\foo\\\": "src/main/php" } }}')
                  ->at($this->root);
-        $this->classFileCreator->create('example\console\ExampleConsoleApp');
+        expect(function() {
+                $this->classFileCreator->create('example\console\ExampleConsoleApp');
+        })
+                ->throws(\UnexpectedValueException::class);
     }
 
     /**

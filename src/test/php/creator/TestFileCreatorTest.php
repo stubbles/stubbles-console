@@ -15,9 +15,12 @@ use stubbles\console\Console;
 use stubbles\values\ResourceLoader;
 use stubbles\values\Rootpath;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\predicate\equals;
+use function bovigo\assert\{
+    assert,
+    assertTrue,
+    expect,
+    predicate\equals
+};
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\console\creator\TestFileCreator.
@@ -158,16 +161,18 @@ class ExampleConsoleAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  UnexpectedValueException
-     * @since  4.1.0
      * @group  issue_49
+     * @since  4.1.0
      */
     public function throwsConfigurationExceptionWhenNoPsr4PathDefinedForNamespace()
     {
         vfsStream::newFile('composer.json')
                  ->withContent('{"autoload": { "psr-4": { "stubbles\\\foo\\\": "src/main/php" } }}')
                  ->at($this->root);;
-        $this->testFileCreator->create('example\console\ExampleConsoleApp');
+        expect(function() {
+                $this->testFileCreator->create('example\console\ExampleConsoleApp');
+        })
+                ->throws(\UnexpectedValueException::class);
     }
 
     /**

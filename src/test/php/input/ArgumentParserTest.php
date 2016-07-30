@@ -23,6 +23,7 @@ use function bovigo\assert\{
     assert,
     assertFalse,
     assertTrue,
+    expect,
     predicate\equals,
     predicate\isInstanceOf,
     predicate\isSameAs
@@ -246,13 +247,13 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  RuntimeException
      */
     public function invalidOptionsThrowConfigurationException()
     {
         $this->getopt->mapCall(false);
         $this->argumentParser->withOptions('//');
-        $this->bindArguments();
+        expect(function() { $this->bindArguments(); })
+                ->throws(\RuntimeException::class);
     }
 
     /**
