@@ -142,25 +142,4 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
         $commandInputStream->close();
         $commandInputStream->read();
     }
-
-    /**
-     * @test
-     * @deprecated  since 6.1.0, will be removed with 7.0.0
-     */
-    public function executeDirectReturnsOutputAsArray()
-    {
-        assert($this->executor->executeDirect('echo foo && echo bar'), equals(['foo', 'bar']));
-    }
-
-    /**
-     * @test
-     * @expectedException  RuntimeException
-     * @deprecated  since 6.1.0, will be removed with 7.0.0
-     */
-    public function executeDirectFailsThrowsRuntimeException()
-    {
-        $this->executor->executeDirect(
-                PHP_BINARY . ' -r "throw new Exception();"'
-        );
-    }
 }

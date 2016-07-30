@@ -79,23 +79,6 @@ class Executor
     }
 
     /**
-     * executes command directly and returns output as array (each line as one entry)
-     *
-     * In case you only want to iterate over the output you should use outputOf()
-     * instead as it will yield a line as soon as it occurs, whereas this method
-     * waits until the command finishes until it returns all output lines at once.
-     *
-     * @param   string  $command
-     * @param   string  $redirect  optional  how to redirect error output
-     * @return  string[]
-     * @deprecated  since 6.1.0, use $executor->execute($command, collect($array)) or iterator_to_array($executor->outputOf($command)) instead, will be removed with 7.0.0
-     */
-    public function executeDirect(string $command, string $redirect = '2>&1'): array
-    {
-        return iterator_to_array($this->outputOf($command, $redirect));
-    }
-
-    /**
      * returns output from a command as it occurs
      *
      * @param   string  $command

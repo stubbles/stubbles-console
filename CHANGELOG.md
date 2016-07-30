@@ -5,6 +5,9 @@
 
   * raised minimum required PHP version to 7.0.0
   * introduced scalar type hints and strict type checking
+  * removed deprecated classes and methods:
+    * `stubbles\console\Executor::executeDirect($command)`, deprecated since 6.1.0
+    * `stubbles\console\ConsoleExecutor`, deprecated since 6.0.0
 
 
 ### Other changes
