@@ -317,7 +317,7 @@ into play. It provides a facade to stdin input stream, stdout and stderr output
 streams so you have a direct dependency to one class only instead of three. The
 class provides methods to read and write:
 
-### `prompt($message, $paramErrors = null)`
+### `prompt(string $message, ParamErrors $paramErrors = null): ValueReader`
 _Available since release 2.1.0._
 
 Writes a message to stdout and returns a value reader similar to
@@ -326,12 +326,12 @@ In case you need access to error messages that may happen during value
 validation you need to supply `stubbles\input\ParamErrors`, errors will be
 accumulated therein under the param name stdin.
 
-### `readValue($paramErrors = null)`
+### `readValue(ParamErrors $paramErrors = null): ValueReader`
 _Available since release 2.1.0._
 
 Similar to `prompt()`, but without a message
 
-### `confirm($message, $default = null)`
+### `confirm(string $message, string $default = null): bool`
 _Available since release 2.1.0._
 
 Asks the user to confirm something. Repeats the message until user enters _y_ or
@@ -339,29 +339,29 @@ _n_ (case insensitive). In case a default is given and the users enters nothing
 this default will be used - if the default is _y_ it will return `true`, and
 `false` otherwise.
 
-### `read($length = 8192)`
+### `read(int $length = 8192): string`
 Reads input from stdin.
 
-### `readLine($length = 8192)`
+### `readLine(int $length = 8192): string`
 Reads input from stdin with line break stripped.
 
-### `write($bytes)`
+### `write(string $bytes): Console`
 Write message to stdout.
 
-### `writeLine($bytes)`
+### `writeLine(string $bytes): Console`
 Write a line to stdout.
 
-### `writeEmptyLine()`
+### `writeEmptyLine(): Console`
 _Available since release 2.6.0._
 Write an empty line to stdout.
 
-### `writeError($bytes)`
+### `writeError(string $bytes): Console`
 Write error message to stderr.
 
-### `writeErrorLine($bytes)`
+### `writeErrorLine(string $bytes): Console`
 Write an error message line to stderr.
 
-### `writeEmptyErrorLine()`
+### `writeEmptyErrorLine(): Console`
 _Available since release 2.6.0._
 Write an empty error message line to stderr.
 
@@ -370,18 +370,17 @@ Command line executor
 ---------------------
 
 From time to time it is necessary to run another command line program from within
-your application. Stubbles Console provides a convenient way to do this via the
+your application. _stubbles/console_ provides a convenient way to do this via the
 `stubbles\console\Executor` class.
 
 It provides three different ways to run a command line program:
 
-1. `execute($command, callable  $out = null)`: This will simply execute the
+1. `execute(string $command, callable  $out = null)`: This will simply execute the
    given command. If the executor receives an callable the callable will be
    executed for each single line of the command's output.
-2. `executeAsync($command)`: This will execute the command, but reading the
-   output of the command can be done later via the returned `CommandInputStream`
-   instance which is a normal [input stream](https://github.com/stubbles/stubbles-streams).
-3. `outputOf($command)`: This will execute the given command and return a
+2. `executeAsync(string $command): InputStream`: This will execute the command, but reading the
+   output of the command can be done later via the returned [`InputStream`](https://github.com/stubbles/stubbles-streams).
+3. `outputOf(string $command): \Generator`: This will execute the given command and return a
    [Generator](http://php.net/manual/en/language.generators.php) which yields
    each single line from the command's output as it occurs. (_Available since
    release 6.0.0._)
