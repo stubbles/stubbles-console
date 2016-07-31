@@ -19,6 +19,6 @@ install:
 script:
   - vendor/bin/phpunit --coverage-text
 
-after_script:
+after_success:
   - composer require satooshi/php-coveralls
   - travis_retry vendor/bin/coveralls
