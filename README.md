@@ -21,13 +21,13 @@ _stubbles/console_ is distributed as [Composer](https://getcomposer.org/)
 package. To install it as a dependency of your package use the following
 command:
 
-    composer require "stubbles/console": "^6.1"
+    composer require "stubbles/console": "^7.0"
 
 
 Requirements
 ------------
 
-_stubbles/console_ requires at least PHP 5.6.
+_stubbles/console_ requires at least PHP 7.0.
 
 
 Console app class
