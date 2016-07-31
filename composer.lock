@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "stubbles/input",
-            "version": "dev-master",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-input.git",
-                "reference": "7a6566bf54194adbbdd3d6eda5f5b5d98e6a2cdd"
+                "reference": "1ce0ebe5ba392faf3cc369a95e3fe0fa38912b1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/7a6566bf54194adbbdd3d6eda5f5b5d98e6a2cdd",
-                "reference": "7a6566bf54194adbbdd3d6eda5f5b5d98e6a2cdd",
+                "url": "https://api.github.com/repos/stubbles/stubbles-input/zipball/1ce0ebe5ba392faf3cc369a95e3fe0fa38912b1e",
+                "reference": "1ce0ebe5ba392faf3cc369a95e3fe0fa38912b1e",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
             ],
             "description": "Stubbles Input enables to handle input data via validation and filtering.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-07-30 14:02:39"
+            "time": "2016-07-31 10:35:48"
         },
         {
             "name": "stubbles/ioc",
@@ -247,16 +247,16 @@
         },
         {
             "name": "stubbles/values",
-            "version": "dev-master",
+            "version": "v8.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-values.git",
-                "reference": "5aaa5979a12fe7e7eeca4beb9b2c84f6762f4508"
+                "reference": "16dab0c6fa8f278b27120caac6389845ad7d2d28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/5aaa5979a12fe7e7eeca4beb9b2c84f6762f4508",
-                "reference": "5aaa5979a12fe7e7eeca4beb9b2c84f6762f4508",
+                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/16dab0c6fa8f278b27120caac6389845ad7d2d28",
+                "reference": "16dab0c6fa8f278b27120caac6389845ad7d2d28",
                 "shasum": ""
             },
             "require": {
@@ -289,7 +289,7 @@
             ],
             "description": "Useful classes to ease the work with values.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-07-30 11:16:45"
+            "time": "2016-07-30 19:18:15"
         }
     ],
     "packages-dev": [
