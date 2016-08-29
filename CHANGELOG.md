@@ -1,3 +1,9 @@
+7.0.1 (2016-08-29)
+------------------
+
+  * Removed return type hint from `stubbles\console\Executor::outputOf()` so it can be mocked more easily
+
+
 7.0.0 (2016-07-31)
 ------------------
 

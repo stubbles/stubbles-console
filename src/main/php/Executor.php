@@ -150,7 +150,7 @@ class Executor
      * @return  \Generator
      * @since   6.0.0
      */
-    public function outputOf(string $command, string $redirect = '2>&1'): \Generator
+    public function outputOf(string $command, string $redirect = '2>&1')
     {
         $pd = $this->runCommand($command, $redirect);
         while (!feof($pd) && false !== ($line = fgets($pd, 4096))) {
