@@ -43,7 +43,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setup()
     {
         $this->errorOutputStream   = new MemoryOutputStream();
         TestConsoleApp::$exception = null;
@@ -52,7 +52,7 @@ class ConsoleAppTest extends \PHPUnit_Framework_TestCase
     /**
      * clean up test environment
      */
-    public function tearDown()
+    public function teardown()
     {
         restore_error_handler();
         restore_exception_handler();
