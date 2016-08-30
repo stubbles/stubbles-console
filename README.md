@@ -345,8 +345,9 @@ Reads input from stdin.
 ### `readLine(int $length = 8192): string`
 Reads input from stdin with line break stripped.
 
-### `write(string $bytes): Console`
-Write message to stdout.
+### `write(string|InputStream $bytes): Console`
+Write message to stdout, in case of an input stream the contents of that
+stream are copied to stdout.
 
 ### `writeLine(string $bytes): Console`
 Write a line to stdout.
@@ -355,8 +356,9 @@ Write a line to stdout.
 _Available since release 2.6.0._
 Write an empty line to stdout.
 
-### `writeError(string $bytes): Console`
-Write error message to stderr.
+### `writeError(string|InputStream $bytes): Console`
+Write error message to stderr, in case of an input stream the contents of that
+stream are copied to stderr.
 
 ### `writeErrorLine(string $bytes): Console`
 Write an error message line to stderr.
