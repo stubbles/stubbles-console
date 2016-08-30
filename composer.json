@@ -9,7 +9,7 @@
         "stubbles/input": "^7.0",
         "stubbles/ioc": "^8.0.1",
         "stubbles/reflect": "^8.0",
-        "stubbles/streams": "^8.0",
+        "stubbles/streams": "^8.1",
         "stubbles/values": "^8.1"
     },
     "require-dev": {
@@ -31,7 +31,7 @@
     "bin": ["bin/createConsoleApp"],
     "extra": {
         "branch-alias": {
-            "dev-master": "7.0.x-dev"
+            "dev-master": "7.1.x-dev"
         }
     },
     "minimum-stability": "dev",

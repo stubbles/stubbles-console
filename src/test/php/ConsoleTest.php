@@ -11,19 +11,18 @@ declare(strict_types=1);
 namespace stubbles\console;
 use bovigo\callmap\NewInstance;
 use stubbles\input\errors\ParamErrors;
-use stubbles\streams\InputStream;
-use stubbles\streams\OutputStream;
+use stubbles\streams\{InputStream, OutputStream, memory\MemoryInputStream};
 
 use function bovigo\assert\{
     assert,
     assertFalse,
     assertNull,
     assertTrue,
+    expect,
     predicate\equals,
     predicate\isSameAs
 };
-use function bovigo\callmap\onConsecutiveCalls;
-use function bovigo\callmap\verify;
+use function bovigo\callmap\{onConsecutiveCalls, verify};
 use function stubbles\reflect\annotationsOfConstructorParameter;
 /**
  * Test for stubbles\console\Console.
@@ -65,7 +64,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->inputStream  = NewInstance::of(InputStream::class);
         $this->outputStream = NewInstance::of(OutputStream::class);
         $this->errorStream  = NewInstance::of(OutputStream::class);
-        $this->console          = new Console(
+        $this->console      = new Console(
                 $this->inputStream,
                 $this->outputStream,
                 $this->errorStream
@@ -150,6 +149,29 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @since  7.1.0
+     */
+    public function usesOutputStreamForWriteWithInputStream()
+    {
+        $inputStream = new MemoryInputStream("foo\nbar");
+        $this->outputStream->mapCalls(['write' => 7]);
+        assert($this->console->write($inputStream), isSameAs($this->console));
+        verify($this->outputStream, 'write')->received("foo\nbar");
+        verify($this->errorStream, 'write')->wasNeverCalled();
+    }
+
+    /**
+     * @test
+     * @since  7.1.0
+     */
+    public function writeThrowsInvalidArgumentExceptionForNonWriteableArgument()
+    {
+        expect(function() { $this->console->write(303); })
+                ->throws(\InvalidArgumentException::class);
+    }
+
+    /**
+     * @test
      */
     public function usesOutputStreamForWriteLine()
     {
@@ -195,6 +217,29 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         assert($this->console->writeError('foo'), isSameAs($this->console));
         verify($this->errorStream, 'write')->received('foo');
         verify($this->outputStream, 'write')->wasNeverCalled();
+    }
+
+    /**
+     * @test
+     * @since  7.1.0
+     */
+    public function usesErrorStreamForWriteErrorWithInputStream()
+    {
+        $inputStream = new MemoryInputStream("foo\nbar");
+        $this->errorStream->mapCalls(['write' => 7]);
+        assert($this->console->writeError($inputStream), isSameAs($this->console));
+        verify($this->errorStream, 'write')->received("foo\nbar");
+        verify($this->outputStream, 'write')->wasNeverCalled();
+    }
+
+    /**
+     * @test
+     * @since  7.1.0
+     */
+    public function writeErrorThrowsInvalidArgumentExceptionForNonWriteableArgument()
+    {
+        expect(function() { $this->console->writeError(303); })
+                ->throws(\InvalidArgumentException::class);
     }
 
     /**

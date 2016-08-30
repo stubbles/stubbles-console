@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6fd419ff56f3ac108a4ef2a73f8f0bfb",
-    "content-hash": "d7914f441fb8411a29b59d16a9468b9a",
+    "hash": "1e63b3343bf0bdaf57e358a6010af642",
+    "content-hash": "05980bcec6858a98df1c4d06a921f0d8",
     "packages": [
         {
             "name": "stubbles/input",
@@ -195,27 +195,27 @@
         },
         {
             "name": "stubbles/streams",
-            "version": "v8.0.0",
+            "version": "v8.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-streams.git",
-                "reference": "8fae2ecf6fa6e0e77a5e81c3a90c3b25a71c9bf5"
+                "reference": "99b0dace5fcf71584d1456b4b5408017b896bdf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-streams/zipball/8fae2ecf6fa6e0e77a5e81c3a90c3b25a71c9bf5",
-                "reference": "8fae2ecf6fa6e0e77a5e81c3a90c3b25a71c9bf5",
+                "url": "https://api.github.com/repos/stubbles/stubbles-streams/zipball/99b0dace5fcf71584d1456b4b5408017b896bdf5",
+                "reference": "99b0dace5fcf71584d1456b4b5408017b896bdf5",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0"
             },
             "require-dev": {
-                "bovigo/assert": "^2.0",
-                "bovigo/callmap": "3.0",
+                "bovigo/assert": "^2.1",
+                "bovigo/callmap": "3.2",
                 "ext-iconv": "*",
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "^5.4",
+                "phpunit/phpunit": "^5.5",
                 "stubbles/reflect": "^8.0",
                 "stubbles/sequence": "^8.1"
             },
@@ -226,7 +226,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.0.x-dev"
+                    "dev-master": "8.1.x-dev"
                 }
             },
             "autoload": {
@@ -243,7 +243,7 @@
             ],
             "description": "Input- and OutputStreams.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-07-20 15:29:54"
+            "time": "2016-08-30 20:10:51"
         },
         {
             "name": "stubbles/values",

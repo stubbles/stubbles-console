@@ -1,3 +1,9 @@
+7.1.0 (2016-08-30)
+------------------
+
+  * `stubbles\console\Console::write()` and `stubbles\console\Console::writeError()` now also accept instances of `stubbles\streams\InputStream` beside raw strings and will copy the content of the passed input stream to the respective output stream
+
+
 7.0.1 (2016-08-29)
 ------------------
 

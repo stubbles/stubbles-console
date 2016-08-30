@@ -9,12 +9,12 @@ declare(strict_types=1);
  * @package  stubbles\console
  */
 namespace stubbles\console;
-use stubbles\input\Param;
-use stubbles\input\ValueReader;
-use stubbles\input\errors\ParamErrors;
-use stubbles\streams\InputStream;
-use stubbles\streams\OutputStream;
+use stubbles\input\{Param, ValueReader, errors\ParamErrors};
+use stubbles\streams\{InputStream, OutputStream};
 use stubbles\values\Value;
+
+use function stubbles\streams\copy;
+use function stubbles\values\typeOf;
 /**
  * Interface to read and write on command line.
  */
@@ -174,13 +174,28 @@ class Console implements InputStream
     /**
      * writes given bytes
      *
+     * In case $bytes are an instance of InputStream all bytes from the input
+     * stream starting at its current offset until its end will be copied to
+     * the standard output stream.
+     *
      * @api
-     * @param   string  $bytes
+     * @param   string|InputStream  $bytes
      * @return  \stubbles\console\Console
+     * @throws  \InvalidArgumentException
      */
-    public function write(string $bytes): self
+    public function write($bytes): self
     {
-        $this->out->write($bytes);
+        if (is_string($bytes)) {
+            $this->out->write($bytes);
+        } elseif ($bytes instanceof InputStream) {
+            copy($bytes)->to($this->out);
+        } else {
+            throw new \InvalidArgumentException(
+                    'Given bytes are neither a string nor an instance of '
+                    . InputStream::class . ' but of type ' . typeOf($bytes)
+            );
+        }
+
         return $this;
     }
 
@@ -225,13 +240,28 @@ class Console implements InputStream
     /**
      * writes given bytes
      *
+     * In case $bytes are an instance of InputStream all bytes from the input
+     * stream starting at its current offset until its end will be copied to
+     * the error output stream.
+     *
      * @api
-     * @param   string  $bytes
+     * @param   string|InputStream  $bytes
      * @return  \stubbles\console\Console
+     * @throws  \InvalidArgumentException
      */
-    public function writeError(string $bytes): self
+    public function writeError($bytes): self
     {
-        $this->err->write($bytes);
+        if (is_string($bytes)) {
+            $this->err->write($bytes);
+        } elseif ($bytes instanceof InputStream) {
+            copy($bytes)->to($this->err);
+        } else {
+            throw new \InvalidArgumentException(
+                    'Given bytes are neither a string nor an instance of '
+                    . InputStream::class . ' but of type ' . typeOf($bytes)
+            );
+        }
+
         return $this;
     }
 
