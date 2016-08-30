@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @package  stubbles\console
  */
 namespace stubbles\console;
-
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
@@ -22,6 +21,18 @@ use function bovigo\assert\predicate\equals;
  */
 class WorkingDirectoryTest extends \PHPUnit_Framework_TestCase
 {
+    private $globalWd;
+
+    public function setup()
+    {
+        $this->globalWd = getcwd();
+    }
+
+    public function teardown()
+    {
+        chdir($this->globalWd);
+    }
+
     /**
      * @test
      */

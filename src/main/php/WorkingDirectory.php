@@ -55,6 +55,10 @@ class WorkingDirectory
     /**
      * change current working directory to given target
      *
+     * Please note that this really has a side effect - it doesn't just change
+     * a value inside this object, it really changed the global current working
+     * directory for the whole PHP application!
+     *
      * @param   string  $target  directory to change current working directory to
      * @return  bool  whether change was successful
      */
