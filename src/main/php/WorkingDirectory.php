@@ -64,7 +64,7 @@ class WorkingDirectory
      */
     public function changeTo(string $target): bool
     {
-        if (@chdir($target) === true) {
+        if (file_exists($target) && @chdir($target) === true) {
             $this->current = $target;
             return true;
         }
